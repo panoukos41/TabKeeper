@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DynamicData" Version="8.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src-modules\Core\src\Core.UI\Core.UI.csproj" />
+    <ProjectReference Include="..\TabKeeper\TabKeeper.csproj" />
+  </ItemGroup>
+
+</Project>

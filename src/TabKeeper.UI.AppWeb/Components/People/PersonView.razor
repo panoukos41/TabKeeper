@@ -1,0 +1,12 @@
+﻿@inherits ViewBase<PersonViewModel>
+
+<div class="relative flex items-center justify-center bg-white border border-red-500 h-10 p-3 pb-6 rounded-3xl">
+    <h2>@ViewModel.Name</h2>
+
+    <div class="absolute bottom-0 translate-y-1/2 bg-white border border-red-500 p-1 rounded-2xl text-xs w-10 text-center">
+        @ViewModel.Total
+    </div>
+</div>
+
+@code {
+}

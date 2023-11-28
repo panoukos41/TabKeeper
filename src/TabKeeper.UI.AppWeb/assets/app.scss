@@ -1,0 +1,28 @@
+@import "./_buttons.scss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #app {
+    @apply w-screen h-screen overflow-clip;
+  }
+
+  h1 {}
+  h2 {}
+  h3 {}
+  h4 {}
+
+  p {
+    @apply text-primary-900;
+  }
+
+  small {
+    @apply text-primary-500;
+  }
+}
+
+@layer components {
+}
