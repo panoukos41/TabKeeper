@@ -1,9 +1,10 @@
-﻿using TabKeeper.People;
+﻿using Core.Reactive;
+using TabKeeper.People;
 using TabKeeper.UI.Tabs;
 
 namespace TabKeeper.UI.People;
 
-public sealed class PersonViewModel : ViewModelBase
+public sealed class PersonViewModel : RxObject
 {
     private readonly SourceCache<ProductViewModel, Uuid> products;
     private Person person;

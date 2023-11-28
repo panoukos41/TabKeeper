@@ -8,9 +8,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{689C1AA2-EEA6-4DC1-A090-CEDFAB39437E}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
 		Directory.Build.props = Directory.Build.props
 		global.json = global.json
+		LICENSE = LICENSE
 		publish.ps1 = publish.ps1
+		README.md = README.md
 		version.json = version.json
 	EndProjectSection
 EndProject
@@ -24,13 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabKeeper.UI.UnitTests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabKeeper.UI.AppWeb", "src\TabKeeper.UI.AppWeb\TabKeeper.UI.AppWeb.csproj", "{1E09DF5D-BEB0-4555-8C5E-D68D32817844}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src-submodules", "src-submodules", "{0F8AC477-3BF8-411F-BC0B-767F820697EA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src-modules", "src-modules", "{0F8AC477-3BF8-411F-BC0B-767F820697EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "src-modules\Core\src\Core\Core.csproj", "{569E0878-B758-42B0-8166-5935C584C03B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.App", "src-modules\Core\src\Core.App\Core.App.csproj", "{FA50AF51-FC1D-4259-BA00-03B5E7592484}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.UI", "src-modules\Core\src\Core.UI\Core.UI.csproj", "{0CC39361-FCB0-485A-8AD2-FD27D53C195A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Web", "src-modules\Core\src\Core.Web\Core.Web.csproj", "{6E21EE17-77BD-4072-BDDB-027D38C6D188}"
 EndProject
@@ -64,10 +67,6 @@ Global
 		{FA50AF51-FC1D-4259-BA00-03B5E7592484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA50AF51-FC1D-4259-BA00-03B5E7592484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA50AF51-FC1D-4259-BA00-03B5E7592484}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0CC39361-FCB0-485A-8AD2-FD27D53C195A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0CC39361-FCB0-485A-8AD2-FD27D53C195A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0CC39361-FCB0-485A-8AD2-FD27D53C195A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0CC39361-FCB0-485A-8AD2-FD27D53C195A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E21EE17-77BD-4072-BDDB-027D38C6D188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E21EE17-77BD-4072-BDDB-027D38C6D188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E21EE17-77BD-4072-BDDB-027D38C6D188}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -83,7 +82,6 @@ Global
 		{1E09DF5D-BEB0-4555-8C5E-D68D32817844} = {1FE5EE5F-70AA-4824-B306-304ADBF3A312}
 		{569E0878-B758-42B0-8166-5935C584C03B} = {0F8AC477-3BF8-411F-BC0B-767F820697EA}
 		{FA50AF51-FC1D-4259-BA00-03B5E7592484} = {0F8AC477-3BF8-411F-BC0B-767F820697EA}
-		{0CC39361-FCB0-485A-8AD2-FD27D53C195A} = {0F8AC477-3BF8-411F-BC0B-767F820697EA}
 		{6E21EE17-77BD-4072-BDDB-027D38C6D188} = {0F8AC477-3BF8-411F-BC0B-767F820697EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

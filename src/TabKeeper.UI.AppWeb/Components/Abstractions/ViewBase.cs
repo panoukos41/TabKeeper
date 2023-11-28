@@ -1,11 +1,11 @@
-﻿using Core.Abstractions.UI;
+﻿using Core.Reactive;
 using Ignis.Components;
 using Microsoft.AspNetCore.Components;
 
 namespace TabKeeper.UI.AppWeb.Components.Abstractions;
 
 public abstract class ViewBase<TViewModel> : IgnisComponentBase, IDisposable
-    where TViewModel : ViewModelBase
+    where TViewModel : RxObject
 {
     private IDisposable? changedSub;
 

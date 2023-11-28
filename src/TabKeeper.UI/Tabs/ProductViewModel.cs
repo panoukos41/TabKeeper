@@ -1,8 +1,9 @@
-﻿using TabKeeper.Tabs;
+﻿using Core.Reactive;
+using TabKeeper.Tabs;
 
 namespace TabKeeper.UI.Tabs;
 
-public sealed class ProductViewModel : ViewModelBase
+public sealed class ProductViewModel : RxObject
 {
     private Product product;
     private int divisor = 0;
