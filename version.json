@@ -3,7 +3,7 @@
   "publicReleaseRefSpec": [
     "^refs/heads/main$"
   ],
-  "versionHeightOffset": -1,
+  "versionHeightOffset": 0,
   "nugetPackageVersion": {
     "semVer": 2
   },
