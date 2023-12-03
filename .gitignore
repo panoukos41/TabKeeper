@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # Local History for Visual Studio Code
 .history/
+
+# Custom
+**/wwwroot/css/app.css

@@ -31,7 +31,7 @@
     }
 
     &:disabled {
-      @apply bg-primary-800 text-primary-100;
+      @apply bg-primary-300 text-primary-100;
     }
   }
 
@@ -47,7 +47,7 @@
     }
 
     &:disabled {
-      @apply bg-secondary-800 text-secondary-100;
+      @apply bg-secondary-300 text-secondary-100;
     }
   }
 
