@@ -1,8 +1,7 @@
 ﻿using Core.Reactive;
-using TabKeeper.People;
-using TabKeeper.UI.Tabs;
+using TabKeeper.Tabs;
 
-namespace TabKeeper.UI.People;
+namespace TabKeeper.People;
 
 public sealed class PersonViewModel : RxObject
 {

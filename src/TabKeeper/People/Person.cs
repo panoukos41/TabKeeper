@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace TabKeeper.People;
 
-public sealed record Person : IValid, IEquatable<Uuid>
+public sealed record Person : IValid<Person>, IEquatable<Uuid>
 {
     public required Uuid Id { get; init; }
 
@@ -15,7 +15,7 @@ public sealed record Person : IValid, IEquatable<Uuid>
         return Id.Equals(other);
     }
 
-    public static IValidator Validator { get; } = InlineValidator.For<Person>(data =>
+    public static IValidator<Person> Validator { get; } = InlineValidator.For<Person>(data =>
     {
         data.RuleFor(x => x.Id)
             .NotEmpty();

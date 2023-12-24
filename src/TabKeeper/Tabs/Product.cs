@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace TabKeeper.Tabs;
 
-public sealed record Product : IValid
+public sealed record Product : IValid<Product>
 {
     public required Uuid Id { get; init; }
 
@@ -16,7 +16,7 @@ public sealed record Product : IValid
 
     public decimal Total => Price * Quantity;
 
-    public static IValidator Validator { get; } = InlineValidator.For<Product>(data =>
+    public static IValidator<Product> Validator { get; } = InlineValidator.For<Product>(data =>
     {
         data.RuleFor(x => x.Id)
             .NotEmpty();

@@ -1,0 +1,69 @@
+@layer components {
+  .btn {
+    @apply px-4 py-2 flex items-center justify-center rounded-lg;
+
+    &:hover:enabled {
+      @apply shadow-lg;
+    }
+
+    &:active:enabled {
+      @apply shadow-inner;
+    }
+
+    &:disabled:not(.executing) {
+      @apply cursor-not-allowed;
+    }
+
+    &.executing {
+      @apply cursor-progress;
+    }
+  }
+
+  .btn-primary {
+    @apply bg-primary text-on-primary;
+
+    &:hover:enabled {
+      @apply bg-primary-50 text-on-primary-container;
+    }
+
+    &:active:enabled {
+      @apply bg-primary-container text-on-primary-container;
+    }
+
+    &:disabled {
+      @apply bg-outline text-on-surface-variant;
+    }
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-on-secondary;
+
+    &:hover:enabled {
+      @apply bg-secondary-container text-on-secondary-container;
+    }
+
+    &:active:enabled {
+      @apply bg-secondary-500;
+    }
+
+    &:disabled {
+      @apply bg-outline text-on-surface-variant;
+    }
+  }
+
+  .btn-cancel {
+    @apply bg-red-500 text-gray-50;
+
+    &:hover:enabled {
+      @apply bg-red-400;
+    }
+
+    &:active:enabled {
+      @apply bg-red-600;
+    }
+
+    &:disabled {
+      @apply bg-red-900 text-gray-300;
+    }
+  }
+}

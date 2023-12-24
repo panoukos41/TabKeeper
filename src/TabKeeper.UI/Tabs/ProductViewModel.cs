@@ -1,7 +1,6 @@
 ﻿using Core.Reactive;
-using TabKeeper.Tabs;
 
-namespace TabKeeper.UI.Tabs;
+namespace TabKeeper.Tabs;
 
 public sealed class ProductViewModel : RxObject
 {

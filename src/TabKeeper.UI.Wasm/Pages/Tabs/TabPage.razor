@@ -1,0 +1,65 @@
+﻿@page "/tabs/{Id}"
+@inherits Ignis.Components.IgnisComponentBase
+
+@using TabKeeper.People
+@using TabKeeper.Tabs
+@using TabKeeper.Components.People
+@using TabKeeper.Components.Tabs
+
+<PageTitle>Home</PageTitle>
+
+@* Products view  *@
+<div class="flex flex-col gap-3 flex-grow overflow-y-auto">
+    @foreach (var product in Products.Items)
+    {
+        <ProductCardView ViewModel="product" @key="product.ProductId" />
+    }
+</div>
+
+@* People view *@
+@* <div class="p-3 my-2 flex items-center justify-start gap-2 overflow-x-auto">
+    @foreach (var person in People.Items)
+    {
+        <PersonCircleView ViewModel="person" @key="person.PersonId" />
+    }
+</div> *@
+
+@* Toolbar *@
+<div class="mt-2 p-6 flex gap-4 bg-secondary-container items-center rounded-xl">
+    <div class="me-auto text-on-secondary-container">
+        @Products.Items.Sum(x=>x.Total) x
+        @People.Items.Sum(x=>x.Total)
+    </div>
+
+    <button class="btn btn-primary">1</button>
+    <button class="btn btn-primary">1</button>
+    <button class="btn btn-primary">1</button>
+</div>
+
+@code {
+    private SourceCache<PersonViewModel, Uuid> People { get; } = new(p => p.PersonId);
+    private SourceCache<ProductViewModel, Uuid> Products { get; } = new(p => p.ProductId);
+
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    public TabPage()
+    {
+        People.AddOrUpdate([
+            new(new() { Id = Uuid.NewUuid(), Name = "Panos" }),
+            new(new() { Id = Uuid.NewUuid(), Name = "Manids" }),
+            new(new() { Id = Uuid.NewUuid(), Name = "Giorgos" }),
+            new(new() { Id = Uuid.NewUuid(), Name = "Marianna" }),
+            new(new() { Id = Uuid.NewUuid(), Name = "Eleana" })
+        ]);
+
+        Products.AddOrUpdate([
+            new(new() { Id = Uuid.NewUuid(), Name = "Salata", Price = 10 }),
+            new(new() { Id = Uuid.NewUuid(), Name = "Xoirino", Price = 20 }),
+            new(new() { Id = Uuid.NewUuid(), Name = "Turokafterh", Price = 4 }),
+            new(new() { Id = Uuid.NewUuid(), Name = "Patates", Price = 7, Quantity = 2 })
+        ]);
+
+        Products.Connect().AutoRefresh(x=>x.Total).Subscribe(x => Update());
+    }
+}

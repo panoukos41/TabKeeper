@@ -14,11 +14,9 @@ public sealed record Tab
 
     public DateOnly? Date { get; set; }
 
-    public HashSet<Person> People { get; } = [];
-
     public HashSet<Product> Products { get; } = [];
 
-    public HashSet<PersonTab> Tabs { get; } = [];
+    public HashSet<PersonTab> People { get; } = [];
 
     public override string ToString()
     {

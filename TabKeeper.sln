@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6EEC0350
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabKeeper.UI.UnitTests", "tests\TabKeeper.UI.UnitTests\TabKeeper.UI.UnitTests.csproj", "{F9012243-16F3-4CD8-9F86-4F7F6DAEABF8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabKeeper.UI.AppWeb", "src\TabKeeper.UI.AppWeb\TabKeeper.UI.AppWeb.csproj", "{1E09DF5D-BEB0-4555-8C5E-D68D32817844}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabKeeper.UI.Wasm", "src\TabKeeper.UI.Wasm\TabKeeper.UI.Wasm.csproj", "{1E09DF5D-BEB0-4555-8C5E-D68D32817844}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src-modules", "src-modules", "{0F8AC477-3BF8-411F-BC0B-767F820697EA}"
 EndProject

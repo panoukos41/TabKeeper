@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>TabKeeper</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DynamicData" Version="8.1.1" />
+    <PackageReference Include="DynamicData" Version="8.3.27" />
   </ItemGroup>
 
   <ItemGroup>

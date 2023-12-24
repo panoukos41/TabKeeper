@@ -2,8 +2,8 @@
 using DynamicData.Binding;
 using FluentAssertions;
 using System.ComponentModel;
+using System.Reactive.Linq;
 using TabKeeper.Tabs;
-using TabKeeper.UI.Tabs;
 
 namespace TabKeeper.UI.UnitTests.Tabs;
 

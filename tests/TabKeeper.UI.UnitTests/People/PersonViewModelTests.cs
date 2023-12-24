@@ -2,8 +2,8 @@
 using DynamicData.Binding;
 using FluentAssertions;
 using System.Reactive.Linq;
-using TabKeeper.UI.People;
-using TabKeeper.UI.Tabs;
+using TabKeeper.People;
+using TabKeeper.Tabs;
 
 namespace TabKeeper.UI.UnitTests.People;
 
