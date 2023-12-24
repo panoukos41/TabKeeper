@@ -14,7 +14,8 @@ public sealed record Product : IValid<Product>
 
     public decimal Quantity { get; init; } = 1;
 
-    public decimal Total => Price * Quantity;
+    public decimal Total
+        => Price is < 0 || Quantity is < 0 ? 0 : Price * Quantity;
 
     public static IValidator<Product> Validator { get; } = InlineValidator.For<Product>(data =>
     {

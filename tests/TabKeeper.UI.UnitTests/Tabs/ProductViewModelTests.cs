@@ -15,6 +15,7 @@ public sealed class ProductViewModelTests
     [Fact]
     public void Should_Change_Product_Properties()
     {
+        // Arrange
         var product = new Product
         {
             Id = Uuid.NewUuid(),
@@ -23,10 +24,7 @@ public sealed class ProductViewModelTests
             Quantity = 1
         };
 
-        var viewModel = new ProductViewModel(product)
-        {
-            ShouldSetWhenValidationFailed = false
-        };
+        var viewModel = new ProductViewModel(product);
 
         var propertyChangedFired = false;
         var propertyChangingFired = false;
@@ -39,10 +37,9 @@ public sealed class ProductViewModelTests
 
         viewModel.WhenValueChanged(x => x.Name).Subscribe(x => name = x);
         viewModel.WhenValueChanged(x => x.Total).Subscribe(x => total = x);
-        viewModel.WhenPropertyChanged.Subscribe();
         viewModel.WhenProblem.Subscribe(x => problem = x);
 
-
+        // Act/Assert
         total.Should().Be(10);
 
         viewModel.Price = 20;
@@ -52,8 +49,17 @@ public sealed class ProductViewModelTests
         total.Should().Be(40);
 
         viewModel.Price = -1;
-        viewModel.Price.Should().Be(20);
+        viewModel.Total.Should().Be(0);
         problem.Should().NotBeNull();
+
+        viewModel.Price = 20;
+        viewModel.Total.Should().Be(40);
+
+        viewModel.Quantity = -1;
+        viewModel.Total.Should().Be(0);
+
+        viewModel.Quantity = 2;
+        viewModel.Total.Should().Be(40);
 
         product.Name.Should().Be("Test");
         product.Price.Should().Be(10);
