@@ -23,15 +23,12 @@ public sealed record Product : IValid<Product>
             .NotEmpty();
 
         data.RuleFor(x => x.Name)
-            .NotEmpty()
-            .MaximumLength(100);
+            .Length(3, 100);
 
         data.RuleFor(x => x.Price)
-            .NotEmpty()
             .GreaterThan(0);
 
         data.RuleFor(x => x.Quantity)
-            .NotEmpty()
             .GreaterThan(0);
     });
 }
