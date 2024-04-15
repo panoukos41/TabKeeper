@@ -1,0 +1,35 @@
+<Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests\TabKeeper.UI.UnitTests\TabKeeper.UI.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src\TabKeeper.UI.Wasm\TabKeeper.UI.Wasm.csproj" />
+    <Project Path="src\TabKeeper.UI\TabKeeper.UI.csproj" />
+    <Project Path="src\TabKeeper\TabKeeper.csproj" />
+  </Folder>
+  <Folder Name="/src-modules/">
+    <Project Path="src-modules\Core\src\Core.App\Core.App.csproj" />
+    <Project Path="src-modules\Core\src\Core.Blazor\Core.Blazor.csproj" />
+    <Project Path="src-modules\Core\src\Core.Web\Core.Web.csproj" />
+    <Project Path="src-modules\Core\src\Core\Core.csproj" />
+  </Folder>
+  <Folder Name="/root/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".gitmodules" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="publish.ps1" />
+    <File Path="README.md" />
+    <File Path="version.json" />
+  </Folder>
+</Solution>th="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="publish.ps1" />
+    <File Path="README.md" />
+    <File Path="version.json" />
+  </Folder>
+</Solution>
