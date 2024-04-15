@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TabKeeper</title>
     <base href="/" />
-    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/app.min.css" />
     <!-- If you add any scoped CSS files, uncomment the following to load them
     <link href="TabKeeper.styles.css" rel="stylesheet" /> -->
     <link href="manifest.webmanifest" rel="manifest" />
@@ -17,22 +17,26 @@
 
 <body>
     <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
+        <div class="col-span-full row-span-full flex flex-col items-center justify-center gap-2">
+            <h1 class="text-base font-medium m-0">Tab Keeper</h1>
+            <svg class="animate-spin w-10 h-10 fill-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <h2 class="text-sm m-0">Loading...</h2>
+        </div>
     </div>
 
-    <div id="blazor-error-ui">
+    <div id="dialog-outlet"></div>
+
+    <!-- <div id="blazor-error-ui" class="fixed">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
-    </div>
+    </div> -->
     <script src="_framework/blazor.webassembly.js"></script>
     <script defer type="text/javascript" src="_content/Ignis.Components.Web/min.js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js');</script>
-    <div id="dialog-outlet"></div>
+    <!-- <script>navigator.serviceWorker.register('service-worker.js');</script> -->
 </body>
 
 </html>

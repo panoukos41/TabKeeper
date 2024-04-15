@@ -1,13 +1,14 @@
-﻿@inherits IgnisComponentBase
+﻿@inherits CoreComponent
+@implements IDisposable
 
-<Transition Appear Show="Open" AsComponent="typeof(Fragment)" Context="_">
-    <Dialog>
+<Transition Appear Show="IsOpen" AsComponent="typeof(Fragment)" Context="_">
+    <Dialog IsOpenChanged="IsOpenChanged">
         <TransitionChild
             AsComponent="typeof(Fragment)"
             Enter="ease-out duration-300"
             EnterFrom="opacity-0"
             EnterTo="opacity-100"
-            Leave="ease-in duration-200"
+            Leave="ease-in duration-300"
             LeaveFrom="opacity-100"
             LeaveTo="opacity-0"
             Context="transition">
@@ -16,20 +17,22 @@
 
         </TransitionChild>
 
-        <div class="absolute inset-0 overflow-y-auto" @onclick="() => BackdropDismiss ? Hide() : default">
-            <div class="flex min-h-full items-center justify-center p-4 text-center">
+        <div class="absolute inset-0 bg-black bg-opacity-25" @onclick="() => BackdropDismiss ? Close() : None.Value">
+            <div class="w-full h-full overflow-hidden flex">
                 <TransitionChild
                     AsComponent="typeof(Fragment)"
                     Enter="ease-out duration-300"
                     EnterFrom="opacity-0 scale-95"
                     EnterTo="opacity-100 scale-100"
-                    Leave="ease-in duration-200"
+                    Leave="ease-in duration-300"
                     LeaveFrom="opacity-100 scale-100"
                     LeaveTo="opacity-0 scale-95"
                     Context="transition">
 
-                    <div class="@Css.Class("w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all", transition)">
-                        @(ChildContent?.Invoke(new ModalContext(Hide)))
+                    <div class="@Css.Class("w-full max-h-full rounded-2xl bg-white overflow-y-auto p-6 m-4", TryGetAttribute<string>("class") ?? "self-center justify-self-center", transition.CssClass)" @onclick:stopPropagation>
+                        <ReactiveSection For="updateExpression" AsComponent="typeof(Fragment)">
+                            @(ChildContent?.Invoke(this))
+                        </ReactiveSection>
                     </div>
                 </TransitionChild>
             </div>
@@ -38,35 +41,78 @@
 </Transition>
 
 @code {
-    [Parameter]
-    public bool Open { get; set; }
+    private ReactiveValue<int> updateExpression;
 
     [Parameter]
-    public RenderFragment<ModalContext>? ChildContent { get; set; }
+    public bool IsOpen { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> IsOpenChanged { get; set; }
+
+    [Parameter]
+    public IObservable<bool>? IsOpenWhen { get; set; }
+
+    [Parameter]
+    public IObservable<None>? UpdateWhen { get; set; }
+
+    [Parameter]
+    public RenderFragment<Modal>? ChildContent { get; set; }
 
     [Parameter]
     public bool BackdropDismiss { get; set; } = true;
 
-    private None dismissBackdrop() => BackdropDismiss ? Hide() : None.Value;
+    [Parameter]
+    public EventCallback OnDismiss { get; set; }
+
+    [Parameter]
+    public EventCallback OnShow { get; set; }
+
+    public Modal()
+    {
+        updateExpression = new(this, 0);
+    }
+
+    protected override void OnInitialized()
+    {
+        if (IsOpenWhen is { })
+        {
+            var sub = IsOpenWhen.Subscribe(open =>
+            {
+                IsOpen = open;
+                base.Update();
+            });
+            DisposeWith(sub);
+        }
+        if (UpdateWhen is { })
+        {
+            var updateSub = UpdateWhen.Subscribe(_ => updateExpression.Value = 0);
+            DisposeWith(updateSub);
+        }
+    }
 
     public None Show()
     {
-        Open = true;
-        Update();
+        IsOpen = true;
+        OnShow.InvokeAsync();
+        base.Update();
         return None.Value;
     }
 
-    public None Hide()
+    public None Close()
     {
-        Open = false;
-        Update();
+        IsOpen = false;
+        OnDismiss.InvokeAsync();
+        base.Update();
         return None.Value;
     }
 
     public None Toggle()
     {
-        Open = !Open;
-        Update();
-        return None.Value;
+        return IsOpen ? Close() : Show();
+    }
+
+    public void Update()
+    {
+        updateExpression.Value = 0;
     }
 }

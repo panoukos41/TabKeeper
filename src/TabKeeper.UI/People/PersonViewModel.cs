@@ -21,35 +21,49 @@ public sealed class PersonViewModel : RxObject
 
     public IEnumerable<Uuid> ProductIds => products.Keys;
 
+    public PersonViewModel() : this(new Person { Id = Uuid.NewUuid() })
+    {
+    }
+
     public PersonViewModel(Person person)
     {
         this.person = person;
         products = new(p => p.ProductId);
 
-        var subscription = products.Connect();
-
-        subscription
-            .WhereReasonsAre(ChangeReason.Add, ChangeReason.Remove)
-            .ForEachChange(c => c.Current.Divisor += c.Reason is ChangeReason.Add ? 1 : -1)
-            .Subscribe();
-
-        subscription
-            .AutoRefresh(x => x.Total) // will refresh when an object emits it's total changed.
+        products
+            .Connect()
+            .AutoRefresh(x => x.Total) // will refresh when product total has changed.
+            .AutoRefresh(x => x.Divisor) // will refresh when product total has changed.
+            .Transform(x => new ProductProxy(x))
+            .DisposeMany()
             .QueryWhenChanged(query => query.Items
-                .Select(product => product.Divisor > 0 ? product.Total / product.Divisor : 0)
-                .Sum(division => division)
-            ) // Get the latest changes and compute the sum.
-            .Subscribe(total => SetAndRaise(ref this.total, total, nameof(Total))); // Set our total.
+                .Sum(proxy => proxy.Total)
+            )
+            // Get the latest changes and compute the sum.
+
+            //.QueryWhenChanged(query => query.Items
+            //    .Select(product => product.TotalSubs > 0 ? product.Total / product.TotalSubs : 0)
+            //    .Sum(division => division)
+            //) // Get the latest changes and compute the sum.
+            .Subscribe(total => SetAndRaise(ref this.total, total, nameof(Total))) // Set our total.
+            .DisposeWith(Disposables);
     }
 
-    public void AddProduct(ProductViewModel product)
+    public None RegisterProduct(ProductViewModel product)
     {
         products.AddOrUpdate(product);
+        return None.Value;
     }
 
-    public void RemoveProduct(ProductViewModel product)
+    public None UnRegisterProduct(ProductViewModel product)
     {
         products.Remove(product);
+        return None.Value;
+    }
+
+    public None ToggleProduct(ProductViewModel product)
+    {
+        return HasProduct(product) ? UnRegisterProduct(product) : RegisterProduct(product);
     }
 
     public bool HasProduct(Uuid productId)
@@ -57,10 +71,34 @@ public sealed class PersonViewModel : RxObject
         return products.Lookup(productId).HasValue;
     }
 
+    public bool HasProduct(ProductViewModel product)
+    {
+        return HasProduct(product.ProductId);
+    }
+
     public override void Dispose()
     {
         products.Clear();
         products.Dispose();
         base.Dispose();
+    }
+}
+
+file sealed class ProductProxy : IDisposable
+{
+    private readonly IDisposable sub;
+    private readonly ProductViewModel product;
+
+    public decimal Total => product.Divisor > 0 ? product.Total / product.Divisor : 0;
+
+    public ProductProxy(ProductViewModel product)
+    {
+        this.product = product;
+        sub = this.product.WhenTotalChanged.Subscribe();
+    }
+
+    public void Dispose()
+    {
+        sub.Dispose();
     }
 }

@@ -1,0 +1,17 @@
+@layer base {
+  .icon-xs {
+    @apply w-4 h-4;
+  }
+  .icon-sm {
+    @apply w-5 h-5;
+  }
+  .icon {
+    @apply w-6 h-6;
+  }
+  .icon-lg {
+    @apply w-7 h-7;
+  }
+  .icon-xl {
+    @apply w-8 h-8;
+  }
+}

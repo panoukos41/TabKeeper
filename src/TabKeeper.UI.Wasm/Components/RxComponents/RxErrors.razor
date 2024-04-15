@@ -1,0 +1,24 @@
+﻿
+@if (ShowErrors && EditContext?.IsValid(FieldIdentifier) is false)
+{
+    @foreach (var error in EditContext?.GetValidationMessages(this.FieldIdentifier) ?? [])
+    {
+        <p @attributes="AdditionalAttributes">@error</p>
+    }
+}
+
+@code {
+    [CascadingParameter]
+    public EditContext? EditContext { get; set; }
+
+    [Parameter, EditorRequired]
+    public FieldIdentifier FieldIdentifier { get; set; }
+
+    [Parameter]
+    public bool ShowErrors { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a collection of additional attributes that will be applied to the created element.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+}

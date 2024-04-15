@@ -1,20 +1,22 @@
-@import "./material.scss";
 @import "./_buttons.scss";
 @import "./_cards.scss";
+@import "./_icons.scss";
+@import "./_input.scss";
+@import "./_material-input.scss";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html,
+  html
   body,
   #app {
-    @apply w-screen h-screen overflow-clip bg-background text-on-background;
+    @apply w-screen h-dvh bg-surface;
   }
 
   #app {
-    @apply grid grid-rows-[auto_1fr];
+    @apply grid grid-rows-[auto_minmax(0,1fr)];
   }
 
   h1 {
@@ -31,13 +33,56 @@
   }
 
   p {
-    @apply text-on-surface;
   }
 
   small {
-    @apply text-on-surface;
   }
+
+  /*input[type='checkbox'] {
+    @apply relative appearance-none min-w-[22px] min-h-[22px] m-1 bg-white border-2 border-grey rounded cursor-pointer outline-none;
+
+    &:checked {
+      @apply border-grey-130;
+
+      &:before {
+        @apply absolute inset-0 flex items-center justify-center text-sm;
+        content: url(../src/assets/images/icon-check.svg);
+      }
+    }
+
+    &:focus:checked {
+      @apply border-2 border-grey-130;
+    }
+
+    &:focus:not(:checked) {
+      @apply border-2 border-grey;
+    }
+
+    &:disabled {
+      @apply cursor-default border-grey;
+    }
+  }*/
 }
 
 @layer components {
+  .material-group {
+    @apply relative;
+  }
+
+  .material-input {
+    @apply w-full placeholder:invisible rounded bg-white;
+  }
+
+  .material-label {
+    @apply absolute top-0 left-2 px-2 text-sm transition-all ease-linear select-none pointer-events-none;
+
+    @apply peer-placeholder-shown:translate-y-1/2 peer-placeholder-shown:text-gray-500;
+
+    @apply -translate-y-1/2 bg-white text-gray-950;
+    @apply peer-focus:-translate-y-1/2 peer-focus:text-gray-950;
+  }
+
+  .material-error {
+    @apply text-sm text-red-500;
+  }
 }

@@ -1,6 +1,5 @@
 ﻿using Core;
 using System.Text.Json;
-using TabKeeper.People;
 
 namespace TabKeeper.Tabs;
 
@@ -14,9 +13,9 @@ public sealed record Tab
 
     public DateOnly? Date { get; set; }
 
-    public HashSet<Product> Products { get; } = [];
+    public HashSet<Product> Products { get; set; } = [];
 
-    public HashSet<PersonTab> People { get; } = [];
+    public HashSet<PersonTab> People { get; set; } = [];
 
     public override string ToString()
     {

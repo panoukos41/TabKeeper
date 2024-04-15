@@ -1,0 +1,53 @@
+@layer components {
+  .material-form {
+    @apply flex flex-col gap-4;
+
+    input {
+      @apply w-full placeholder:invisible rounded disabled:bg-gray-200 text-black;
+    }
+
+    label {
+      @apply absolute top-0 left-2 px-2 text-sm transition-all ease-linear select-none pointer-events-none rounded;
+
+      @apply peer-placeholder-shown:translate-y-1/2 peer-placeholder-shown:text-gray-500;
+
+      @apply -translate-y-1/2 text-gray-950 bg-transparent bg-white peer-disabled:bg-gray-200;
+      @apply peer-focus:-translate-y-1/2 peer-focus:text-gray-950;
+    }
+
+    .error {
+      @apply text-sm text-red-500;
+    }
+
+    input[type='checkbox'] {
+      @apply appearance-none min-w-[18px] min-h-[18px] rounded-sm;
+    }
+  }
+
+  
+}
+
+/*.material-group {
+    @apply relative;
+  }
+
+  .material-input {
+    @apply w-full placeholder:invisible rounded disabled:bg-gray-200 text-black;
+  }
+
+  .material-label {
+    @apply absolute top-0 left-2 px-2 text-sm transition-all ease-linear select-none pointer-events-none rounded;
+
+    @apply peer-placeholder-shown:translate-y-1/2 peer-placeholder-shown:text-gray-500;
+
+    @apply -translate-y-1/2 text-gray-950 bg-transparent bg-white peer-disabled:bg-gray-200;
+    @apply peer-focus:-translate-y-1/2 peer-focus:text-gray-950;
+  }
+
+  .material-error {
+    @apply text-sm text-red-500;
+  }
+
+  input[type='checkbox'] {
+    @apply appearance-none min-w-[18px] min-h-[18px] rounded-sm;
+  }*/
