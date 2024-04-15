@@ -25,23 +25,23 @@ public sealed class PersonViewModelTests
         // Act / Assert
         total.Should().Be(0);
 
-        viewModel.AddProduct(salad);
-        viewModel.AddProduct(salad);
+        viewModel.RegisterProduct(salad);
+        viewModel.RegisterProduct(salad);
         total.Should().Be(5);
 
         salad.Quantity = 2;
         total.Should().Be(10);
 
-        viewModel.AddProduct(meat);
+        viewModel.RegisterProduct(meat);
         total.Should().Be(25);
 
-        viewModel.AddProduct(chips);
+        viewModel.RegisterProduct(chips);
         total.Should().Be(35);
 
         chips.Quantity += 1;
         total.Should().Be(45);
 
-        viewModel.RemoveProduct(chips);
+        viewModel.UnRegisterProduct(chips);
         total.Should().Be(25);
     }
 
@@ -68,34 +68,34 @@ public sealed class PersonViewModelTests
         // Act / Assert
         totals().Should().Be((0m, 0m, 0m));
 
-        panos.AddProduct(salad);
-        john.AddProduct(salad);
+        panos.RegisterProduct(salad);
+        john.RegisterProduct(salad);
         totals().Should().Be((3m, 3m, 0m));
         salad.Divisor.Should().Be(2);
 
         salad.Quantity = 2;
         totals().Should().Be((6m, 6m, 0m));
 
-        panos.AddProduct(chips);
-        john.AddProduct(chips);
-        george.AddProduct(chips);
+        panos.RegisterProduct(chips);
+        john.RegisterProduct(chips);
+        george.RegisterProduct(chips);
         totals().Should().Be((8m, 8m, 2m));
         chips.Divisor.Should().Be(3);
 
         chips.Quantity = 2;
         totals().Should().Be((10m, 10m, 4m));
 
-        panos.AddProduct(meat);
-        john.AddProduct(meat);
-        george.AddProduct(meat);
+        panos.RegisterProduct(meat);
+        john.RegisterProduct(meat);
+        george.RegisterProduct(meat);
         totals().Should().Be((15m, 15m, 9m));
         meat.Divisor.Should().Be(3);
 
-        george.AddProduct(salad);
+        george.RegisterProduct(salad);
         totals().Should().Be((13m, 13m, 13m));
         salad.Divisor.Should().Be(3);
 
-        george.RemoveProduct(salad);
+        george.UnRegisterProduct(salad);
         totals().Should().Be((15m, 15m, 9m));
         salad.Divisor.Should().Be(2);
 
@@ -109,5 +109,48 @@ public sealed class PersonViewModelTests
         meat.Divisor.Should().Be(2);
         peopleTotals = [panos.Total, john.Total];
         peopleTotals.Sum().Should().Be(productTotals.Sum());
+    }
+
+    [Fact]
+    public void Should_Change_Totals_After_Removing_People_Or_Product()
+    {
+        // Arrange
+        var salad = new ProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Salad", Price = 9 });
+
+        var panos = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "Panos" });
+        var john = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "John" });
+        var george = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "George" });
+
+        decimal panosTotal = 0, johnTotal = 0, georgeTotal = 0;
+
+        panos.WhenValueChanged(x => x.Total).Subscribe(x => panosTotal = x);
+        john.WhenValueChanged(x => x.Total).Subscribe(x => johnTotal = x);
+        george.WhenValueChanged(x => x.Total).Subscribe(x => georgeTotal = x);
+
+        var totals = () => (panosTotal, johnTotal, georgeTotal);
+
+        // Act / Assert
+        totals().Should().Be((0m, 0m, 0m));
+
+        panos.RegisterProduct(salad);
+        john.RegisterProduct(salad);
+        george.RegisterProduct(salad);
+        totals().Should().Be((3m, 3m, 3m));
+        salad.Divisor.Should().Be(3);
+
+        // remove product
+        john.UnRegisterProduct(salad);
+        totals().Should().Be((4.5m, 0m, 4.5m));
+        salad.Divisor.Should().Be(2);
+
+        // simulate removing a person (which implies disposing the person)
+        george.Dispose();
+        totals().Should().Be((9m, 0m, 0m));
+        salad.Divisor.Should().Be(1);
+
+        // dispose product
+        salad.Dispose();
+        totals().Should().Be((0m, 0m, 0m));
+        salad.Divisor.Should().Be(0);
     }
 }
