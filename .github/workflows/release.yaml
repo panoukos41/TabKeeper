@@ -1,0 +1,46 @@
+name: Release Workflow
+
+env:
+  DOTNET_NOLOGO: true
+
+on:
+  workflow_call:
+    secrets:
+      CLOUDFLARE_API_TOKEN: { required: true }
+      CLOUDFLARE_ACCOUNT_ID: { required: true }
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with: { fetch-depth: 0 }
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v4.0.0
+        with: { dotnet-version: 8.0.x }
+
+      - name: Setup wasm-tools workload
+        run: dotnet workload install wasm-tools
+
+      - name: Nerdbank.GitVersioning
+        uses: dotnet/nbgv@v0.4.2
+        id: nbgv
+        with: { setAllVars: true }
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Publish
+        working-directory: src/TabKeeper.UI.Wasm
+        run: dotnet publish --no-restore
+
+      - name: Upload to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: tab-keeper
+          directory: artifacts/src/publish/TabKeeper.UI.Wasm/release/wwwroot
+          wranglerVersion: '3'
