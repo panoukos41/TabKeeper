@@ -21,10 +21,13 @@ jobs:
 
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4.0.0
-        with: { dotnet-version: 8.0.x }
+        with: { dotnet-version: 8.0.x, cache: true }
 
       - name: Setup wasm-tools workload
         run: dotnet workload install wasm-tools
+
+      - name: Setup tailwindcss
+        run: npm install -g tailwindcss
 
       - name: Nerdbank.GitVersioning
         uses: dotnet/nbgv@v0.4.2
@@ -32,11 +35,16 @@ jobs:
         with: { setAllVars: true }
 
       - name: Restore
-        run: dotnet restore
+        run: |
+          npm install
+          dotnet restore
 
       - name: Publish
         working-directory: src/TabKeeper.UI.Wasm
-        run: dotnet publish --no-restore
+        shell: pwsh
+        run: |
+          .\css.ps1 -publish
+          dotnet publish --no-restore
 
       - name: Upload to Cloudflare Pages
         uses: cloudflare/pages-action@v1
