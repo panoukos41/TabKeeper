@@ -21,7 +21,7 @@ jobs:
 
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4.0.0
-        with: { dotnet-version: 8.0.x, cache: true }
+        with: { dotnet-version: 8.0.x }
 
       - name: Setup wasm-tools workload
         run: dotnet workload install wasm-tools
@@ -35,6 +35,7 @@ jobs:
         with: { setAllVars: true }
 
       - name: Restore
+        working-directory: src/TabKeeper.UI.Wasm
         run: |
           npm install
           dotnet restore
