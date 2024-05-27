@@ -5,9 +5,11 @@ env:
 
 on:
   workflow_call:
-    secrets:
-      CLOUDFLARE_API_TOKEN: { required: true }
-      CLOUDFLARE_ACCOUNT_ID: { required: true }
+    inputs:
+      publish:
+          description: Publish to nuget or not
+          default: false
+          type: boolean
 
 jobs:
   publish:
@@ -19,17 +21,17 @@ jobs:
           fetch-depth: 0
           submodules: 'true'
 
-      - name: Setup .NET Core SDK
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4.0.0
         with: { dotnet-version: 8.0.x }
 
-      - name: Setup wasm-tools workload
+      - name: Setup wasm-tools
         run: dotnet workload install wasm-tools
 
       - name: Setup tailwindcss
         run: npm install -g tailwindcss
 
-      - name: Nerdbank.GitVersioning
+      - name: Setup Nerdbank.GitVersioning
         uses: dotnet/nbgv@v0.4.2
         id: nbgv
         with: { setAllVars: true }
@@ -40,14 +42,20 @@ jobs:
           npm install
           dotnet restore
 
+      - name: Build
+        working-directory: src/TabKeeper.UI.Wasm
+        run: dotnet build --no-restore
+
       - name: Publish
+        if: ${{ inputs.publish }}
         working-directory: src/TabKeeper.UI.Wasm
         shell: pwsh
         run: |
           .\css.ps1 -publish
-          dotnet publish --no-restore
+          dotnet publish --no-restore --no-build
 
-      - name: Upload to Cloudflare Pages
+      - name: Push to Cloudflare Pages
+        if: ${{ inputs.publish }}
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
