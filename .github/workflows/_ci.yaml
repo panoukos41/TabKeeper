@@ -44,7 +44,7 @@ jobs:
 
       - name: Build
         working-directory: src/TabKeeper.UI.Wasm
-        run: dotnet build --no-restore
+        run: dotnet build -c Release --no-restore
 
       - name: Publish
         if: ${{ inputs.publish }}
@@ -52,7 +52,7 @@ jobs:
         shell: pwsh
         run: |
           .\css.ps1 -publish
-          dotnet publish --no-restore --no-build
+          dotnet publish --no-restore
 
       - name: Push to Cloudflare Pages
         if: ${{ inputs.publish }}
