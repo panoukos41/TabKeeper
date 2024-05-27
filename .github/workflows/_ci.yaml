@@ -12,7 +12,7 @@ on:
           type: boolean
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
