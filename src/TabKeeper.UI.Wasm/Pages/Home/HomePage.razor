@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @inherits CoreComponent
 @inject ISyncLocalStorageService storage
 @inject NavigationManager nav
@@ -61,6 +61,7 @@
 
     protected override void OnInitialized()
     {
+        ShellContext.Title = "general.home" | translate;
         NewTabEntryName.Subscribe(_ => Update());
         Entries
             .Connect()

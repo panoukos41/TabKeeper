@@ -1,12 +1,35 @@
 ﻿@inherits LayoutComponentBase
 
-<header class="w-full flex items-center p-6 bg-background">
-    <a href="/" class="m-0 text-xl font-bold">Home</a>
+@inject TranslateService translate
+
+@if (ThisAssembly.IsPrerelease)
+{
+    <div class="fixed w-full h-0 pointer-events-none">
+        <div class="p-1 bg-amber-500 origin-top float-right mt-4 mr-4 w-28 text-center translate-x-1/2 rotate-45 pointer-events-none">
+            <p class="font-mono font-semibold text-xs pointer-events-none">DEV</p>
+        </div>
+    </div>
+}
+
+<PageTitle>@title</PageTitle>
+
+<header class="bg-background flex w-full items-center p-6">
+    <p class="m-0 text-xl font-bold">@ShellContext.Title</p>
 </header>
 
-<main class="p-2 overflow-y-auto">
+<main class="overflow-y-auto p-2">
     @Body
 </main>
 
-@* <footer>
-</footer> *@
+@code {
+    private string? title;
+
+    protected override void OnInitialized()
+    {
+        ShellContext.TitleChanged.Subscribe(title =>
+        {
+            this.title = string.IsNullOrEmpty(ShellContext.Title) ? "Tab Keeper" : $"Tab Keeper - {title}";
+            StateHasChanged();
+        });
+    }
+}
