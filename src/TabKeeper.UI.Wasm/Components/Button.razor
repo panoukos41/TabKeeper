@@ -1,7 +1,13 @@
 ﻿@using System.Diagnostics.CodeAnalysis
 @using System.Globalization
+@using OneOf;
 
 @inherits CoreComponent
+
+@if (!If.Match(static v => v, static f => f()))
+{
+    return;
+}
 
 <button
     @attributes="Attributes"
@@ -38,6 +44,8 @@
 
     [Parameter]
     public bool PreventDefault { get; set; }
+
+    public OneOf<bool, Func<bool>> If { get; set; } = true;
 
     private string TypeAttribute => GetAttributeOrDefault<string>("type", "button");
     
