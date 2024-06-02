@@ -1,0 +1,11 @@
+﻿@page "/about"
+@inherits CoreComponent
+@inject TranslateService translate
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        ShellContext.Title = "general.about" | translate;
+    }
+}

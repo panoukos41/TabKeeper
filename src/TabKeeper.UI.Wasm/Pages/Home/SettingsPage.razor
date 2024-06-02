@@ -1,0 +1,12 @@
+﻿@page "/settings"
+@inherits CoreComponent
+@inject TranslateService translate
+
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        ShellContext.Title = "general.settings" | translate;
+    }
+}

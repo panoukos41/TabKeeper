@@ -1,4 +1,4 @@
-@page "/"
+﻿@page "/"
 @inherits CoreComponent
 @inject ISyncLocalStorageService storage
 @inject NavigationManager nav
@@ -22,9 +22,21 @@
         }
     </div>
 
-    <Button class="absolute bottom-1 right-1 btn btn-primary w-14 h-14 rounded-full" OnClick="() => addEntryModal.Show()">
-        <FaSolidPlus class="icon" />
-    </Button>
+    <div class="absolute bottom-1 right-1 flex gap-1 bg-primary rounded-3xl">
+        <Button class="btn w-14 h-14 rounded-3xl" OnClick="() => addEntryModal.Show()">
+            <FaSolidPlus class="icon" />
+        </Button>
+        <div class="border-l border-surface h-8 self-center"></div>
+        <Dropdown>
+            <DropdownButton class="btn w-14 h-14 rounded-3xl">
+                <FaSolidEllipsis class="icon" />
+            </DropdownButton>
+            <DropdownContent class="min-w-52 bg-primary-container px-3 py-2" Anchor="Anchor.Top | Anchor.Right">
+                <DropdownItem OnClick="@(() => nav.NavigateTo("/settings"))"><FaSolidGear class="icon-xs me-2" /> @("general.settings" | translate)</DropdownItem>
+                <DropdownItem OnClick="@(() => nav.NavigateTo("/about"))"><FaSolidInfo class="icon-xs me-2" /> @("general.about" | translate)</DropdownItem>
+            </DropdownContent>
+        </Dropdown>
+    </div>
 </div>
 
 <Modal @ref="addEntryModal" UpdateWhen="NewTabEntryName.ToNone()" class="self-center min-h-52 flex flex-col">
