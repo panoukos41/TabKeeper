@@ -9,19 +9,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    },
-    "watch": {
-      "commandName": "Executable",
-      "executablePath": "dotnet.exe",
-      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "workingDirectory": "$(ProjectDir)",
-      "commandLineArgs": "watch --non-interactive run",
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:5001",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HTTPS_PORT": "5001"
-      }
     }
   }
 }
