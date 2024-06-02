@@ -1,0 +1,13 @@
+﻿@inherits CoreComponent
+
+<MenuButton class="@Class()">
+    @(ChildContent?.Invoke(Menu?.IsOpen ?? false))
+</MenuButton>
+
+@code {
+    [CascadingParameter]
+    public Menu? Menu { get; set; }
+
+    [Parameter]
+    public RenderFragment<bool>? ChildContent { get; set; }
+}

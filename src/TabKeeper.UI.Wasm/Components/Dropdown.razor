@@ -1,0 +1,10 @@
+﻿@inherits CoreComponent
+
+<Menu AsElement="div" class="@Class("relative")">
+    @ChildContent
+</Menu>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}
