@@ -4,8 +4,14 @@
 
 @inject ISyncLocalStorageService storage
 
-<PageTitle>Tab Keeper</PageTitle>
+@* Not Found  *@
+@if (ViewModel is null)
+{
+    <NotFound />
+    return;
+}
 
+@* Found  *@
 <div class="h-full flex flex-col gap-2">
     <TabGroup Context="tabGroup">
         <TabPanels class="flex-grow overflow-y-auto">
@@ -147,36 +153,40 @@
 </Modal>
 
 @code {
-    public override TabViewModel ViewModel { get; set; } = null!;
-
-    [Parameter]
-    public string Id { get; set; } = string.Empty;
-
-    private void OnAddProduct()
-    {
-        ViewModel.AddProduct(NewProduct!.Value);
-        NewProduct.OnNext(new());
-    }
-
-    private void OnAddPerson()
-    {
-        ViewModel.AddPerson(NewPerson!.Value);
-        NewPerson.OnNext(new());
-    }
+    public override TabViewModel ViewModel { get; set; }
 
     private BehaviorSubject<ProductViewModel?> SelectedProduct { get; } = new(null);
     private BehaviorSubject<PersonViewModel?> SelectedPerson { get; } = new(null);
     private BehaviorSubject<ProductViewModel?> NewProduct { get; } = new(null);
     private BehaviorSubject<PersonViewModel?> NewPerson { get; } = new(null);
 
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    private void OnAddProduct()
+    {
+        ViewModel.AddProduct(NewProduct.Value!);
+        NewProduct.OnNext(new());
+    }
+
+    private void OnAddPerson()
+    {
+        ViewModel.AddPerson(NewPerson.Value!);
+        NewPerson.OnNext(new());
+    }
+
+    
+
     protected override void OnInitialized()
     {
         var tab = storage.GetItem<TabKeeper.Tabs.Tab>(Id);
         if (tab is null)
         {
+            // show not found.
             return;
         }
 
+        ShellContext.Title = tab.Name;
         ViewModel = new TabViewModel(tab);
         ViewModel.WhenPropertyChanged
             .Throttle(TimeSpan.FromSeconds(1))
