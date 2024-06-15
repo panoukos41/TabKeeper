@@ -1,53 +1,34 @@
 @layer components {
-  .material-form {
-    @apply flex flex-col gap-4;
+  .material-input {
+    @apply relative;
 
     input {
-      @apply w-full placeholder:invisible rounded disabled:bg-gray-200 text-black;
+      @apply w-full rounded border-2 bg-white p-1 text-gray-900 placeholder-transparent focus:outline-none;
+      @apply border-gray-300;
+      @apply focus:border-rose-600;
     }
 
     label {
-      @apply absolute top-0 left-2 px-2 text-sm transition-all ease-linear select-none pointer-events-none rounded;
-
-      @apply peer-placeholder-shown:translate-y-1/2 peer-placeholder-shown:text-gray-500;
-
-      @apply -translate-y-1/2 text-gray-950 bg-transparent bg-white peer-disabled:bg-gray-200;
-      @apply peer-focus:-translate-y-1/2 peer-focus:text-gray-950;
+      /* Defaults */
+      @apply pointer-events-none absolute left-2 translate-y-1/2 cursor-text bg-white transition-all;
+      /* Styling */
+      @apply text-sm font-medium text-gray-600;
+      @apply next-input-placeholder-shown:text-base next-input-placeholder-shown:text-gray-500;
+      @apply next-input-focus:text-sm;
+      /* Placing */
+      @apply bottom-full px-1;
+      @apply next-input-placeholder-shown:bottom-1/2 next-input-placeholder-shown:left-1.5 next-input-placeholder-shown:px-0;
+      @apply next-input-focus:bottom-full next-input-focus:left-2 next-input-focus:px-1;
     }
+  }
 
-    .error {
-      @apply text-sm text-red-500;
-    }
-
+  .material-checkbox {
     input[type='checkbox'] {
       @apply appearance-none min-w-[18px] min-h-[18px] rounded-sm;
     }
   }
 
-  
-}
-
-/*.material-group {
-    @apply relative;
-  }
-
-  .material-input {
-    @apply w-full placeholder:invisible rounded disabled:bg-gray-200 text-black;
-  }
-
-  .material-label {
-    @apply absolute top-0 left-2 px-2 text-sm transition-all ease-linear select-none pointer-events-none rounded;
-
-    @apply peer-placeholder-shown:translate-y-1/2 peer-placeholder-shown:text-gray-500;
-
-    @apply -translate-y-1/2 text-gray-950 bg-transparent bg-white peer-disabled:bg-gray-200;
-    @apply peer-focus:-translate-y-1/2 peer-focus:text-gray-950;
-  }
-
-  .material-error {
+  .error {
     @apply text-sm text-red-500;
   }
-
-  input[type='checkbox'] {
-    @apply appearance-none min-w-[18px] min-h-[18px] rounded-sm;
-  }*/
+}

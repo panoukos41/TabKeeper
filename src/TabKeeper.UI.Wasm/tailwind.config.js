@@ -1,3 +1,5 @@
+import { variants } from './tailwind.config.variants'
+
 const { withMaterialColors } = require('./tailwind-material-colors.esm');
 
 module.exports = withMaterialColors(
@@ -7,8 +9,9 @@ module.exports = withMaterialColors(
       "./**/*.{razor,html,cshtml}"
     ],
     plugins: [
-      require('@tailwindcss/forms')({ strategy: 'base' }),
-      require('@tailwindcss/typography')
+      require('@tailwindcss/typography'),
+      require('@tailwindcss/forms'),
+      variants,
     ],
     theme: {
       extend: {
