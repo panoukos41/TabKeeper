@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Core.Blazor.Reactive.Forms.Primitives
 @inherits CoreComponent
 @inject ISyncLocalStorageService storage
 @inject NavigationManager nav
@@ -39,52 +40,50 @@
     </div>
 </div>
 
-<Modal @ref="addEntryModal" UpdateWhen="NewTabEntryName.ToNone()" class="self-center min-h-52 flex flex-col">
-    <EditForm Context="_" Model="NewTabEntryName" class="material-form grow">
-
-        <div class="material-group">
-            <RxInput Label="Name" T="string" Value="NewTabEntryName.Value" ValueChanged="v => NewTabEntryName.OnNext(v)" ValueExpression="@(() => NewTabEntryName.Value)" />
+<Modal @ref="addEntryModal" UpdateWhen="newTabForm.ValueChanges.ToNone()" class="self-center min-h-52 flex flex-col">
+    <RxFormGroup FormGroup="newTabForm">
+        <div class="material-input">
+            <RxInput Id="name" Label="Name" T="string" Validators="[Validators.Required, MinLength3]" HideErrors />
         </div>
-
-        @if (NewTabEntryName.Value.Length < 3)
-        {
-            <span class="error">Name can't be less than 3 characters</span>
-        }
-
-        <Button class="btn btn-primary mt-auto" OnClick="AddNewTab">Add</Button>
-    </EditForm>
+        <RxOutputErrors Id="name" />
+    </RxFormGroup>
+    <Button class="btn btn-primary mt-auto" OnClick="AddNewTab" disabled="@(newTabForm.Invalid)">Add</Button>
 </Modal>
 
 @code {
+    private ValidatorFn MinLength3 = Validators.MinLength(3);
     private const string EntriesKey = "tab-entries";
-    private Modal addEntryModal = null!;
 
-    private BehaviorSubject<string> NewTabEntryName { get; } = new("");
+    private FormGroup newTabForm = new();
+    private Modal addEntryModal = null!;
 
     private SourceList<TabEntry> Entries { get; } = new();
 
     private void AddNewTab()
     {
-        if (NewTabEntryName.Value.Length < 3) return;
+        if (newTabForm.Invalid) return;
+
+        var name = newTabForm.GetControl<string>("name")?.Value;
+
+        if (name is null or "") return;
 
         var entryId = Uuid.NewUuid();
-        Entries.Insert(0, new TabEntry(entryId, NewTabEntryName.Value));
+        Entries.Insert(0, new TabEntry(entryId, name));
         nav.NavigateTo($"/tabs/{entryId}");
     }
 
     protected override void OnInitialized()
     {
         ShellContext.Title = "general.home" | translate;
-        NewTabEntryName.Subscribe(_ => Update());
+        // NewTabEntryName.Subscribe(_ => Update());
         Entries
             .Connect()
-            .OnItemAdded(entry => storage.TrySetItem(entry.Id, new TabKeeper.Tabs.Tab { Id = entry.Id, Name = entry.Name }))
+            .OnItemAdded(entry => storage.TrySetItem(entry.Id, new TabKeeper.Tabs.Tab { Id = entry.Id, Name = entry.Name, Date = DateOnly.FromDateTime(DateTime.Now) }))
             .OnItemRemoved(entry => storage.RemoveItem(entry.Id), invokeOnUnsubscribe: false)
             .QueryWhenChanged()
             .Do(entries => storage.SetItem(EntriesKey, entries))
             .Subscribe(_ => Update())
             .DisposeWith(Disposables);
-
 
         Entries.AddRange(storage.GetItem<List<TabEntry>>(EntriesKey) ?? []);
     }
