@@ -8,6 +8,7 @@ using Ignis.Components.WebAssembly;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Threading.Tasks;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -29,8 +30,16 @@ services.AddScoped<TranslateService>();
 
 var app = builder.Build();
 
+await Import();
 await InitializeLang(app);
+
 await app.RunAsync();
+
+[SuppressMessage("BrowserPlatform", "CA1416")]
+static Task Import()
+{
+    return Theme.Import();
+}
 
 static Task InitializeLang(WebAssemblyHost app)
 {

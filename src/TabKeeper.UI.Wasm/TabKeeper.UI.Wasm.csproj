@@ -6,6 +6,8 @@
     <!-- <PublishTrimmed>true</PublishTrimmed> -->
     <!-- <TrimMode>partial</TrimMode> -->
     <!--<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>-->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NBGV_EmitThisAssemblyClass>true</NBGV_EmitThisAssemblyClass>
   </PropertyGroup>
 
   <ItemGroup>
