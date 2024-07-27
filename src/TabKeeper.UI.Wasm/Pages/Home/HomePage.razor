@@ -33,8 +33,7 @@
                 <FaSolidEllipsis class="icon" />
             </DropdownButton>
             <DropdownContent class="min-w-52 bg-primary-container px-3 py-2" Anchor="Anchor.Top | Anchor.Right">
-                <DropdownItem OnClick="@(() => nav.NavigateTo("/settings"))"><FaSolidGear class="icon-xs me-2" /> @("general.settings" | translate)</DropdownItem>
-                <DropdownItem OnClick="@(() => nav.NavigateTo("/about"))"><FaSolidInfo class="icon-xs me-2" /> @("general.about" | translate)</DropdownItem>
+                <DropdownItem OnClick="@(() => nav.NavigateTo("settings"))"><FaSolidGear class="icon-xs me-2" /> @("general.settings" | translate)</DropdownItem>
             </DropdownContent>
         </Dropdown>
     </div>
@@ -63,13 +62,13 @@
     {
         if (newTabForm.Invalid) return;
 
-        var name = newTabForm.GetControl<string>("name")?.Value;
+        var name = newTabForm.GetFormControl<string>("name")?.Value;
 
         if (name is null or "") return;
 
         var entryId = Uuid.NewUuid();
         Entries.Insert(0, new TabEntry(entryId, name));
-        nav.NavigateTo($"/tabs/{entryId}");
+        nav.NavigateTo($"tabs/{entryId}");
     }
 
     protected override void OnInitialized()
