@@ -1,15 +1,18 @@
 {
   "general": {
     "home": "Home",
-    "settings": "Settings",
-    "about": "About",
     "not-found": {
       "title": "Not Found",
       "description": "Sorry, there is nothing at this address."
     }
   },
-  "errors": {
-  },
-  "pages": {
+  "settings": {
+    "title": "Settings",
+    "theme": {
+      "title": "Theme",
+      "auto": "Auto",
+      "dark": "Dark",
+      "light": "Light"
+    }
   }
 }
