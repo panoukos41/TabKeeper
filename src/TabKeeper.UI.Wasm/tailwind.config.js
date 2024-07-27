@@ -1,36 +1,31 @@
-import { variants } from './tailwind.config.variants'
-
-const { withMaterialColors } = require('./tailwind-material-colors.esm');
+import { variants } from "./tailwind.config.variants"
+const { withMaterialColors } = require("tailwind-material-colors");
 
 module.exports = withMaterialColors(
   {
-    darkMode: 'class',
+    darkMode: ["selector", "[dark]"],
     content: [
       "./**/*.{razor,html,cshtml}"
     ],
     plugins: [
-      require('@tailwindcss/typography'),
-      require('@tailwindcss/forms'),
+      require("@tailwindcss/typography"),
+      require("@tailwindcss/forms"),
       variants,
     ],
     theme: {
       extend: {
-        screens: {}, // '2xl': {'max': '1535px'}
+        screens: {}, // "2xl": {"max": "1535px"}
       }
-    },
-    safelist: [
-      'material-group'
-    ]
+    }
   },
   {
-    // Here, your base colors as HEX values
-    // primary is required
-    primary: '#ff0000',
-    // secondary and/or tertiary are optional, if not set they will be derived from the primary color
-    //secondary: '#ffff00',
-    //tertiary: '#0000ff'
+    primary: "#ff0000",
+    //secondary: "#ffff00",
+    //tertiary: "#0000ff"
+    // error: "#FF5449",
   },
   {
+    scheme: "content",
     extend: true
   }
 );
