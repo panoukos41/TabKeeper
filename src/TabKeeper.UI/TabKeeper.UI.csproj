@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Annular.Translate" Version="0.1.1-dev" />
-    <PackageReference Include="DynamicData" Version="8.4.1" />
+    <PackageReference Include="Annular.Translate" />
+    <PackageReference Include="DynamicData" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
 <Project>
-  <!--Build-->
+
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
@@ -8,29 +8,37 @@
     <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
     <NoWarn>$(NoWarn);CS8509;IDE0039;IDE0130;IDE0290;IDE0060;RZ10012;IDE0052;BL0007;</NoWarn>
 
-    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts/default</ArtifactsPath>
-    <ArtifactsPath Condition="$(MSBuildProjectDirectory.Contains('tests'))">$(MSBuildThisFileDirectory)artifacts/tests</ArtifactsPath>
-    <ArtifactsPath Condition="$(MSBuildProjectDirectory.Contains('tools'))">$(MSBuildThisFileDirectory)artifacts/tools</ArtifactsPath>
-    <ArtifactsPath Condition="$(MSBuildProjectDirectory.Contains('samples'))">$(MSBuildThisFileDirectory)artifacts/samples</ArtifactsPath>
-    <ArtifactsPath Condition="$(MSBuildProjectDirectory.Contains('src'))">$(MSBuildThisFileDirectory)artifacts/src</ArtifactsPath>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts\$([MSBuild]::MakeRelative($(MSBuildThisFileDirectory),$(MSBuildProjectDirectory)).Replace($(MSBuildProjectName), ''))</ArtifactsPath>
+
     <UseArtifactsOutput>true</UseArtifactsOutput>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <NBGV_EmitThisAssemblyClass>false</NBGV_EmitThisAssemblyClass>
   </PropertyGroup>
 
   <!-- Repository -->
   <PropertyGroup>
     <Authors>Panagiotis Athanasiou</Authors>
-    <Owners>panoukos41</Owners>
-    <Copyright>Copyright (c) 2023 $(Authors)</Copyright>
-    <RepositoryUrl></RepositoryUrl>
+    <Copyright>Copyright (c) 2024 $(Authors)</Copyright>
+    <RepositoryUrl>https://www.github.com/panoukos41/FontAwesome</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryLicense>MIT</RepositoryLicense>
-    <RepositoryDescription></RepositoryDescription>
-    <RepositoryTags></RepositoryTags>
+    <RepositoryDescription>Project to port great features, component, ideas and libs from the Angular ecosystem to Blazor and .NET.</RepositoryDescription>
+    <RepositoryTags>blazor;angular;components</RepositoryTags>
   </PropertyGroup>
 
-  <ItemGroup>
-    <!-- Versioning -->
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.139" PrivateAssets="All" />
-  </ItemGroup>
+  <!-- Package -->
+  <PropertyGroup>
+    <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
+    <PackageLicenseExpression>$(RepositoryLicense)</PackageLicenseExpression>
+    <PackageDescription>$(RepositoryDescription)</PackageDescription>
+    <PackageTags>$(RepositoryTags)</PackageTags>
+    <PackageReleaseNotes>$(RepositoryUrl)/releases</PackageReleaseNotes>
+    <!--<PackageIcon></PackageIcon>-->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
 
 </Project>
