@@ -58,10 +58,10 @@
             <div class="flex gap-4 items-center">
                 <div class="me-auto text-on-secondary-container flex items-center gap-2">
                     <FaSolidCashRegister class="icon" />
-                    <p class="text-lg font-semibold">@ViewModel.Products.Items.Sum(x => x.Total)</p>
+                    <p class="text-lg font-semibold">@ViewModel.Products.Items.Sum(x => x.Total).ToString("0.00")</p>
                     <div class="h-4 mx-2 border border-gray-700"></div>
                     <FaSolidCalculator class="icon" />
-                    <p class="text-lg font-semibold">@ViewModel.People.Items.Sum(x => x.Total)</p>
+                    <p class="text-lg font-semibold">@ViewModel.People.Items.Sum(x => x.Total).ToString("0.00")</p>
                 </div>
                 <Button class="btn btn-primary p-2" OnClick="() => NewProductModal.Show()">
                     <FaSolidCartPlus class="icon" />
