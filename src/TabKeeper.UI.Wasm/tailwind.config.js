@@ -19,10 +19,11 @@ module.exports = withMaterialColors(
     }
   },
   {
-    primary: "#32EBDE",
-    secondary: "#779793",
-    tertiary: "#7594B4",
-    error: "#FF5449",
+    primary: "#0035BE",
+    secondary: "#005A6F",
+    tertiary: "#054C6C",
+    error: "#D4352F",
+    neutral: "#919094"
   },
   {
     scheme: "content",
