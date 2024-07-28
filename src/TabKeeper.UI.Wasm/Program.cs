@@ -2,7 +2,6 @@ using Annular.Translate;
 using Annular.Translate.Abstract;
 using Annular.Translate.HttpLoader;
 using Blazored.LocalStorage;
-using Core.Blazor;
 using Ignis.Components.HeadlessUI;
 using Ignis.Components.WebAssembly;
 using Microsoft.AspNetCore.Components.Web;

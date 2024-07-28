@@ -1,10 +1,8 @@
-﻿@using System.Diagnostics.CodeAnalysis
-@using System.Globalization
-@using OneOf;
+﻿@using OneOf
 
 @inherits CoreComponent
 
-@if (!If.Match(static v => v, static f => f()))
+@if (If?.Match(static v => v, static f => f()) is false)
 {
     return;
 }
@@ -31,6 +29,9 @@
 
 @code {
     [Parameter]
+    public OneOf<bool, Func<bool>>? If { get; set; }
+
+    [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
@@ -45,12 +46,10 @@
     [Parameter]
     public bool PreventDefault { get; set; }
 
-    public OneOf<bool, Func<bool>> If { get; set; } = true;
-
-    private string TypeAttribute => GetAttributeOrDefault<string>("type", "button");
+    private string TypeAttribute => this.GetAttributeOrDefault<string>("type", "button");
     
-    private bool DisabledAttribute => GetAttributeOrDefault<bool>("disabled", false) || IsLoading;
+    private bool DisabledAttribute => this.GetAttributeOrDefault<bool>("disabled", false) || IsLoading;
 
     private string? ClassAttribute
-        => Css.Class(TryGetAttribute<string>("class"), ("cursor-not-allowed relative", IsLoading));
+        => Css.Class(this.TryGetAttribute<string>("class"), ("cursor-not-allowed relative", IsLoading));
 }

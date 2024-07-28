@@ -1,6 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@implements IDisposable
 
 @inject TranslateService translate
+@inject NavigationManager nav
 
 @if (ThisAssembly.IsPrerelease)
 {
@@ -11,10 +13,11 @@
     </div>
 }
 
-<PageTitle>@title</PageTitle>
+<PageTitle>@(string.IsNullOrEmpty(Title) ? "Tab Keeper" : $"Tab Keeper - {Title}")</PageTitle>
 
-<header class="bg-background flex w-full items-center p-6">
-    <p class="m-0 text-xl font-bold">@ShellContext.Title</p>
+<header class="flex w-full items-center p-6 gap-2 border-b border-on-surface">
+    <Button key="Back" If="BackUri is not null" OnClick="() => nav.NavigateTo(BackUri!)"><FaSolidCircleChevronLeft class="icon" /></Button>
+    <h1 class="m-0 text-2xl font-bold">@Title</h1>
 </header>
 
 <main class="overflow-y-auto p-2">
@@ -22,14 +25,38 @@
 </main>
 
 @code {
-    private string? title;
+    private static readonly BehaviorSubject<ShellContext> contextSub = new(new());
+    private IDisposable? sub;
 
     protected override void OnInitialized()
     {
-        ShellContext.TitleChanged.Subscribe(title =>
-        {
-            this.title = string.IsNullOrEmpty(ShellContext.Title) ? "Tab Keeper" : $"Tab Keeper - {title}";
-            StateHasChanged();
-        });
+        sub = contextSub.Subscribe(_ => StateHasChanged());
+    }
+
+    public static IObservable<ShellContext> ContextChanged { get; } = contextSub.AsObservable();
+
+    public static ShellContext Context
+    {
+        get => contextSub.Value;
+        set {
+            if (contextSub.Value == value) return;
+            contextSub.OnNext(value);
+        }
+    }
+
+    public static string Title
+    {
+        get => Context.Title;
+    }
+
+    public static string? BackUri
+    {
+        get => Context.BackUri;
+    }
+
+    public void Dispose()
+    {
+        sub?.Dispose();
+        sub = null;
     }
 }

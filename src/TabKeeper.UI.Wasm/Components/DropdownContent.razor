@@ -8,7 +8,7 @@
             LeaveFrom="transform opacity-100 scale-100"
             LeaveTo="transform opacity-0 scale-95"
             Context="transition">
-    <MenuItems class="@Css.Class("absolute space-y-1 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none", Class(), GetPosition(Anchor), transition.CssClass)">
+    <MenuItems class="@Css.Class("absolute space-y-1 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none", this.Class(), GetPosition(Anchor), transition.CssClass)">
         @ChildContent
     </MenuItems>
 </Transition>

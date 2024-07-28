@@ -1,7 +1,7 @@
-﻿using Annular.Translate;
+﻿using Core.Blazor;
 using Microsoft.AspNetCore.Components;
 
-namespace Core.Blazor.Translate;
+namespace Annular.Translate;
 
 public static class TranslateMixins
 {

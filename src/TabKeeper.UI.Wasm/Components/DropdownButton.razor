@@ -1,6 +1,6 @@
 ﻿@inherits CoreComponent
 
-<MenuButton class="@Class()">
+<MenuButton class="@this.Class()">
     @(ChildContent?.Invoke(Menu?.IsOpen ?? false))
 </MenuButton>
 

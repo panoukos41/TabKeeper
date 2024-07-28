@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using Core.Blazor.Reactive.Forms.Primitives
 @inherits CoreComponent
 @inject ISyncLocalStorageService storage
 @inject NavigationManager nav
@@ -73,7 +72,8 @@
 
     protected override void OnInitialized()
     {
-        ShellContext.Title = "general.home" | translate;
+        ShellLayout.Context = new() { Title = "general.home" | translate };
+
         // NewTabEntryName.Subscribe(_ => Update());
         Entries
             .Connect()
@@ -81,8 +81,8 @@
             .OnItemRemoved(entry => storage.RemoveItem(entry.Id), invokeOnUnsubscribe: false)
             .QueryWhenChanged()
             .Do(entries => storage.SetItem(EntriesKey, entries))
-            .Subscribe(_ => Update())
-            .DisposeWith(Disposables);
+            .Subscribe(_ => TriggerUpdate())
+            .DisposeWith(this);
 
         Entries.AddRange(storage.GetItem<List<TabEntry>>(EntriesKey) ?? []);
     }

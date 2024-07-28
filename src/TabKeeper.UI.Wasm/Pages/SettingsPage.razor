@@ -18,7 +18,7 @@
 @code {
     protected override void OnInitialized()
     {
-        ShellContext.Title = "settings.title" | translate;
+        ShellLayout.Context = new() { Title = "settings.title" | translate };
     }
 
     public void OnThemeChange(ChangeEventArgs e)

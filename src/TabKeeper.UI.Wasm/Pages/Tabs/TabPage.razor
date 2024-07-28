@@ -63,7 +63,7 @@
                     <FaSolidCalculator class="icon" />
                     <p class="text-lg font-semibold">@ViewModel.People.Items.Sum(x => x.Total)</p>
                 </div>
-                <Button class="btn btn-primary p-2" OnClick="() => NewProduct.OnNext(new())">
+                <Button class="btn btn-primary p-2" OnClick="() => NewProductModal.Show()">
                     <FaSolidCartPlus class="icon" />
                 </Button>
                 <Button class="btn btn-primary p-2" OnClick="() => NewPerson.OnNext(new())">
@@ -88,9 +88,9 @@
     @foreach (var person in ViewModel.People.Items)
     {
         var key = person.PersonId.ToString();
-        <div class="flex items-center border gap-2 mb-2 rounded bg-primary-container" @onclick="() => person.ToggleProduct(product)">
+        <div class="flex items-center border gap-2 mb-2 rounded bg-primary-container">
             <input id="@key" @key="key" class="ms-4 my-2 rounded-full" type="checkbox" checked="@person.HasProduct(product)" @onchange="() => person.ToggleProduct(product)" />
-            <label for="@key" class="my-2 me-4 flex-grow cursor-pointer">@person.Name</label>
+            <label for="@key" class="my-2 me-4 grow cursor-pointer">@person.Name</label>
         </div>
     }
     <button class="btn btn-secondary mx-auto" @onclick="() => context.Close()">Close</button>
@@ -110,31 +110,33 @@
     @foreach (var product in ViewModel.Products.Items)
     {
         var key = product.ProductId.ToString();
-        <div class="flex items-center border gap-2 mb-2 rounded bg-primary-container" @onclick="() => person.ToggleProduct(product)">
+        <div class="flex items-center border gap-2 mb-2 rounded bg-primary-container">
             <input id="@key" @key="key" class="ms-4 my-2 rounded-full" type="checkbox" checked="@person.HasProduct(product)" @onchange="() => person.ToggleProduct(product)" />
-            <label for="@key" class="my-2 me-4 flex-grow cursor-pointer">@product.Name</label>
+            <label for="@key" class="my-2 me-4 grow cursor-pointer">@product.Name</label>
         </div>
     }
     <button class="btn btn-secondary mx-auto" @onclick="() => context.Close()">Close</button>
 </Modal>
 
 @* Add Product Modal *@
-<Modal BackdropDismiss IsOpenWhen="NewProduct.IsNotNull()">
-    @if (NewProduct.Value is null) { return; }
-
-    <EditForm Model="NewProduct" Context="_" OnValidSubmit="OnAddProduct" class="flex flex-col gap-3">
-        <FluentValidator TModel="ProductViewModel" FailureNotifications="NewProduct.Value.WhenProblem.Select(x => x.ValidationFailures).WhereNotNull()" />
-
-        <div class="material-group">
-            <RxInput @bind-Value="NewProduct.Value.Name" Label="Name" class="material-input" label-class="material-label" error-class="material-error" />
+<Modal BackdropDismiss @ref="NewProductModal" UpdateWhen="NewProductForm.ValueChanges.ToNone()">
+    <RxFormGroup AsElement="div" class="flex flex-col gap-3" FormGroup="NewProductForm">
+        <div class="material-input">
+            <RxInput Id="name" Label="Name" @bind-Value="NewProductModel.Name" Validators="[Validators.Required, MinLength3]" HideErrors />
+        </div>
+        <div class="-mt-2">
+            <RxOutputErrors Id="name" />
         </div>
 
-        <div class="material-group">
-            <RxInput @bind-Value="NewProduct.Value.Price" Label="Price" type="number" step="0.01" class="material-input" label-class="material-label" error-class="material-error" />
+        <div class="material-input">
+            <RxInput Id="price" Label="Price" @bind-Value="NewProductModel.Price" Type="number" step="0.01" Validators="[Min]" HideErrors />
+        </div>
+        <div class="-mt-2">
+            <RxOutputErrors Id="price" />
         </div>
 
-        <Button type="submit" class="btn btn-primary mt-4">Add</Button>
-    </EditForm>
+        <Button type="submit" class="btn btn-primary mt-4" OnClick="OnAddProduct" disabled="@(NewProductForm.Invalid)">Add</Button>
+    </RxFormGroup>
 </Modal>
 
 @* Add Person Modal *@
@@ -153,20 +155,32 @@
 </Modal>
 
 @code {
-    public override TabViewModel ViewModel { get; set; }
+    private static ValidatorFn MinLength3 = Validators.MinLength(3);
+    private static ValidatorFn Min = Validators.MoreThan(0.0M);
 
     private BehaviorSubject<ProductViewModel?> SelectedProduct { get; } = new(null);
     private BehaviorSubject<PersonViewModel?> SelectedPerson { get; } = new(null);
-    private BehaviorSubject<ProductViewModel?> NewProduct { get; } = new(null);
     private BehaviorSubject<PersonViewModel?> NewPerson { get; } = new(null);
+
+    private Modal NewProductModal { get; set; } = null!;
+    private FormGroup NewProductForm { get; } = new();
+    private ProductViewModel NewProductModel { get; set; } = new();
+
+    private FormGroup NewPersonForm { get; } = new();
 
     [Parameter]
     public string Id { get; set; } = string.Empty;
 
     private void OnAddProduct()
     {
-        ViewModel.AddProduct(NewProduct.Value!);
-        NewProduct.OnNext(new());
+        Console.WriteLine($"Count: {NewProductForm.Count}");
+        return;
+        if (NewProductForm.Invalid) return;
+
+        ViewModel.AddProduct(NewProductModel);
+        NewProductModel = new();
+        NewProductModal.Close();
+        // NewProduct.OnNext(new());
     }
 
     private void OnAddPerson()
@@ -174,8 +188,6 @@
         ViewModel.AddPerson(NewPerson.Value!);
         NewPerson.OnNext(new());
     }
-
-    
 
     protected override void OnInitialized()
     {
@@ -186,7 +198,7 @@
             return;
         }
 
-        ShellContext.Title = tab.Name;
+        ShellLayout.Context = new() { Title = tab.Name, BackUri = "" };
         ViewModel = new TabViewModel(tab);
         ViewModel.WhenPropertyChanged
             .Throttle(TimeSpan.FromSeconds(1))

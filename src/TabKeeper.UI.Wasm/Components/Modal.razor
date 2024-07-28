@@ -13,11 +13,11 @@
             LeaveTo="opacity-0"
             Context="transition">
 
-            <div class="@Css.Class("absolute inset-0 bg-black bg-opacity-25", transition)"></div>
+            <div class="@Css.Class("absolute inset-0 bg-black/20", transition)"></div>
 
         </TransitionChild>
 
-        <div class="absolute inset-0 bg-black bg-opacity-25" @onclick="() => BackdropDismiss ? Close() : None.Value">
+        <div class="absolute inset-0" @onclick="() => BackdropDismiss ? Close() : None.Value">
             <div class="w-full h-full overflow-hidden flex">
                 <TransitionChild
                     AsComponent="typeof(Fragment)"
@@ -29,7 +29,7 @@
                     LeaveTo="opacity-0 scale-95"
                     Context="transition">
 
-                    <div class="@Css.Class("w-full max-h-full rounded-2xl bg-white overflow-y-auto p-6 m-4", TryGetAttribute<string>("class") ?? "self-center justify-self-center", transition.CssClass)" @onclick:stopPropagation>
+                    <div class="@Css.Class("w-full max-h-full rounded-2xl bg-secondary-container overflow-y-auto p-6 m-4", this.Class() ?? "self-center justify-self-center", transition.CssClass)" @onclick:stopPropagation>
                         <ReactiveSection For="updateExpression" AsComponent="typeof(Fragment)">
                             @(ChildContent?.Invoke(this))
                         </ReactiveSection>
@@ -79,7 +79,7 @@
             var sub = IsOpenWhen.Subscribe(open =>
             {
                 IsOpen = open;
-                base.Update();
+                base.TriggerUpdate();
             });
             DisposeWith(sub);
         }
@@ -94,7 +94,7 @@
     {
         IsOpen = true;
         OnShow.InvokeAsync();
-        base.Update();
+        base.TriggerUpdate();
         return None.Value;
     }
 
@@ -102,7 +102,7 @@
     {
         IsOpen = false;
         OnDismiss.InvokeAsync();
-        base.Update();
+        base.TriggerUpdate();
         return None.Value;
     }
 
