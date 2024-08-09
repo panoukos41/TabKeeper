@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
-using System.Reactive.Threading.Tasks;
+using TabKeeper.Common;
+using TabKeeper.Common.Migrations;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 var services = builder.Services;
@@ -27,17 +28,23 @@ services.AddScoped(sp => (IJSInProcessRuntime)sp.GetRequiredService<IJSRuntime>(
 services.AddScoped<TranslateLoader, TranslateHttpLoader>();
 services.AddScoped<TranslateService>();
 
+services.AddSingleton<IndexedDb>();
+services.AddScoped<IndexedDB_Migration_2024_08_001>();
+
 var app = builder.Build();
 
 await Import();
 await InitializeLang(app);
+
+var migration = app.Services.GetRequiredService<IndexedDB_Migration_2024_08_001>();
+await migration.Migrate();
 
 await app.RunAsync();
 
 [SuppressMessage("BrowserPlatform", "CA1416")]
 static Task Import()
 {
-    return Theme.Import();
+    return ThemeModule.Import();
 }
 
 static Task InitializeLang(WebAssemblyHost app)
