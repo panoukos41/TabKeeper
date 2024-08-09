@@ -1,13 +1,27 @@
 ﻿@page "/tabs/{Id}"
-
 @inherits CoreRxComponent<TabViewModel>
+@inject IndexedDb indexedDb
+@inject TranslateService translate
 
-@inject ISyncLocalStorageService storage
+@* Loading *@
+@if (loading)
+{
+    <div class="h-full flex items-center justify-center">
+        <div class="max-h-1/2 max-w-full">
+            <LottiePlayer Source="lottie/loading.lottie" AutoPlay Loop />
+        </div>
+    </div>
+    return;
+}
 
-@* Not Found  *@
+@* Not Found *@
 @if (ViewModel is null)
 {
-    <NotFound />
+    <div class="h-full flex items-center justify-center">
+        <div class="max-h-1/2 max-w-full">
+            <NotFound />
+        </div>
+    </div>
     return;
 }
 
@@ -23,8 +37,7 @@
                         <ProductCardView
                             @key="product.ProductId.ToString()"
                             ViewModel="product"
-                            OnEditClicked="() => SelectedProduct.OnNext(product)"
-                            OnRemoveClicked="() => ViewModel.RemoveProduct(product)"
+                            OnClick="() => SelectedProduct.OnNext(product)"
                         />
                     }
                 </div>
@@ -37,39 +50,49 @@
                         <PersonCardView
                             @key="person.PersonId.ToString()"
                             ViewModel="person"
-                            OnEditClicked="() => SelectedPerson.OnNext(person)"
-                            OnRemoveClicked="() => ViewModel.RemovePerson(person)"
+                            OnClick="() => SelectedPerson.OnNext(person)"
                         />
                     }
                 </div>
             </TabPanel>
         </TabPanels>
 
-        <div class="p-4 bg-secondary-container rounded-xl space-y-4">
-            <TabList class="flex gap-2 justify-between">
-                <Tab Context="tab" class="@Css.Class("border border-secondary rounded p-1 mx-auto w-full", tabGroup.SelectedIndex is 0 ? "font-bold interactive-bg-secondary" : "interactive-bg-secondary-container")">
-                    Products
-                </Tab>
-                <Tab Context="tab" class="@Css.Class("border border-secondary rounded p-1 mx-auto w-full", tabGroup.SelectedIndex is 1 ? "font-bold interactive-bg-secondary" : "interactive-bg-secondary-container")">
-                    People
-                </Tab>
-            </TabList>
+        <div class="p-2 bg-secondary-container rounded-md space-y-3">
+            <div class="flex gap-2 items-center">
+                <div class="flex items-center justify-center gap-2">
+                    <FaSolidReceipt class="icon-sm" />
+                    <p class="text-lg font-semibold">@ViewModel.Total.ToString("0.00")</p>
+                </div>
 
-            <div class="flex gap-4 items-center">
-                <div class="me-auto text-on-secondary-container flex items-center gap-2">
-                    <FaSolidCashRegister class="icon" />
-                    <p class="text-lg font-semibold">@ViewModel.Products.Items.Sum(x => x.Total).ToString("0.00")</p>
-                    <div class="h-4 mx-2 border border-gray-700"></div>
-                    <FaSolidCalculator class="icon" />
+                <div class="ms-3 me-auto flex items-center justify-center gap-2">
+                    <FaSolidCoins class="icon-sm" />
                     <p class="text-lg font-semibold">@ViewModel.People.Items.Sum(x => x.Total).ToString("0.00")</p>
                 </div>
-                <Button class="btn btn-primary p-2" OnClick="() => NewProductModal.Show()">
+
+                @* <Button class="btn btn-tertiary p-2">
+                    <FaSolidPen class="icon" />
+                </Button> *@
+
+                <Button class="btn btn-tertiary p-2" OnClick="() => NewProductModal.Show()">
                     <FaSolidCartPlus class="icon" />
                 </Button>
-                <Button class="btn btn-primary p-2" OnClick="() => NewPerson.OnNext(new())">
+
+                <Button class="btn btn-tertiary p-2" OnClick="() => NewPersonModal.Show()">
                     <FaSolidUserPlus class="icon" />
                 </Button>
             </div>
+
+            <TabList class="flex gap-2">
+                <Tab Context="tab" class="@Css.Class("btn gap-2 font-bold grow h-11", tabGroup.SelectedIndex is 0 ? "btn-primary" : "btn-secondary")">
+                    <FaSolidBasketShopping class="icon-sm" />
+                    <span>@("products" | translate)</span>
+                </Tab>
+
+                <Tab Context="tab" class="@Css.Class("btn gap-2 font-bold grow h-11", tabGroup.SelectedIndex is 1 ? "btn-primary" : "btn-secondary")">
+                    <FaSolidPeopleGroup class="icon-sm" />
+                    <span>@("people" | translate)</span>
+                </Tab>
+            </TabList>
         </div>
     </TabGroup>
 </div>
@@ -119,106 +142,75 @@
 </Modal>
 
 @* Add Product Modal *@
-<Modal BackdropDismiss @ref="NewProductModal" UpdateWhen="NewProductForm.ValueChanges.ToNone()">
-    <RxFormGroup AsElement="div" class="flex flex-col gap-3" FormGroup="NewProductForm">
-        <div class="material-input">
-            <RxInput Id="name" Label="Name" @bind-Value="NewProductModel.Name" Validators="[Validators.Required, MinLength3]" HideErrors />
-        </div>
-        <div class="-mt-2">
-            <RxOutputErrors Id="name" />
-        </div>
-
-        <div class="material-input">
-            <RxInput Id="price" Label="Price" @bind-Value="NewProductModel.Price" Type="number" step="0.01" Validators="[Min]" HideErrors />
-        </div>
-        <div class="-mt-2">
-            <RxOutputErrors Id="price" />
-        </div>
-
-        <Button type="submit" class="btn btn-primary mt-4" OnClick="OnAddProduct" disabled="@(NewProductForm.Invalid)">Add</Button>
-    </RxFormGroup>
+<Modal @ref="NewProductModal" BackdropDismiss class="self-center flex flex-col gap-2">
+    <ProductForm id="new-product-form" OnValidSubmit="OnValidProduct" OnValidReset />
+    <div class="flex flex-row-reverse gap-2">
+        <Button class="btn btn-primary gap-2 grow" type="submit" form="new-product-form">
+            <FaSolidPlus class="icon-sm" />
+            <span>@("add" | translate)</span>
+        </Button>
+        <Button class="btn btn-cancel gap-2 grow" OnClick="() => NewProductModal.Close()">
+            <FaSolidX class="icon-xs" />
+            <span>@("close" | translate)</span>
+        </Button>
+    </div>
 </Modal>
 
 @* Add Person Modal *@
-<Modal BackdropDismiss IsOpenWhen="NewPerson.IsNotNull()">
-    @if (NewPerson.Value is null) { return; }
-
-    <EditForm Model="NewPerson" Context="_" OnValidSubmit="OnAddPerson" class="flex flex-col gap-3">
-        <FluentValidator TModel="PersonViewModel" FailureNotifications="NewPerson.Value.WhenProblem.Select(x => x.ValidationFailures).WhereNotNull()" />
-
-        <div class="material-group">
-            <RxInput @bind-Value="NewPerson.Value.Name" Label="Name" class="material-input" label-class="material-label" error-class="material-error" />
-        </div>
-
-        <Button type="submit" class="btn btn-primary mt-4">Add</Button>
-    </EditForm>
+<Modal @ref="NewPersonModal" BackdropDismiss class="self-center flex flex-col gap-2">
+    <PersonForm id="new-person-form" OnValidSubmit="OnValidPerson" OnValidReset />
+    <div class="flex flex-row-reverse gap-2">
+        <Button class="btn btn-primary gap-2 grow" type="submit" form="new-person-form">
+            <FaSolidPlus class="icon-sm" />
+            <span>@("add" | translate)</span>
+        </Button>
+        <Button class="btn btn-cancel gap-2 grow" OnClick="() => NewPersonModal.Close()">
+            <FaSolidX class="icon-xs" />
+            <span>@("close" | translate)</span>
+        </Button>
+    </div>
 </Modal>
 
 @code {
-    private static ValidatorFn MinLength3 = Validators.MinLength(3);
-    private static ValidatorFn Min = Validators.MoreThan(0.0M);
+    private bool loading = true;
 
-    private BehaviorSubject<ProductViewModel?> SelectedProduct { get; } = new(null);
-    private BehaviorSubject<PersonViewModel?> SelectedPerson { get; } = new(null);
-    private BehaviorSubject<PersonViewModel?> NewPerson { get; } = new(null);
+    private BehaviorSubject<TabProductViewModel?> SelectedProduct { get; } = new(null);
+    private BehaviorSubject<TabPersonViewModel?> SelectedPerson { get; } = new(null);
 
     private Modal NewProductModal { get; set; } = null!;
-    private FormGroup NewProductForm { get; } = new();
-    private ProductViewModel NewProductModel { get; set; } = new();
-
-    private FormGroup NewPersonForm { get; } = new();
+    private Modal NewPersonModal { get; set; } = null!;
 
     [Parameter]
     public string Id { get; set; } = string.Empty;
 
-    private void OnAddProduct()
+    private void OnValidProduct(TabProduct product)
     {
-        Console.WriteLine($"Count: {NewProductForm.Count}");
-        return;
-        if (NewProductForm.Invalid) return;
-
-        ViewModel.AddProduct(NewProductModel);
-        NewProductModel = new();
-        NewProductModal.Close();
-        // NewProduct.OnNext(new());
+        ViewModel.AddProduct(new(product));
     }
 
-    private void OnAddPerson()
+    private void OnValidPerson(Person person)
     {
-        ViewModel.AddPerson(NewPerson.Value!);
-        NewPerson.OnNext(new());
+        ViewModel.AddPerson(new(new TabPerson(person)));
     }
 
     protected override void OnInitialized()
     {
-        var tab = storage.GetItem<TabKeeper.Tabs.Tab>(Id);
-        if (tab is null)
-        {
-            // show not found.
-            return;
-        }
-
-        ShellLayout.Context = new() { Title = tab.Name, BackUri = "" };
-        ViewModel = new TabViewModel(tab);
-        ViewModel.WhenPropertyChanged
-            .Throttle(TimeSpan.FromSeconds(1))
-            .Subscribe(_ =>
+        indexedDb.Tabs
+            .GetAsync<string, TabKeeper.Tabs.Tab>(Id)
+            .ToObservable()
+            .Subscribe(tab =>
             {
-                var tab = ViewModel.Tab;
-                tab.People.Clear();
-                tab.People.AddRange(ViewModel.People.Items.Select(x => new PersonTab(new() { Id = x.PersonId, Name = x.Name })
-                {
-                    ProductIds = [.. x.ProductIds]
-                }));
-                tab.Products.Clear();
-                tab.Products.AddRange(ViewModel.Products.Items.Select(x => new Product
-                {
-                    Id = x.ProductId,
-                    Name = x.Name,
-                    Price = x.Price,
-                    Quantity = x.Quantity
-                }));
-                storage.SetItem(tab.Id, tab);
+                if (tab is null) return;
+
+                ShellLayout.Context = new() { Title = tab.Name, BackUri = "" };
+                ViewModel = new TabViewModel(tab);
+                ViewModel.WhenPropertyChanged
+                    .Throttle(TimeSpan.FromMilliseconds(500))
+                    .Subscribe(_ => indexedDb.Tabs.PutAsync(ViewModel.Tab))
+                    .DisposeWith(this);
+
+                loading = false;
+                Update();
             });
     }
 }

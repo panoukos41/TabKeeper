@@ -4,7 +4,8 @@
     @apply w-full p-2 rounded focus:ring-0;
   }
 
-  .error {
+  .error,
+  .validation-message {
     @apply text-sm text-error;
   }
 
@@ -12,7 +13,12 @@
     @apply relative;
 
     input {
-      @apply rounded p-2 pt-5 border-0 placeholder-transparent bg-surface focus:border-on-surface focus:ring-0;
+      @apply rounded p-2 pt-5 border border-transparent placeholder-transparent bg-surface focus:border-on-surface focus:ring-0;
+
+    }
+
+    input.invalid {
+      @apply border-error;
     }
 
     label {

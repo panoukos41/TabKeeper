@@ -11,6 +11,10 @@
     @apply interactive-bg-secondary;
   }
 
+  .btn-tertiary {
+    @apply interactive-bg-tertiary;
+  }
+
   .btn-danger {
     @apply interactive-bg-error;
   }

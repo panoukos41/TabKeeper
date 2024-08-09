@@ -1,4 +1,4 @@
-﻿@inherits CoreRxComponent<ProductViewModel>
+﻿@inherits CoreRxComponent<TabProductViewModel>
 
 <div class="card space-y-3">
     <div class="pb-1 border-b border-gray-400 flex items-start gap-2">
@@ -25,7 +25,7 @@
         </div>
         <div class="flex gap-2 items-center">
             <FaSolidPeopleGroup class="icon-sm" />
-            <p class="text-lg">@ViewModel.Divisor</p>
+            <p class="text-lg">@ViewModel.Participants</p>
         </div>
 
         <Button class="ms-auto btn btn-primary p-2" OnClick="() => ViewModel.Quantity -= 1" disabled="@(ViewModel.Quantity <= 1)">

@@ -1,0 +1,16 @@
+﻿@inherits CoreRxComponent<TabPersonViewModel>
+
+<div @attributes="Attributes" @onclick="OnClick" class="@this.Class("card cursor-pointer flex items-center justify-between")">
+    <h1 class="m-0 font-medium">
+        @ViewModel.Name
+    </h1>
+    <div class="flex gap-2 items-center">
+        <FaSolidMoneyBillTransfer class="icon-sm" />
+        <p class="font-semibold">@(ViewModel.Total.ToString("0.00"))</p>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+}

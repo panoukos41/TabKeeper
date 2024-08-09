@@ -1,6 +1,14 @@
-﻿@inherits CoreRxComponent<PersonViewModel>
+﻿@inherits CoreRxComponent<TabPersonViewModel>
 
-<div class="card space-y-3">
+<div>
+    <PersonForm Person="Person" />
+
+
+
+</div>
+
+
+<div class="space-y-3">
     <div class="flex justify-between pb-1 border-b items-start">
         <h2 class="m-0">@ViewModel.Name</h2>
 
@@ -20,6 +28,9 @@
 </div>
 
 @code {
+    [Parameter, EditorRequired]
+    public Person Person { get; set; } = null!;
+
     [Parameter]
     public EventCallback OnEditClicked { get; set; }
 

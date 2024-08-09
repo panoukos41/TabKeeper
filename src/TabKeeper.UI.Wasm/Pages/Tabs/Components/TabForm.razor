@@ -1,0 +1,37 @@
+﻿@inherits CoreComponent
+@inject TranslateService translate
+
+<EditForm Model="Tab" OnValidSubmit="ValidSubmit" @attributes="Attributes" class="@this.Class("space-y-2")">
+    <FluentValidator Validator="TabKeeper.Tabs.Tab.Validator" />
+
+    <div class="material-input">
+        <label for="Tab.Name">@("name" | translate)</label>
+        <InputText @bind-Value="Tab.Name" placeholder="@("name" | translate)" />
+    </div>
+    <ValidationMessage For="() => Tab.Name" />
+
+    <div class="material-input">
+        <label for="Tab.Place">@("place" | translate)</label>
+        <InputText @bind-Value="Tab.Place" placeholder="@("place" | translate)" />
+    </div>
+    <ValidationMessage For="() => Tab.Place" />
+</EditForm>
+
+@code {
+    [Parameter, NotNull]
+    public TabKeeper.Tabs.Tab? Tab { get; set; }
+
+    [Parameter]
+    public EventCallback<TabKeeper.Tabs.Tab> OnValidSubmit { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Tab ??= new();
+        Tab.Date = DateOnly.FromDateTime(DateTimeOffset.Now.DateTime);
+    }
+
+    private void ValidSubmit()
+    {
+        OnValidSubmit.InvokeAsync(Tab);
+    }
+}

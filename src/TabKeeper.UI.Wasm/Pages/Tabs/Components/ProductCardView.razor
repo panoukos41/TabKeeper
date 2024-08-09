@@ -1,0 +1,36 @@
+﻿@inherits CoreRxComponent<TabProductViewModel>
+
+<div @attributes="Attributes" @onclick="OnClick" class="@this.Class("card grid grid-cols-[1fr_auto_auto] gap-3")">
+    <div class="truncate flex flex-col">
+        <h1 class="m-0 font-medium truncate border-b">
+            @ViewModel.Name
+        </h1>
+        <div class="mt-auto gap-1 flex items-center">
+            <p class="m-0 text-xl font-bold">@ViewModel.Price.ToString("0.00")</p>
+            <FaSolidFileInvoice class="icon-sm" />
+        </div>
+    </div>
+
+    <div class="ms-auto grid grid-cols-[1fr_auto] items-center justify-items-end gap-2">
+        <p class="m-0 text-xl font-bold">@ViewModel.Quantity</p>
+        <FaSolidBasketShopping class="icon-sm" />
+
+        <p class="m-0 text-xl font-bold">@ViewModel.Total.ToString("0.00")</p>
+        <FaSolidFileInvoiceDollar class="icon-sm" />
+    </div>
+
+    <div class="grid grid-rows-2 gap-2">
+        <Button class="btn btn-primary" OnClick="() => ViewModel.Quantity += 1" StopPropagation>
+            <FaSolidChevronUp class="icon" />
+        </Button>
+
+        <Button class="btn btn-primary" OnClick="() => ViewModel.Quantity -= 1" disabled="@(ViewModel.Quantity <= 1)" StopPropagation>
+            <FaSolidChevronDown class="icon" />
+        </Button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+}
