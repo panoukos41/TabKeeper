@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" />
+    <PackageReference Include="BlazorEssentials.IndexedDb" />
     <PackageReference Include="Flurl.Http" />
     <PackageReference Include="Ignis.Components.HeadlessUI" />
     <PackageReference Include="Ignis.Components.Reactivity" />
@@ -26,10 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src-modules\Core\src\Core.Blazor\Core.Blazor.csproj" />
     <ProjectReference Include="..\TabKeeper.UI\TabKeeper.UI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageVersion Include="Annular.Translate" Version="0.1.7-dev" />
     <PackageVersion Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageVersion Include="BlazorEssentials.IndexedDb" Version="3.0.0-CI-20240808-161419" />
     <PackageVersion Include="DynamicData" Version="9.0.1" />
     <PackageVersion Include="Flurl.Http" Version="4.0.2" />
     <PackageVersion Include="Ignis.Components.HeadlessUI" Version="1.4.0" />
@@ -25,6 +26,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.7" />
     <PackageVersion Include="OneOf" Version="3.0.271" />
     <PackageVersion Include="P41.FontAwesome" Version="6.5.2" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
   <!---->
   <!-- Testing -->
