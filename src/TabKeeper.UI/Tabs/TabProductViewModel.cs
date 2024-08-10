@@ -60,8 +60,9 @@ public sealed class TabProductViewModel : RxObject
                 RaisePropertyChanged(nameof(Participants));
             }
             return this
-                .WhenValueChanged(x => x.Total)
-                .Select(total => Participants > 0 ? total / Participants : 0)
+                .WhenAnyPropertyChanged(nameof(Total), nameof(Participants))
+                .Prepend(this)
+                .Select(static vm => vm!.Participants > 0 ? vm!.Total / vm!.Participants : 0)
                 .Finally(() =>
                 {
                     if (participantIds.Remove(participantId))
