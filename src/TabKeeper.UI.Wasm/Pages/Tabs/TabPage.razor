@@ -102,21 +102,11 @@
     @{
         var product = SelectedProduct.Value!;
     }
-
-    <div class="flex justify-between">
-        <h1 class="my-2">@product.Name</h1>
-        <button class="btn rounded-full w-10 h-10" @onclick="() => context.Close()">X</button>
-    </div>
-
-    @foreach (var person in ViewModel.People.Items)
-    {
-        var key = person.PersonId.ToString();
-        <div class="flex items-center border gap-2 mb-2 rounded bg-primary-container">
-            <input id="@key" @key="key" class="ms-4 my-2 rounded-full" type="checkbox" checked="@person.HasProduct(product)" @onchange="() => person.ToggleProduct(product)" />
-            <label for="@key" class="my-2 me-4 grow cursor-pointer">@person.Name</label>
-        </div>
-    }
-    <button class="btn btn-secondary mx-auto" @onclick="() => context.Close()">Close</button>
+    <ProductDetailView ViewModel="product" TabViewModel="ViewModel" />
+    <Button class="min-w-60 mx-auto btn btn-secondary gap-2 mt-4" OnClick="() => context.Close()">
+        <FaSolidXmark class="icon-sm" />
+        <span>@("close" | translate)</span>
+    </Button>
 </Modal>
 
 @* Person Modal *@

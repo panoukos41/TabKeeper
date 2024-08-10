@@ -38,7 +38,7 @@ public sealed class TabPersonViewModel : RxObject
             .AutoRefresh(x => x.Participants)
             .OnItemAdded(x => tab.ProductIds.Add(x.ProductId))
             .OnItemRemoved(x => tab.ProductIds.Remove(x.ProductId))
-            .Transform(x => new ProductProxy(x))
+            .Transform(x => new ProductProxy(PersonId, x))
             .DisposeMany()
             // Get the latest changes and compute the sum.
             .QueryWhenChanged(query => query.Items
@@ -90,10 +90,10 @@ file sealed class ProductProxy : IDisposable
 
     public decimal Total { get; private set; }
 
-    public ProductProxy(TabProductViewModel product)
+    public ProductProxy(Uuid personId, TabProductViewModel product)
     {
         this.product = product;
-        sub = this.product.Participate().Subscribe(total => Total = total);
+        sub = this.product.Participate(personId).Subscribe(total => Total = total);
     }
 
     public void Dispose()

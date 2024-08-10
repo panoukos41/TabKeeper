@@ -30,7 +30,7 @@ public sealed record TabProduct : IEntity, ISnapshotCode, IValid<TabProduct>
 
     public int GetSnapshotCode()
     {
-        return HashCode.Combine(Id, Name);
+        return HashCode.Combine(Id, Name, Price, Quantity);
     }
 
     public static IValidator<TabProduct> Validator { get; } = InlineValidator.For<TabProduct>(data =>

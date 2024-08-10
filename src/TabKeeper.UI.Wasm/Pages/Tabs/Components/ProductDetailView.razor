@@ -1,6 +1,45 @@
 ﻿@inherits CoreRxComponent<TabProductViewModel>
+@inject TranslateService translate
 
-<div class="card space-y-3">
+<div class="space-y-3">
+    <div class="flex items-center justify-between">
+        <h1 class="m-0">
+            @ViewModel.Name
+        </h1>
+        <Button If="@(!edit)" class="btn btn-primary gap-2 h-10" OnClick="StartEdit">
+            <FaSolidPen class="icon-xs" />
+        </Button>
+    </div>
+    @if (edit)
+    {
+        <ProductForm id="update-product-form" Product="@(ViewModel.Product with { })" OnValidSubmit="ValidSubmit" />
+        <div class="flex flex-row-reverse gap-2">
+            <Button class="btn btn-primary gap-2 grow" type="submit" form="update-product-form">
+                <FaSolidPlus class="icon-sm" />
+                <span>@("update" | translate)</span>
+            </Button>
+            <Button class="btn btn-cancel gap-2 grow" OnClick="CancelEdit">
+                <FaSolidX class="icon-xs" />
+                <span>@("cancel" | translate)</span>
+            </Button>
+        </div>
+    }
+    else
+    {
+        @foreach (var person in TabViewModel.People.Items)
+        {
+            var key = person.PersonId.ToString();
+
+            <div class="flex items-center border gap-2 mb-2 rounded bg-primary-container">
+                <input id="@key" @key="key" class="ms-4 my-2 rounded-full" type="checkbox" checked="@person.HasProduct(ViewModel)" @onchange="() => person.ToggleProduct(ViewModel)" />
+                <label for="@key" class="my-2 me-4 grow cursor-pointer">@person.Name</label>
+            </div>
+        }
+    }
+</div>
+
+
+@* <div class="card space-y-3">
     <div class="pb-1 border-b border-gray-400 flex items-start gap-2">
         <div class="flex gap-2 items-center">
             <FaSolidUtensils class="icon-sm" />
@@ -38,12 +77,30 @@
             <FaSolidBagShopping class="icon-sm" />
         </Button>
     </div>
-</div>
+</div> *@
 
 @code {
-    [Parameter]
-    public EventCallback OnEditClicked { get; set; }
+    private bool edit;
 
-    [Parameter]
-    public EventCallback OnRemoveClicked { get; set; }
+    [Parameter, EditorRequired]
+    public TabViewModel TabViewModel { get; set; } = null!;
+
+    private void StartEdit()
+    {
+        edit = true;
+        TriggerUpdate();
+    }
+
+    private void CancelEdit()
+    {
+        edit = false;
+        TriggerUpdate();
+    }
+
+    private void ValidSubmit(TabProduct product)
+    {
+        ViewModel.Product = product;
+        edit = false;
+        TriggerUpdate();
+    }
 }

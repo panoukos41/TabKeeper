@@ -7,8 +7,13 @@ public sealed class TabProductViewModel : RxObject
 {
     private TabProduct product;
     private int participants = 0;
+    private readonly HashSet<Uuid> participantIds = [];
 
-    public TabProduct Product => product;
+    public TabProduct Product
+    {
+        get => product;
+        set => SetAndRaise(ref product, value);
+    }
 
     public Uuid ProductId => product.Id;
 
@@ -34,6 +39,8 @@ public sealed class TabProductViewModel : RxObject
 
     public int Participants => participants;
 
+    public IEnumerable<Uuid> ParticipantIds => participantIds;
+
     public TabProductViewModel() : this(new() { Id = Uuid.NewUuid() })
     {
     }
@@ -43,19 +50,26 @@ public sealed class TabProductViewModel : RxObject
         this.product = product;
     }
 
-    public IObservable<decimal> Participate() =>
+    public IObservable<decimal> Participate(Uuid participantId) =>
         Observable.Defer(() =>
         {
-            Interlocked.Increment(ref participants);
-            RaisePropertyChanged(nameof(Participants));
-
+            if (participantIds.Add(participantId))
+            {
+                RaisePropertyChanged(nameof(ParticipantIds));
+                Interlocked.Increment(ref participants);
+                RaisePropertyChanged(nameof(Participants));
+            }
             return this
                 .WhenValueChanged(x => x.Total)
                 .Select(total => Participants > 0 ? total / Participants : 0)
                 .Finally(() =>
                 {
-                    Interlocked.Decrement(ref participants);
-                    RaisePropertyChanged(nameof(Participants));
+                    if (participantIds.Remove(participantId))
+                    {
+                        RaisePropertyChanged(nameof(ParticipantIds));
+                        Interlocked.Decrement(ref participants);
+                        RaisePropertyChanged(nameof(Participants));
+                    }
                 });
         });
 

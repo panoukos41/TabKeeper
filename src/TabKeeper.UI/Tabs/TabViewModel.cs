@@ -62,6 +62,11 @@ public sealed class TabViewModel : RxObject
 
     public decimal Total => products.Items.Sum(x => x.Total);
 
+    public TabProductViewModel? GetProduct(Uuid productId)
+    {
+        return products.Lookup(productId) is { HasValue: true, Value: { } person } ? person : null;
+    }
+
     public void AddProduct(TabProductViewModel product)
     {
         products.AddOrUpdate(product);
@@ -70,6 +75,11 @@ public sealed class TabViewModel : RxObject
     public void RemoveProduct(TabProductViewModel product)
     {
         products.Remove(product);
+    }
+
+    public TabPersonViewModel? GetPerson(Uuid personId)
+    {
+        return people.Lookup(personId) is { HasValue: true, Value: { } person } ? person : null;
     }
 
     public void AddPerson(TabPersonViewModel person)
