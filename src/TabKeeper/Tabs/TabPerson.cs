@@ -13,7 +13,7 @@ public sealed record TabPerson : ISnapshotCode, IValid<TabPerson>
     /// <summary>
     /// The person this tab belongs to.
     /// </summary>
-    public Person Person { get; }
+    public Person Person { get; set; }
 
     /// <summary>
     /// A list of product ids that this person shares with other people.

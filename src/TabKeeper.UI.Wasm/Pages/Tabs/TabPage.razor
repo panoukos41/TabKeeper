@@ -57,7 +57,7 @@
             </TabPanel>
         </TabPanels>
 
-        <div class="p-2 bg-secondary-container rounded-md space-y-3">
+        <div class="p-2 bg-secondary-container rounded-md space-y-2">
             <div class="flex gap-2 items-center">
                 <div class="flex items-center justify-center gap-2">
                     <FaSolidReceipt class="icon-sm" />
@@ -73,12 +73,12 @@
                     <FaSolidPen class="icon" />
                 </Button> *@
 
-                <Button class="btn btn-tertiary p-2" OnClick="() => NewProductModal.Show()">
-                    <FaSolidCartPlus class="icon" />
-                </Button>
-
                 <Button class="btn btn-tertiary p-2" OnClick="() => NewPersonModal.Show()">
                     <FaSolidUserPlus class="icon" />
+                </Button>
+
+                <Button class="btn btn-tertiary p-2" OnClick="() => NewProductModal.Show()">
+                    <FaSolidCartPlus class="icon" />
                 </Button>
             </div>
 
@@ -114,21 +114,11 @@
     @{
         var person = SelectedPerson.Value!;
     }
-
-    <div class="flex justify-between">
-        <h1 class="my-2">@person.Name</h1>
-        <button class="btn rounded-full w-10 h-10" @onclick="() => context.Close()">X</button>
-    </div>
-
-    @foreach (var product in ViewModel.Products.Items)
-    {
-        var key = product.ProductId.ToString();
-        <div class="flex items-center border gap-2 mb-2 rounded bg-primary-container">
-            <input id="@key" @key="key" class="ms-4 my-2 rounded-full" type="checkbox" checked="@person.HasProduct(product)" @onchange="() => person.ToggleProduct(product)" />
-            <label for="@key" class="my-2 me-4 grow cursor-pointer">@product.Name</label>
-        </div>
-    }
-    <button class="btn btn-secondary mx-auto" @onclick="() => context.Close()">Close</button>
+    <PersonDetailView ViewModel="person" TabViewModel="ViewModel" />
+    <Button class="min-w-60 mx-auto btn btn-secondary gap-2 mt-4" OnClick="() => context.Close()">
+        <FaSolidXmark class="icon-sm" />
+        <span>@("close" | translate)</span>
+    </Button>
 </Modal>
 
 @* Add Product Modal *@

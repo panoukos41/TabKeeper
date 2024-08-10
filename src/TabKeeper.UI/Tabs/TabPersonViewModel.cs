@@ -11,7 +11,14 @@ public sealed class TabPersonViewModel : RxObject
 
     public TabPerson Tab => tab;
 
-    public Person Person => Tab.Person;
+    public Person Person
+    {
+        get => tab.Person;
+        set {
+            Tab.Person = value;
+            RaisePropertyChanged(nameof(Person));
+        }
+    }
 
     public Uuid PersonId => tab.Person.Id;
 
