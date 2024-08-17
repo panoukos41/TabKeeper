@@ -2,6 +2,7 @@
 @import "./_cards.scss";
 @import "./_icons.scss";
 @import "./_material-input.scss";
+@import "./_skeleton.scss";
 
 @tailwind base;
 @tailwind components;
@@ -19,19 +20,19 @@
   }
 
   h1 {
-    @apply text-2xl font-bold mb-4;
+    @apply text-2xl font-bold;
   }
 
   h2 {
-    @apply text-xl mb-3;
+    @apply text-xl font-medium;
   }
 
   h3 {
-    @apply text-lg font-medium mb-2;
+    @apply text-lg font-medium;
   }
 
   h4 {
-    @apply text-base font-normal mb-1;
+    @apply text-base font-medium;
   }
 
   p {
