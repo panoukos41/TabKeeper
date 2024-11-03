@@ -1,34 +1,35 @@
-﻿@page "/settings"
+﻿@using Core.Preferences;
+@using Microsoft.Extensions.Configuration.Memory
+@using TabKeeper.Components.Preferences.Pages;
+
+@page "/settings"
 @inherits CoreComponent
 @inject TranslateService translate
+@inject ISyncLocalStorageService localStorage
 
-<div class="space-y-4 divide-y">
-    <div class="space-y-1">
-        <h3>@("settings.theme.title" | translate)</h3>
-        <div>
-            <select class="w-full rounded bg-primary px-2 py-1" value="@ThemeModule.GetTheme()" @onchange="OnThemeChange">
-                <option value="auto">@("settings.theme.auto" | translate)</option>
-                <option value="dark">@("settings.theme.dark" | translate)</option>
-                <option value="light">@("settings.theme.light" | translate)</option>
-            </select>
-        </div>
-    </div>
-</div>
+<PreferenceScreenPage Screen="Preferences.Screen" />
 
 @code {
+    public static ConfigurationManager Configuration { get; } = new();
+
     protected override void OnInitialized()
     {
-        ShellLayout.Context = new() { Title = "settings.title" | translate };
-    }
-
-    public void OnThemeChange(ChangeEventArgs e)
-    {
-        Action execute = e.Value switch
+        if (Configuration.Sources.Count is 1)
         {
-            "dark" => ThemeModule.SetDark,
-            "light" => ThemeModule.SetLight,
-            _ => ThemeModule.SetAuto
-        };
-        execute();
+            Configuration.Sources.Add(new LocalStorageConfigurationProvider(localStorage));
+        }
+
+        ShellLayout.Context = new() { Title = "settings.title" | translate };
+
+        Preferences.Screen.TitleTransformer = v => v | translate;
+        Preferences.Screen.DescriptionTransformer = v => v is {} ? v | translate : v;
+        Preferences.Screen.SummaryTransformer = v => v | translate;
+
+        Preferences.Screen
+            .WhenValuePreferenceChanged(Preferences.Theme)
+            .Throttle(TimeSpan.FromMilliseconds(100))
+            .Subscribe(p => ThemeModule.UpdateDom());
+
+        Preferences.Screen.Initialize(Configuration);
     }
 }
