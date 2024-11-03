@@ -9,34 +9,26 @@
     <div class="grow overflow-y-auto space-y-2">
         @foreach(var entry in Entries.Items.OrderBy(x => x.Date))
         {
-            <div class="card flex gap-3 items-center" @key="@entry.Id.ToString()">
+            <a class="card flex gap-3 items-center" @key="@entry.Id.ToString()" href="@($"tab/{entry.Id}")">
                 <h2 class="mb-0 me-auto truncate">@entry.Name</h2>
-
-                <Button class="btn btn-danger h-10" OnClick="() => Entries.Remove(entry)">
-                    <FaSolidTrash class="icon-sm" />
-                </Button>
-
-                <Button class="btn btn-primary h-10" OnClick="@(() => nav.NavigateTo($"tabs/{entry.Id}"))"> 
-                    <FaSolidCircleArrowRight class="icon-sm" />
-                </Button>
-            </div>
+            </a>
         }
     </div>
 
-    @* Options  *@
-    <div class="absolute bottom-1 right-1 flex gap-1 bg-primary rounded-3xl">
-        <Button class="btn w-14 h-14 rounded-3xl" OnClick="() => addEntryModal.Show()">
-            <FaSolidPlus class="icon" />
-        </Button>
-        <div class="border-l border-surface h-8 self-center"></div>
+    @* Bar *@
+    <div class="p-2 bg-secondary-container rounded-md flex gap-4 items-center">
         <Dropdown>
-            <DropdownButton class="btn w-14 h-14 rounded-3xl">
+            <DropdownButton class="btn">
                 <FaSolidEllipsis class="icon" />
             </DropdownButton>
-            <DropdownContent class="min-w-52 bg-primary-container px-3 py-2" Anchor="Anchor.Top | Anchor.Right">
+            <DropdownContent class="min-w-52 bg-primary-container px-3 py-2" Anchor="Anchor.Top | Anchor.Left">
                 <DropdownItem OnClick="@(() => nav.NavigateTo("settings"))"><FaSolidGear class="icon-xs me-2" /> @("settings.title" | translate)</DropdownItem>
             </DropdownContent>
         </Dropdown>
+
+        <Button class="ms-auto btn btn-primary w-12 h-12" OnClick="() => addEntryModal.Show()">
+            <FaSolidPlus class="icon" />
+        </Button>
     </div>
 </div>
 
@@ -80,8 +72,6 @@
                 loading = false;
             })
             .Subscribe(_ => Update());
-
-        // NewTabEntryName.Subscribe(_ => Update());
     }
 
     private record TabEntry(Uuid Id, string Name, DateOnly? Date);
