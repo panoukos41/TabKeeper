@@ -29,4 +29,9 @@
   <Properties Name="Visual Studio">
     <Property Name="OpenWith" Value="Visual Studio Version 17" />
   </Properties>
+  <Folder Name="/src-modules/root/">
+    <File Path="src-modules\Core\Directory.Build.props" />
+    <File Path="src-modules\Core\Directory.Packages.props" />
+    <File Path="src-modules\Core\global.json" />
+  </Folder>
 </Solution>
