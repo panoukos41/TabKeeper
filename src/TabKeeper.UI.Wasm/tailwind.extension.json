@@ -1,6 +1,10 @@
 {
   "ConfigurationFile": "tailwind.config.js",
-  "InputCssFile": "./assets/app.scss",
-  "OutputCssFile": "./wwwroot/css/app.min.css",
+  "BuildFiles": [
+    {
+      "Input": "assets\\app.scss",
+      "Output": "wwwroot\\css\\app.min.css"
+    }
+  ],
   "UseCli": false
 }
