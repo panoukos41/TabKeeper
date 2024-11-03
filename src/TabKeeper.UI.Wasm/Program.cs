@@ -62,6 +62,6 @@ static Task InitializeLang(WebAssemblyHost app)
     {
         lang = "en";
     }
-    localStorage.SetItem("lang", lang);
+    localStorage.SetItemAsString("lang", lang);
     return translate.SetCurrentLang(lang).ToTask();
 }
