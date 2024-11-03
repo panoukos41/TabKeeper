@@ -2,7 +2,7 @@
 
 <Ignis.Components.HeadlessUI.MenuItem OnClick="() => OnClick.InvokeAsync()" AdditionalAttributes="Attributes">
     <button @attributes="context.Attributes"
-            class="@Css.Class("flex items-center w-full rounded-md px-2 py-2 text-sm", this.Class(), context.IsActive ? "bg-primary text-gray-100" : "bg-primary-container text-gray-900")"
+            class="@this.Class("flex items-center w-full rounded-md px-2 py-2 text-sm bg-primary")"
             type="button">
         @ChildContent?.Invoke(context.IsActive)
     </button>
