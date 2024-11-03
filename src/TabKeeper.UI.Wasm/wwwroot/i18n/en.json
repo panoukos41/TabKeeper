@@ -13,6 +13,11 @@
       "auto": "Auto",
       "dark": "Dark",
       "light": "Light"
+    },
+    "lang": {
+      "title": "Language",
+      "en": "English",
+      "el": "Ελληνικά"
     }
   }
 }
