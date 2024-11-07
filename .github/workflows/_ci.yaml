@@ -21,9 +21,15 @@ jobs:
           fetch-depth: 0
           submodules: 'true'
 
+      - name: Read .NET Version
+        shell: pwsh
+        run: |
+          $version = $(Get-Content .\global.json -Raw | ConvertFrom-Json).sdk.version.Substring(0,4) + "x"
+          echo "NET_SDK_VERSION=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
-        with: { global-json-file: ./global.json }
+        with: { dotnet-version: $NET_SDK_VERSION }
 
       - name: Setup wasm-tools
         run: dotnet workload install wasm-tools
