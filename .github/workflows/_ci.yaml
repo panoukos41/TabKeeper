@@ -29,7 +29,7 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
-        with: { dotnet-version: $NET_SDK_VERSION }
+        with: { dotnet-version: "${{ $NET_SDK_VERSION }}" }
 
       - name: Setup wasm-tools
         run: dotnet workload install wasm-tools
