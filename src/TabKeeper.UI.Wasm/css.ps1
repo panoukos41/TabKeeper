@@ -7,8 +7,7 @@ param (
 
 $i = "./assets/app.scss"
 $o = "./wwwroot/css/app.min.css"
-$cmd = "tailwindcss", "-i $i", "-o $o", "--postcss"
-# $cmd = "npx @tailwindcss/cli", "-i $i", "-o $o"
+$cmd = "npx tailwindcss", "-i $i", "-o $o"
 
 if ($watch) { $cmd += "--watch" }
 elseif ($publish) { $cmd += "--minify" }
@@ -17,5 +16,5 @@ if ($trace) {$cmd += "--trace-warnings"}
 
 $cmd = $cmd | Join-String -Separator ' '
 
-Write-Host $cmd
+Write-Host "$ $cmd"
 Invoke-Expression -Command $cmd

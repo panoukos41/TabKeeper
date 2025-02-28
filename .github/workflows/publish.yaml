@@ -11,19 +11,24 @@ on:
     - src/**
     - test/**
 jobs:
-  pipeline:
+  determine-environment:
     runs-on: ubuntu-latest
+    outputs:
+      name: ${{ steps.deployment.outputs.environment }}
     steps:
-      - name: Determine if prod
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: echo "environment=main" >> $GITHUB_ENV
-
-      - name: Determine if dev
-        if: startsWith(github.ref, 'refs/heads/main')
-        run: echo "environment=dev" >> $GITHUB_ENV
-
-      - name: Publish
-        uses: panoukos41/TabKeeper/.github/workflows/_.yaml@main
-        with:
-          publish: true
-          environment: $environment
+      - id: deployment
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" =~ refs/tags/v[0-9]+.[0-9]+.[0-9]+ ]]; then
+            echo "environment=main" >> $GITHUB_OUTPUT
+          fi
+  pipeline:
+    needs: determine-environment
+    uses: panoukos41/TabKeeper/.github/workflows/_.yaml@main
+    with:
+      publish: true
+      environment: ${{ needs.determine-environment.outputs.name }}
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

@@ -3,14 +3,20 @@
 
 @inject TranslateService translate
 @inject NavigationManager nav
-
-@if (ThisAssembly.IsPrerelease)
-{
-    <div class="fixed w-full h-0 pointer-events-none">
-        <div class="p-1 bg-amber-500 origin-top float-right mt-4 mr-4 w-28 text-center translate-x-1/2 rotate-45 pointer-events-none">
-            <span class="font-mono font-semibold text-xs pointer-events-none">DEV</span>
+@{
+#if !DEBUG
+    // Using directives because of these issues with GitVersion:
+    // https://github.com/GitTools/GitVersion/issues/4102#issuecomment-2254823123
+    // https://github.com/GitTools/GitVersion/discussions/4130
+    if (!string.IsNullOrEmpty(GitVersionInformation.PreReleaseLabel))
+    {
+        <div class="fixed w-full h-0 pointer-events-none">
+            <div class="p-1 bg-amber-500 origin-top float-right mt-4 mr-4 w-28 text-center translate-x-1/2 rotate-45 pointer-events-none">
+                <span class="font-mono font-semibold text-xs pointer-events-none">PRE</span>
+            </div>
         </div>
-    </div>
+    }
+#endif
 }
 
 <PageTitle>@(string.IsNullOrEmpty(Title) ? "Tab Keeper" : $"Tab Keeper - {Title}")</PageTitle>
