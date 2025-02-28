@@ -8,6 +8,7 @@
   },
   "settings": {
     "title": "Ρυθμίσεις",
+    "app.title": "Εφαρμογή",
     "theme": {
       "title": "Θέμα",
       "auto": "Αυτόματο",

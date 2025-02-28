@@ -6,16 +6,16 @@
             @ViewModel.Name
         </h2>
         <div class="mt-auto gap-1 flex items-center">
-            <p class="m-0 text-xl font-bold">@ViewModel.Price.ToString("0.00")</p>
+            <p class="m-0 font-bold">@ViewModel.Price.ToString("0.00")</p>
             <FaSolidFileInvoice class="icon-sm" />
         </div>
     </div>
 
     <div class="ms-auto grid grid-cols-[1fr_auto] items-center justify-items-end gap-2">
-        <p class="m-0 text-xl font-bold">@ViewModel.Quantity</p>
+        <p class="m-0 font-bold">@ViewModel.Quantity</p>
         <FaSolidBasketShopping class="icon-sm" />
 
-        <p class="m-0 text-xl font-bold">@ViewModel.Total.ToString("0.00")</p>
+        <p class="m-0 font-bold">@ViewModel.Total.ToString("0.00")</p>
         <FaSolidFileInvoiceDollar class="icon-sm" />
     </div>
 

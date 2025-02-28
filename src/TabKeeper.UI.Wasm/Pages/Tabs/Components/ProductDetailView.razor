@@ -47,19 +47,19 @@
     private void StartEdit()
     {
         edit = true;
-        TriggerUpdate();
+        Update();
     }
 
     private void CancelEdit()
     {
         edit = false;
-        TriggerUpdate();
+        Update();
     }
 
     private void ValidSubmit(TabProduct product)
     {
         ViewModel.Product = product;
         edit = false;
-        TriggerUpdate();
+        Update();
     }
 }

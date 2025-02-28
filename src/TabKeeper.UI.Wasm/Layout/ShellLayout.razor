@@ -8,7 +8,7 @@
 {
     <div class="fixed w-full h-0 pointer-events-none">
         <div class="p-1 bg-amber-500 origin-top float-right mt-4 mr-4 w-28 text-center translate-x-1/2 rotate-45 pointer-events-none">
-            <p class="font-mono font-semibold text-xs pointer-events-none">DEV</p>
+            <span class="font-mono font-semibold text-xs pointer-events-none">DEV</span>
         </div>
     </div>
 }
@@ -16,8 +16,8 @@
 <PageTitle>@(string.IsNullOrEmpty(Title) ? "Tab Keeper" : $"Tab Keeper - {Title}")</PageTitle>
 
 <header class="flex w-full min-h-20 items-center p-6 gap-2 border-b border-on-surface">
-    <Button key="Back" If="BackUri is not null" OnClick="() => nav.NavigateTo(BackUri!)"><FaSolidCircleChevronLeft class="icon" /></Button>
-    <h1 class="m-0 p-0 text-2xl font-bold">@Title</h1>
+    <Button key="Back" If="nav.Uri != nav.BaseUri" OnClick="() => nav.NavigateTo(nav.BaseUri)"><FaSolidCircleChevronLeft class="icon" /></Button>
+    <h1 class="font-bold">@Title</h1>
 </header>
 
 <main class="overflow-y-auto p-2">

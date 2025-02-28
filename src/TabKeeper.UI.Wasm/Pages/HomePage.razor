@@ -1,6 +1,6 @@
 ﻿@page "/"
 @inherits CoreComponent
-@inject IndexedDb indexedDb
+@inject StorageDb db
 @inject NavigationManager nav
 @inject TranslateService translate
 
@@ -50,28 +50,32 @@
 
     private async Task TabValidSubmit(TabKeeper.Tabs.Tab tab)
     {
-        await indexedDb.Tabs.AddAsync(tab);
-        nav.NavigateTo($"tabs/{tab.Id}");
+        await db.Tabs.Add(tab);
+        nav.NavigateTo($"tab/{tab.Id}");
     }
 
-    protected override void OnInitialized()
+    protected override void OnAfterRender(bool firstRender)
     {
+        if (!firstRender) return;
+
         ShellLayout.Context = new() { Title = "general.home" | translate };
 
-        indexedDb.Tabs
-            .GetAllAsync<TabEntry>()
+        db.Tabs
+            .GetAll()
+            .AsTask()
             .ToObservable()
             .Do(entries =>
             {
-                Entries.AddRange(entries);
+                Entries.AddRange(entries.Select(x => new TabEntry(x.Id, x.Name, x.Date)));
                 Entries
                     .Connect()
-                    .OnItemRemoved(async entry => await indexedDb.Tabs.BatchDeleteAsync([entry.Id]), invokeOnUnsubscribe: false)
-                    .Subscribe(_ => TriggerUpdate())
+                    .OnItemRemoved(async entry => await db.Tabs.Delete(entry.Id), invokeOnUnsubscribe: false)
+                    .Subscribe(_ => Update())
                     .DisposeWith(this);
                 loading = false;
             })
-            .Subscribe(_ => Update());
+            .Subscribe(_ => Update())
+            .DisposeWith(this);
     }
 
     private record TabEntry(Uuid Id, string Name, DateOnly? Date);

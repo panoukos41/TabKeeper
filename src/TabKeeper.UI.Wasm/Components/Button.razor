@@ -1,8 +1,6 @@
-﻿@using OneOf
+﻿@inherits CoreComponent
 
-@inherits CoreComponent
-
-@if (If?.Match(static v => v, static f => f()) is false)
+@if (If is false)
 {
     return;
 }
@@ -29,7 +27,7 @@
 
 @code {
     [Parameter]
-    public OneOf<bool, Func<bool>>? If { get; set; }
+    public bool If { get; set; } = true;
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

@@ -1,34 +1,30 @@
-﻿@using Core.Preferences;
+﻿@using Core.Preferences
+@using Core.Preferences.Controls
+@using Core.Preferences.Pages
 @using Microsoft.Extensions.Configuration.Memory
-@using TabKeeper.Components.Preferences.Pages;
 
 @page "/settings"
 @inherits CoreComponent
 @inject TranslateService translate
-@inject ISyncLocalStorageService localStorage
+@inject PreferenceManager manager
 
-<PreferenceScreenPage Screen="Preferences.Screen" />
+<PreferenceScreenPage Preference="Preferences.Screen" />
 
 @code {
     public static ConfigurationManager Configuration { get; } = new();
 
     protected override void OnInitialized()
     {
-        if (Configuration.Sources.Count is 1)
-        {
-            Configuration.Sources.Add(new LocalStorageConfigurationProvider(localStorage));
-        }
-
         ShellLayout.Context = new() { Title = "settings.title" | translate };
-
         Preferences.Screen.TitleTransformer = v => v | translate;
-        Preferences.Screen.DescriptionTransformer = v => v is {} ? v | translate : v;
+        Preferences.Screen.DescriptionTransformer = v => v is { } ? v | translate : v;
         Preferences.Screen.SummaryTransformer = v => v | translate;
 
         Preferences.Screen
             .WhenValuePreferenceChanged(Preferences.Theme)
             .Throttle(TimeSpan.FromMilliseconds(100))
-            .Subscribe(p => ThemeModule.UpdateDom());
+            .Subscribe(p => ThemeModule.UpdateDom())
+            .DisposeWith(this);
 
         Preferences.Screen.Initialize(Configuration);
     }

@@ -1,6 +1,6 @@
 ﻿@page "/tab/{Id}"
 @inherits CoreRxComponent<TabViewModel>
-@inject IndexedDb indexedDb
+@inject StorageDb db
 @inject TranslateService translate
 
 @* Loading *@
@@ -61,12 +61,12 @@
             <div class="flex gap-2 items-center">
                 <div class="flex items-center justify-center gap-2">
                     <FaSolidReceipt class="icon-sm" />
-                    <p class="text-lg font-semibold">@ViewModel.Total.ToString("0.00")</p>
+                    <p class="font-semibold">@ViewModel.Total.ToString("0.00")</p>
                 </div>
 
                 <div class="ms-3 me-auto flex items-center justify-center gap-2">
                     <FaSolidCoins class="icon-sm" />
-                    <p class="text-lg font-semibold">@ViewModel.People.Items.Sum(x => x.Total).ToString("0.00")</p>
+                    <p class="font-semibold">@ViewModel.People.Items.Sum(x => x.Total).ToString("0.00")</p>
                 </div>
 
                 @* <Button class="btn btn-tertiary p-2">
@@ -173,10 +173,13 @@
         ViewModel.AddPerson(new(new TabPerson(person)));
     }
 
-    protected override void OnInitialized()
+    protected override void OnAfterRender(bool firstRender)
     {
-        indexedDb.Tabs
-            .GetAsync<string, TabKeeper.Tabs.Tab>(Id)
+        if (!firstRender) return;
+
+        db.Tabs
+            .Get(Uuid.Parse(Id))
+            .AsTask()
             .ToObservable()
             .Subscribe(tab =>
             {
@@ -186,11 +189,12 @@
                 ViewModel = new TabViewModel(tab);
                 ViewModel.WhenPropertyChanged
                     .Throttle(TimeSpan.FromMilliseconds(500))
-                    .Subscribe(_ => indexedDb.Tabs.PutAsync(ViewModel.Tab))
+                    .Subscribe(async _ => await db.Tabs.Put(ViewModel.Tab))
                     .DisposeWith(this);
 
                 loading = false;
                 Update();
-            });
+            })
+            .DisposeWith(this);
     }
 }

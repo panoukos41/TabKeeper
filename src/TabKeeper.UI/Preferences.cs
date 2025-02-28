@@ -1,5 +1,5 @@
-﻿using Core.Preferences;
-using Core.Preferences.Builders;
+﻿using Core.Preferences.Builders;
+using Core.Preferences.Controls;
 
 namespace TabKeeper;
 
@@ -12,7 +12,15 @@ public static class Preferences
     public static PreferenceScreen Screen { get; } = PreferenceScreenBuilder
         .CreateEmpty()
         .AddCategory(b => b
-            .WithTitle("settings.lang.title")
+            .WithTitle("settings.app.title")
+            .AddListBox(new()
+            {
+                Key = Preferences.Theme,
+                Title = "settings.theme.title",
+                AllowedValues = ["auto", "dark", "light"],
+                DefaultValue = "auto",
+                SummaryProvider = value => $"settings.theme.{value}",
+            })
             .AddListBox(new()
             {
                 Key = Preferences.Language,
@@ -22,16 +30,5 @@ public static class Preferences
                 SummaryProvider = value => $"settings.lang.{value}",
             })
         )
-        .AddCategory(b => b
-            .WithTitle("settings.theme.title")
-            .AddListBox(new()
-            {
-                Key = Preferences.Theme,
-                Title = "settings.theme.title",
-                AllowedValues = ["auto", "dark", "light"],
-                DefaultValue = "auto",
-                SummaryProvider = value => $"settings.theme.{value}",
-            })
-        )
-    .Build();
+        .Build();
 }

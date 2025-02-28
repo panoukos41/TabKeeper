@@ -1,7 +1,9 @@
 @import "./_buttons.scss";
 @import "./_cards.scss";
+@import "./_details.scss";
 @import "./_icons.scss";
 @import "./_material-input.scss";
+@import "./_preferences.scss";
 @import "./_skeleton.scss";
 
 @tailwind base;
@@ -40,8 +42,10 @@
   }
 
   small {
+    @apply text-xs;
   }
 
   label {
+    @apply text-base;
   }
 }

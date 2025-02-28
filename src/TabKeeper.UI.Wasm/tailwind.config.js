@@ -1,11 +1,14 @@
 import { variants } from "./tailwind.config.variants"
-const { withMaterialColors } = require("tailwind-material-colors");
+import { withMaterialColors } from "./tailwind.config.tailwind-material-colors"
 
 module.exports = withMaterialColors(
   {
     darkMode: ["selector", "[dark]"],
     content: [
       "./**/*.{razor,html,cshtml}"
+    ],
+    safelist: [
+      { pattern: /preference-+/ }
     ],
     plugins: [
       require("@tailwindcss/typography"),

@@ -30,9 +30,7 @@
                     Context="transition">
 
                     <div class="@Css.Class("w-full max-h-full rounded-2xl bg-secondary-container overflow-y-auto p-6 m-4", this.Class() ?? "self-center justify-self-center", transition.CssClass)" @onclick:stopPropagation>
-                        <ReactiveSection For="updateExpression" AsComponent="typeof(Fragment)">
-                            @(ChildContent?.Invoke(this))
-                        </ReactiveSection>
+                        @(ChildContent?.Invoke(this))
                     </div>
                 </TransitionChild>
             </div>
@@ -41,8 +39,6 @@
 </Transition>
 
 @code {
-    private ReactiveValue<int> updateExpression;
-
     [Parameter]
     public bool IsOpen { get; set; }
 
@@ -67,11 +63,6 @@
     [Parameter]
     public EventCallback OnShow { get; set; }
 
-    public Modal()
-    {
-        updateExpression = new(this, 0);
-    }
-
     protected override void OnInitialized()
     {
         if (IsOpenWhen is { })
@@ -79,13 +70,13 @@
             var sub = IsOpenWhen.Subscribe(open =>
             {
                 IsOpen = open;
-                base.TriggerUpdate();
+                base.Update();
             });
             DisposeWith(sub);
         }
         if (UpdateWhen is { })
         {
-            var updateSub = UpdateWhen.Subscribe(_ => updateExpression.Value = 0);
+            var updateSub = UpdateWhen.Subscribe(_ => Update());
             DisposeWith(updateSub);
         }
     }
@@ -94,7 +85,7 @@
     {
         IsOpen = true;
         OnShow.InvokeAsync();
-        base.TriggerUpdate();
+        base.Update();
         return None.Value;
     }
 
@@ -102,17 +93,12 @@
     {
         IsOpen = false;
         OnDismiss.InvokeAsync();
-        base.TriggerUpdate();
+        base.Update();
         return None.Value;
     }
 
     public None Toggle()
     {
         return IsOpen ? Close() : Show();
-    }
-
-    public void Update()
-    {
-        updateExpression.Value = 0;
     }
 }

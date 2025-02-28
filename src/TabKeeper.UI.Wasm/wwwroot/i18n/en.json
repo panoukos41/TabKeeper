@@ -8,6 +8,7 @@
   },
   "settings": {
     "title": "Settings",
+    "app.title": "Application",
     "theme": {
       "title": "Theme",
       "auto": "Auto",
