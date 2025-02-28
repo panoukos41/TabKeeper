@@ -10,7 +10,5 @@
     <Project Path="src/TabKeeper.UI/TabKeeper.UI.csproj" />
     <Project Path="src/TabKeeper/TabKeeper.csproj" />
   </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/TabKeeper.UI.UnitTests/TabKeeper.UI.UnitTests.csproj" />
-  </Folder>
+  <Folder Name="/test/" Id="0ab3bf05-4346-4aa6-1389-037be0695223" />
 </Solution>
