@@ -1,0 +1,82 @@
+﻿@page "/"
+@inherits CoreComponent
+@inject StorageDb db
+@inject NavigationManager nav
+@inject TranslateService translate
+
+<div class="h-full flex flex-col relative">
+    @* Tabs  *@
+    <div class="grow overflow-y-auto space-y-2">
+        @foreach(var entry in Entries.Items.OrderBy(x => x.Date))
+        {
+            <a class="card flex gap-3 items-center" @key="@entry.Id.ToString()" href="@($"tab/{entry.Id}")">
+                <h2 class="mb-0 me-auto truncate">@entry.Name</h2>
+            </a>
+        }
+    </div>
+
+    @* Bar *@
+    <div class="p-2 bg-secondary-container rounded-md flex gap-4 items-center">
+        <Dropdown>
+            <DropdownButton class="btn">
+                <FaSolidEllipsis class="icon" />
+            </DropdownButton>
+            <DropdownContent class="min-w-52 bg-primary-container px-3 py-2" Anchor="Anchor.Top | Anchor.Left">
+                <DropdownItem OnClick="@(() => nav.NavigateTo("settings"))"><FaSolidGear class="icon-xs me-2" /> @("settings.title" | translate)</DropdownItem>
+            </DropdownContent>
+        </Dropdown>
+
+        <Button class="ms-auto btn btn-primary w-12 h-12" OnClick="() => addEntryModal.Show()">
+            <FaSolidPlus class="icon" />
+        </Button>
+    </div>
+</div>
+
+<Modal @ref="addEntryModal" class="self-center flex flex-col gap-2">
+    <TabKeeper.Pages.Tabs.Components.TabForm
+        id="new-tab-form"
+        OnValidSubmit="TabValidSubmit"
+    />
+    <Button class="btn btn-primary gap-2" type="submit" form="new-tab-form">
+        <FaSolidPlus class="icon-sm" />
+        <span>@("add" | translate)</span>
+    </Button>
+</Modal>
+
+@code {
+    private Modal addEntryModal = null!;
+    private SourceList<TabEntry> Entries { get; } = new();
+    private bool loading = true;
+
+    private async Task TabValidSubmit(TabKeeper.Tabs.Tab tab)
+    {
+        await db.Tabs.Add(tab);
+        nav.NavigateTo($"tab/{tab.Id}");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        ShellLayout.Context = new() { Title = "general.home" | translate };
+
+        db.Tabs
+            .GetAll()
+            .AsTask()
+            .ToObservable()
+            .Do(entries =>
+            {
+                Entries.AddRange(entries.Select(x => new TabEntry(x.Id, x.Name, x.Date)));
+                Entries
+                    .Connect()
+                    .OnItemRemoved(async entry => await db.Tabs.Delete(entry.Id), invokeOnUnsubscribe: false)
+                    .Subscribe(_ => Update())
+                    .DisposeWith(this);
+                loading = false;
+            })
+            .Subscribe(_ => Update())
+            .DisposeWith(this);
+    }
+
+    private record TabEntry(Uuid Id, string Name, DateOnly? Date);
+}

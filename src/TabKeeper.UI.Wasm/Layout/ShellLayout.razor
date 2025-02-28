@@ -1,12 +1,62 @@
 ﻿@inherits LayoutComponentBase
+@implements IDisposable
 
-<header class="w-full flex items-center p-6 bg-background">
-    <a href="/" class="m-0 text-xl font-bold">Home</a>
+@inject TranslateService translate
+@inject NavigationManager nav
+
+@if (ThisAssembly.IsPrerelease)
+{
+    <div class="fixed w-full h-0 pointer-events-none">
+        <div class="p-1 bg-amber-500 origin-top float-right mt-4 mr-4 w-28 text-center translate-x-1/2 rotate-45 pointer-events-none">
+            <span class="font-mono font-semibold text-xs pointer-events-none">DEV</span>
+        </div>
+    </div>
+}
+
+<PageTitle>@(string.IsNullOrEmpty(Title) ? "Tab Keeper" : $"Tab Keeper - {Title}")</PageTitle>
+
+<header class="flex w-full min-h-20 items-center p-6 gap-2 border-b border-on-surface">
+    <Button key="Back" If="nav.Uri != nav.BaseUri" OnClick="() => nav.NavigateTo(nav.BaseUri)"><FaSolidCircleChevronLeft class="icon" /></Button>
+    <h1 class="font-bold">@Title</h1>
 </header>
 
-<main class="p-2 overflow-y-auto">
+<main class="overflow-y-auto p-2">
     @Body
 </main>
 
-@* <footer>
-</footer> *@
+@code {
+    private static readonly BehaviorSubject<ShellContext> contextSub = new(new());
+    private IDisposable? sub;
+
+    protected override void OnInitialized()
+    {
+        sub = contextSub.Subscribe(_ => StateHasChanged());
+    }
+
+    public static IObservable<ShellContext> ContextChanged { get; } = contextSub.AsObservable();
+
+    public static ShellContext Context
+    {
+        get => contextSub.Value;
+        set {
+            if (contextSub.Value == value) return;
+            contextSub.OnNext(value);
+        }
+    }
+
+    public static string Title
+    {
+        get => Context.Title;
+    }
+
+    public static string? BackUri
+    {
+        get => Context.BackUri;
+    }
+
+    public void Dispose()
+    {
+        sub?.Dispose();
+        sub = null;
+    }
+}

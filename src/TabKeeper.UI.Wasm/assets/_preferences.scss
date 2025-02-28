@@ -1,0 +1,36 @@
+@layer components {
+  .preference-screen {
+    h1 {
+      @apply text-2xl text-on-surface font-semibold m-0;
+    }
+  }
+
+  .preference-category {
+    @apply pb-4;
+  }
+  .preference-category-title-container {
+    @apply pb-2;
+  }
+  .preference-category-title-icon {
+  }
+  .preference-category-title {
+  }
+  .preference-category-description {
+  }
+  .preference-category-items {
+  }
+
+  .preference-control-container {
+    @apply pb-3 last:pb-0;
+  }
+
+  .preference-label {
+    @apply text-base text-on-surface;
+  }
+  .preference-input,
+  .preference-select {
+    @apply w-full rounded bg-primary px-2 py-1;
+  }
+  .preference-option {
+  }
+}

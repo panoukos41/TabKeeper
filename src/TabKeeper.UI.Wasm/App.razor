@@ -1,14 +1,16 @@
-﻿@using TabKeeper.Layout
+﻿@using System.Runtime.InteropServices.JavaScript
+@using TabKeeper.Layout
+
+@inject TranslateService translate
 
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(ShellLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
-        <PageTitle>Not found</PageTitle>
+        <PageTitle>@("general.not-found.title" | translate)</PageTitle>
         <LayoutView Layout="@typeof(ShellLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+            <p role="alert">@("general.not-found.description" | translate)</p>
         </LayoutView>
     </NotFound>
 </Router>

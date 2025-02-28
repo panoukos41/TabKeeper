@@ -2,5 +2,10 @@
 global using Core.Abstractions;
 global using DynamicData;
 global using DynamicData.Aggregation;
+global using Flurl;
+global using System.Reactive;
 global using System.Reactive.Linq;
+global using System.Reactive.Threading;
+global using System.Reactive.Threading.Tasks;
 global using TabKeeper;
+global using TabKeeper.Layout;

@@ -13,11 +13,11 @@
             LeaveTo="opacity-0"
             Context="transition">
 
-            <div class="@Css.Class("absolute inset-0 bg-black bg-opacity-25", transition)"></div>
+            <div class="@Css.Class("absolute inset-0 bg-black/20", transition)"></div>
 
         </TransitionChild>
 
-        <div class="absolute inset-0 bg-black bg-opacity-25" @onclick="() => BackdropDismiss ? Close() : None.Value">
+        <div class="absolute inset-0" @onclick="() => BackdropDismiss ? Close() : None.Value">
             <div class="w-full h-full overflow-hidden flex">
                 <TransitionChild
                     AsComponent="typeof(Fragment)"
@@ -29,10 +29,8 @@
                     LeaveTo="opacity-0 scale-95"
                     Context="transition">
 
-                    <div class="@Css.Class("w-full max-h-full rounded-2xl bg-white overflow-y-auto p-6 m-4", TryGetAttribute<string>("class") ?? "self-center justify-self-center", transition.CssClass)" @onclick:stopPropagation>
-                        <ReactiveSection For="updateExpression" AsComponent="typeof(Fragment)">
-                            @(ChildContent?.Invoke(this))
-                        </ReactiveSection>
+                    <div class="@Css.Class("w-full max-h-full rounded-2xl bg-secondary-container overflow-y-auto p-6 m-4", this.Class() ?? "self-center justify-self-center", transition.CssClass)" @onclick:stopPropagation>
+                        @(ChildContent?.Invoke(this))
                     </div>
                 </TransitionChild>
             </div>
@@ -41,8 +39,6 @@
 </Transition>
 
 @code {
-    private ReactiveValue<int> updateExpression;
-
     [Parameter]
     public bool IsOpen { get; set; }
 
@@ -67,11 +63,6 @@
     [Parameter]
     public EventCallback OnShow { get; set; }
 
-    public Modal()
-    {
-        updateExpression = new(this, 0);
-    }
-
     protected override void OnInitialized()
     {
         if (IsOpenWhen is { })
@@ -85,7 +76,7 @@
         }
         if (UpdateWhen is { })
         {
-            var updateSub = UpdateWhen.Subscribe(_ => updateExpression.Value = 0);
+            var updateSub = UpdateWhen.Subscribe(_ => Update());
             DisposeWith(updateSub);
         }
     }
@@ -109,10 +100,5 @@
     public None Toggle()
     {
         return IsOpen ? Close() : Show();
-    }
-
-    public void Update()
-    {
-        updateExpression.Value = 0;
     }
 }

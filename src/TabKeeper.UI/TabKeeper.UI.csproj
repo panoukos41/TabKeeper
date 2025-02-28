@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>TabKeeper</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DynamicData" Version="8.3.27" />
+    <PackageReference Include="Annular.Translate" />
+    <PackageReference Include="DynamicData" />
   </ItemGroup>
 
   <ItemGroup>

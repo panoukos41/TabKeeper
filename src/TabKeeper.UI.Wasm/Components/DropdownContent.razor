@@ -1,0 +1,29 @@
+﻿@inherits CoreComponent
+
+<Transition AsComponent="typeof(Fragment)"
+            Enter="transition ease-out duration-100"
+            EnterFrom="transform opacity-0 scale-95"
+            EnterTo="transform opacity-100 scale-100"
+            Leave="transition ease-in duration-75"
+            LeaveFrom="transform opacity-100 scale-100"
+            LeaveTo="transform opacity-0 scale-95"
+            Context="transition">
+    <MenuItems class="@Css.Class("absolute space-y-1 rounded-md bg-tertiary-container shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none", this.Class(), GetPosition(Anchor), transition.CssClass)">
+        @ChildContent
+    </MenuItems>
+</Transition>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public Anchor Anchor { get; set; } = Anchor.Bottom | Anchor.Left;
+
+    private static string GetPosition(Anchor anchor) => @Css.Class(
+        ("bottom-full mb-2", anchor.HasFlag(Anchor.Top)),
+        ("top-full mt-2", anchor.HasFlag(Anchor.Bottom)),
+        ("left-0", anchor.HasFlag(Anchor.Left)),
+        ("right-0", anchor.HasFlag(Anchor.Right))
+    );
+}

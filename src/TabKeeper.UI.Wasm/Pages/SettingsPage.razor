@@ -1,0 +1,31 @@
+﻿@using Core.Preferences
+@using Core.Preferences.Controls
+@using Core.Preferences.Pages
+@using Microsoft.Extensions.Configuration.Memory
+
+@page "/settings"
+@inherits CoreComponent
+@inject TranslateService translate
+@inject PreferenceManager manager
+
+<PreferenceScreenPage Preference="Preferences.Screen" />
+
+@code {
+    public static ConfigurationManager Configuration { get; } = new();
+
+    protected override void OnInitialized()
+    {
+        ShellLayout.Context = new() { Title = "settings.title" | translate };
+        Preferences.Screen.TitleTransformer = v => v | translate;
+        Preferences.Screen.DescriptionTransformer = v => v is { } ? v | translate : v;
+        Preferences.Screen.SummaryTransformer = v => v | translate;
+
+        Preferences.Screen
+            .WhenValuePreferenceChanged(Preferences.Theme)
+            .Throttle(TimeSpan.FromMilliseconds(100))
+            .Subscribe(p => ThemeModule.UpdateDom())
+            .DisposeWith(this);
+
+        Preferences.Screen.Initialize(Configuration);
+    }
+}

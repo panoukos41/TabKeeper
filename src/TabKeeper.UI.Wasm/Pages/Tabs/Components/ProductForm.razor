@@ -1,0 +1,53 @@
+﻿@inherits CoreComponent
+@inject TranslateService translate
+
+<EditForm Model="Product" OnValidSubmit="ValidSubmit" @attributes="Attributes" class="@this.Class("space-y-2")">
+    <FluentValidator Validator="TabProduct.Validator" />
+
+    <div class="material-input">
+        <label for="Product.Name">@("name" | translate)</label>
+        <InputText @bind-Value="Product.Name" placeholder="@("name" | translate)" />
+    </div>
+    <ValidationMessage For="() => Product.Name" />
+
+    <div class="material-input">
+        <label for="Product.Name">@("price" | translate)</label>
+        <InputNumber @bind-Value="Product.Price" placeholder="@("price" | translate)" min="0" step="0.1" />
+    </div>
+    <ValidationMessage For="() => Product.Price" />
+
+    <div class="material-input">
+        <label for="Product.Name">@("quantity" | translate)</label>
+        <InputNumber @bind-Value="Product.Quantity" placeholder="@("quantity" | translate)" min="1" step="1" />
+    </div>
+    <ValidationMessage For="() => Product.Quantity" />
+</EditForm>
+
+@code {
+    [Parameter, NotNull]
+    public TabProduct? Product { get; set; }
+
+    [Parameter]
+    public bool OnValidReset { get; set; }
+
+    [Parameter]
+    public EventCallback<TabProduct> OnValidSubmit { get; set; }
+
+    public void Reset()
+    {
+        Product = new();
+        Update();
+    }
+
+    protected override void OnInitialized()
+    {
+        Product ??= new();
+    }
+
+    private void ValidSubmit()
+    {
+        OnValidSubmit.InvokeAsync(Product);
+        if (OnValidReset)
+            Reset();
+    }
+}

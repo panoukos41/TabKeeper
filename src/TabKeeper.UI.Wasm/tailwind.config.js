@@ -1,33 +1,38 @@
-const { withMaterialColors } = require('./tailwind-material-colors.esm');
+import { variants } from "./tailwind.config.variants"
+import { withMaterialColors } from "./tailwind.config.tailwind-material-colors"
 
 module.exports = withMaterialColors(
   {
-    darkMode: 'class',
+    darkMode: ["selector", "[dark]"],
     content: [
       "./**/*.{razor,html,cshtml}"
     ],
+    safelist: [
+      { pattern: /preference-+/ }
+    ],
     plugins: [
-      require('@tailwindcss/forms')({ strategy: 'base' }),
-      require('@tailwindcss/typography')
+      require("@tailwindcss/typography"),
+      require("@tailwindcss/forms"),
+      variants,
     ],
     theme: {
       extend: {
-        screens: {}, // '2xl': {'max': '1535px'}
+        screens: {}, // "2xl": {"max": "1535px"}
       }
-    },
-    safelist: [
-      'material-group'
-    ]
+    }
   },
   {
-    // Here, your base colors as HEX values
-    // primary is required
-    primary: '#ff0000',
-    // secondary and/or tertiary are optional, if not set they will be derived from the primary color
-    //secondary: '#ffff00',
-    //tertiary: '#0000ff'
+    primary: "#E6E6FA",
+    //secondary: "#005A6F",
+    //tertiary: "#054C6C",
+    //error: "#D4352F",
+    //neutral: "#919094"
   },
   {
+    /* one of 'content', 'expressive', 'fidelity', 'monochrome', 'neutral', 'tonalSpot' or 'vibrant' */
+    scheme: "expressive",
+    // contrast is optional and ranges from -1 (less contrast) to 1 (more contrast).
+    contrast: 0,
     extend: true
   }
 );

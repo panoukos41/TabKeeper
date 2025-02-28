@@ -1,0 +1,42 @@
+﻿@inherits CoreComponent
+@inject TranslateService translate
+
+<EditForm Model="Person" OnValidSubmit="ValidSubmit" @attributes="Attributes" class="@this.Class("space-y-2")">
+    <FluentValidator Validator="Person.Validator" />
+
+    <div class="material-input">
+        <label for="Person.Name">@("name" | translate)</label>
+        <InputText @bind-Value="Person.Name" placeholder="@("name" | translate)" />
+    </div>
+    <ValidationMessage For="() => Person.Name" />
+
+</EditForm>
+
+@code {
+    [Parameter, NotNull]
+    public Person? Person { get; set; }
+
+    [Parameter]
+    public bool OnValidReset { get; set; }
+
+    [Parameter]
+    public EventCallback<Person> OnValidSubmit { get; set; }
+
+    public void Reset()
+    {
+        Person = new();
+        Update();
+    }
+
+    protected override void OnInitialized()
+    {
+        Person ??= new();
+    }
+
+    private void ValidSubmit()
+    {
+        OnValidSubmit.InvokeAsync(Person);
+        if (OnValidReset)
+            Reset();
+    }
+}

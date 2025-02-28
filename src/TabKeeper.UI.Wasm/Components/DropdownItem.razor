@@ -1,0 +1,17 @@
+﻿@inherits CoreComponent
+
+<Ignis.Components.HeadlessUI.MenuItem OnClick="() => OnClick.InvokeAsync()" AdditionalAttributes="Attributes">
+    <button @attributes="context.Attributes"
+            class="@this.Class("flex items-center w-full rounded-md px-2 py-2 text-sm bg-primary")"
+            type="button">
+        @ChildContent?.Invoke(context.IsActive)
+    </button>
+</Ignis.Components.HeadlessUI.MenuItem>
+
+@code {
+    [Parameter]
+    public RenderFragment<bool>? ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+}

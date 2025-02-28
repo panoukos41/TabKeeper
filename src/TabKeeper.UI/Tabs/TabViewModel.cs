@@ -1,6 +1,6 @@
+using Core.Common.Mixins;
 using Core.Reactive;
 using DynamicData.Binding;
-using TabKeeper.People;
 
 namespace TabKeeper.Tabs;
 
@@ -8,76 +8,86 @@ public sealed class TabViewModel : RxObject
 {
     public Tab Tab { get; }
 
-    private readonly SourceCache<PersonViewModel, Uuid> people = new(p => p.PersonId);
-    private readonly SourceCache<ProductViewModel, Uuid> products = new(p => p.ProductId);
+    private readonly SourceCache<TabProductViewModel, Uuid> products = new(p => p.ProductId);
+    private readonly SourceCache<TabPersonViewModel, Uuid> people = new(p => p.PersonId);
 
     public TabViewModel(Tab tab)
     {
         Tab = tab;
 
-        people
-            .Connect()
-            .AutoRefresh()
-            .DisposeMany()
-            .BindToObservableList(out var peopleList)
-            .Subscribe(_ => RaisePropertyChanged(nameof(People)))
-            .DisposeWith(Disposables);
-
-        products
-            .Connect()
-            .AutoRefresh(x => x.Total)
-            .AutoRefresh(x => x.Divisor)
-            .DisposeMany()
-            .BindToObservableList(out var productsList)
-            .Subscribe(_ => RaisePropertyChanged(nameof(Products)))
-            .DisposeWith(Disposables);
-
-        People = peopleList;
-        Products = productsList;
-
-        products.AddOrUpdate(tab.Products.Select(x => new ProductViewModel(x)));
+        products.AddOrUpdate(tab.Products.Select(x => new TabProductViewModel(x)));
         people.Edit(people =>
         {
-            foreach (var personTab in tab.People)
+            foreach (var personVm in tab.People.Select(person => new TabPersonViewModel(person)))
             {
-                var vm = new PersonViewModel(personTab.Person);
-                people.AddOrUpdate(vm);
-                foreach (var productId in personTab.ProductIds)
+                people.AddOrUpdate(personVm);
+                foreach (var productVm in products.Items.IntersectBy(personVm.Tab.ProductIds, p => p.ProductId))
                 {
-                    var l = products.Lookup(productId);
-                    if (l.HasValue)
-                    {
-                        vm.RegisterProduct(l.Value);
-                    }
+                    personVm.RegisterProduct(productVm);
                 }
             }
         });
 
-        foreach (var product in tab.Products)
-        {
-        }
+        people
+            .Connect()
+            .AutoRefresh()
+            .OnItemAdded(item => tab.People.AddOrUpdate(item.Tab))
+            .OnItemRefreshed(item => tab.People.AddOrUpdate(item.Tab))
+            //.OnItemUpdated((item, _) => tab.People.AddOrUpdate(item.Tab))
+            .OnItemRemoved(item => tab.People.Remove(item.Tab))
+            .DisposeMany()
+            .BindToObservableList(out var peopleList)
+            .Subscribe(_ => RaisePropertyChanged(nameof(People)))
+            .DisposeWith(this);
+        People = peopleList;
+
+        products
+            .Connect()
+            .AutoRefresh()
+            .OnItemAdded(item => tab.Products.AddOrUpdate(item.Product))
+            .OnItemRefreshed(item => tab.Products.AddOrUpdate(item.Product))
+            //.OnItemUpdated((item, _) => tab.Products.AddOrUpdate(item.Product))
+            .OnItemRemoved(item => tab.Products.Remove(item.Product))
+            .DisposeMany()
+            .BindToObservableList(out var productsList)
+            .Subscribe(_ => RaisePropertyChanged(nameof(Products)))
+            .DisposeWith(this);
+
+        Products = productsList;
     }
 
-    public IObservableList<ProductViewModel> Products { get; }
+    public IObservableList<TabProductViewModel> Products { get; }
 
-    public IObservableList<PersonViewModel> People { get; }
+    public IObservableList<TabPersonViewModel> People { get; }
 
-    public void AddProduct(ProductViewModel product)
+    public decimal Total => products.Items.Sum(x => x.Total);
+
+    public TabProductViewModel? GetProduct(Uuid productId)
+    {
+        return products.Lookup(productId) is { HasValue: true, Value: { } person } ? person : null;
+    }
+
+    public void AddProduct(TabProductViewModel product)
     {
         products.AddOrUpdate(product);
     }
 
-    public void RemoveProduct(ProductViewModel product)
+    public void RemoveProduct(TabProductViewModel product)
     {
         products.Remove(product);
     }
 
-    public void AddPerson(PersonViewModel person)
+    public TabPersonViewModel? GetPerson(Uuid personId)
+    {
+        return people.Lookup(personId) is { HasValue: true, Value: { } person } ? person : null;
+    }
+
+    public void AddPerson(TabPersonViewModel person)
     {
         people.AddOrUpdate(person);
     }
 
-    public void RemovePerson(PersonViewModel person)
+    public void RemovePerson(TabPersonViewModel person)
     {
         people.Remove(person);
     }

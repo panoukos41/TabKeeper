@@ -1,0 +1,24 @@
+{
+  "general": {
+    "home": "Home",
+    "not-found": {
+      "title": "Not Found",
+      "description": "Sorry, there is nothing at this address."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "app.title": "Application",
+    "theme": {
+      "title": "Theme",
+      "auto": "Auto",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "lang": {
+      "title": "Language",
+      "en": "English",
+      "el": "Ελληνικά"
+    }
+  }
+}

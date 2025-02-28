@@ -1,36 +1,31 @@
 <Project>
-  <!--Build-->
+
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
-    <NoWarn>$(NoWarn);CS8509;IDE0039;IDE0130;IDE0290;IDE0060;RZ10012</NoWarn>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <NoWarn>$(NoWarn);CS8509;IDE0039;IDE0130;IDE0290;IDE0060;RZ10012;IDE0052;BL0007;CA1816</NoWarn>
+    <WarningsAsErrors>$(WarningsAsErrors);RZ2012;</WarningsAsErrors>
 
-    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts/default</ArtifactsPath>
-    <ArtifactsPath Condition="$(MSBuildProjectDirectory.Contains('tests'))">$(MSBuildThisFileDirectory)artifacts/tests</ArtifactsPath>
-    <ArtifactsPath Condition="$(MSBuildProjectDirectory.Contains('tools'))">$(MSBuildThisFileDirectory)artifacts/tools</ArtifactsPath>
-    <ArtifactsPath Condition="$(MSBuildProjectDirectory.Contains('samples'))">$(MSBuildThisFileDirectory)artifacts/samples</ArtifactsPath>
-    <ArtifactsPath Condition="$(MSBuildProjectDirectory.Contains('src'))">$(MSBuildThisFileDirectory)artifacts/src</ArtifactsPath>
+    <ArtifactsPath>$([System.IO.Path]::Combine(
+      $(MSBuildThisFileDirectory),
+      "artifacts",
+      $([MSBuild]::MakeRelative($(MSBuildThisFileDirectory),$(MSBuildProjectDirectory)).Replace("$(MSBuildProjectName)", '').TrimEnd('/'))
+    ))</ArtifactsPath>
     <UseArtifactsOutput>true</UseArtifactsOutput>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <!-- Repository -->
   <PropertyGroup>
     <Authors>Panagiotis Athanasiou</Authors>
-    <Owners>panoukos41</Owners>
-    <Copyright>Copyright (c) 2023 $(Authors)</Copyright>
-    <RepositoryUrl></RepositoryUrl>
+    <Copyright>Copyright (c) $([System.DateTimeOffset]::UtcNow.ToString("yyyy")) $(Authors)</Copyright>
+    <RepositoryUrl>https://www.github.com/panoukos41/TabKeeper</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryLicense>MIT</RepositoryLicense>
-    <RepositoryDescription></RepositoryDescription>
-    <RepositoryTags></RepositoryTags>
   </PropertyGroup>
-
-  <ItemGroup>
-    <!-- Versioning -->
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133" PrivateAssets="All" />
-  </ItemGroup>
 
 </Project>

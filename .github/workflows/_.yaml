@@ -1,0 +1,58 @@
+name: CI/CD
+env: { DOTNET_NOLOGO: true }
+on:
+  workflow_call:
+    inputs:
+      publish: { type: boolean, default: false, description: Publish application }
+      environment: { type: string, default: dev, description: Choose publish environment <dev|staging|prod> }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: 'true'
+
+    - name: Read .NET Version
+      shell: pwsh
+      id: dotnet-version
+      run: |
+        $version = (Get-Content .\global.json -Raw | ConvertFrom-Json).sdk.version.TrimEnd('0') + 'x'
+        "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with: { dotnet-version: "${{ steps.dotnet-version.outputs.version }}" }
+
+    - name: Setup tools
+      run: |
+        dotnet workload install wasm-tools
+        npm install -g tailwindcss
+
+    - name: Restore
+      working-directory: src/TabKeeper.UI.Wasm
+      run: |
+        npm install
+        dotnet restore
+
+    - name: Build
+      working-directory: src/TabKeeper.UI.Wasm
+      run: dotnet build -c Release --no-restore
+
+    - name: Publish
+      if: ${{ inputs.publish }}
+      working-directory: src/TabKeeper.UI.Wasm
+      shell: pwsh
+      run: |
+        .\css.ps1 -publish
+        dotnet publish --no-restore --no-build
+
+    - name: Publish to Cloudflare Pages
+      if: ${{ inputs.publish }}
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        command: pages deploy artifacts/src/publish/TabKeeper.UI.Wasm/release/wwwroot --project-name=tab-keeper --branch ${{ inputs.environment }}
