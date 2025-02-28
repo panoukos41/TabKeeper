@@ -1,17 +1,16 @@
-name: Build
-
-env:
-  DOTNET_NOLOGO: true
-
+name: build
+env: { DOTNET_NOLOGO: true }
 on:
-  workflow_dispatch:
   pull_request:
-    branches: [main, dev]
+    branches:
+      - main
     paths:
-      - "version.json"
-      - "src/**/*.cs"
-      - "src/**/*.csproj"
-
+      - src/**
+      - test/**
+    types:
+      - opened
+      - ready_for_review
+      - review_requested
 jobs:
-  Build:
-    uses: panoukos41/TabKeeper/.github/workflows/_ci.yaml@dev
+  pipeline:
+    uses: panoukos41/TabKeeper/.github/workflows/_.yaml@main

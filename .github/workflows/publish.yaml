@@ -1,20 +1,29 @@
-name: Publish
-
-env:
-  DOTNET_NOLOGO: true
-
+name: publish
+env: { DOTNET_NOLOGO: true }
 on:
   workflow_dispatch:
   push:
-    branches: [main, dev]
+    branches:
+    - main
+    tags:
+    - v[0-9]+.[0-9]+.[0-9]+  # Only matches vX.X.X where X is a number
     paths:
-      - "version.json"
-      - "src/**/*.cs"
-      - "src/**/*.csproj"
-
+    - src/**
+    - test/**
 jobs:
-  Build:
-    uses: panoukos41/TabKeeper/.github/workflows/_ci.yaml@dev
-    with:
-      publish: true
-    secrets: inherit
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine if prod
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "environment=main" >> $GITHUB_ENV
+
+      - name: Determine if dev
+        if: startsWith(github.ref, 'refs/heads/main')
+        run: echo "environment=dev" >> $GITHUB_ENV
+
+      - name: Publish
+        uses: panoukos41/TabKeeper/.github/workflows/_.yaml@main
+        with:
+          publish: true
+          environment: $environment
