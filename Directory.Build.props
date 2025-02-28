@@ -6,7 +6,8 @@
     <ImplicitUsings>true</ImplicitUsings>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
-    <NoWarn>$(NoWarn);CS8509;IDE0039;IDE0130;IDE0290;IDE0060;RZ10012;IDE0052;BL0007;</NoWarn>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <NoWarn>$(NoWarn);CS8509;IDE0039;IDE0130;IDE0290;IDE0060;RZ10012;IDE0052;BL0007;CA1816</NoWarn>
     <WarningsAsErrors>$(WarningsAsErrors);RZ2012;</WarningsAsErrors>
 
     <ArtifactsPath>$([System.IO.Path]::Combine(
@@ -14,36 +15,17 @@
       "artifacts",
       $([MSBuild]::MakeRelative($(MSBuildThisFileDirectory),$(MSBuildProjectDirectory)).Replace("$(MSBuildProjectName)", '').TrimEnd('/'))
     ))</ArtifactsPath>
-
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <NBGV_EmitThisAssemblyClass>false</NBGV_EmitThisAssemblyClass>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <!-- Repository -->
   <PropertyGroup>
     <Authors>Panagiotis Athanasiou</Authors>
-    <Copyright>Copyright (c) 2024 $(Authors)</Copyright>
-    <RepositoryUrl>https://www.github.com/panoukos41/FontAwesome</RepositoryUrl>
+    <Copyright>Copyright (c) $([System.DateTimeOffset]::UtcNow.ToString("yyyy")) $(Authors)</Copyright>
+    <RepositoryUrl>https://www.github.com/panoukos41/TabKeeper</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryLicense>MIT</RepositoryLicense>
-    <RepositoryDescription>Project to port great features, component, ideas and libs from the Angular ecosystem to Blazor and .NET.</RepositoryDescription>
-    <RepositoryTags>blazor;angular;components</RepositoryTags>
-  </PropertyGroup>
-
-  <!-- Package -->
-  <PropertyGroup>
-    <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
-    <PackageLicenseExpression>$(RepositoryLicense)</PackageLicenseExpression>
-    <PackageDescription>$(RepositoryDescription)</PackageDescription>
-    <PackageTags>$(RepositoryTags)</PackageTags>
-    <PackageReleaseNotes>$(RepositoryUrl)/releases</PackageReleaseNotes>
-    <!--<PackageIcon></PackageIcon>-->
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
 </Project>

@@ -1,40 +1,16 @@
 <Solution>
-  <Folder Name="/.github/" Id="3a44b2bf-950b-44ae-926f-e55762f18b30" />
-  <Folder Name="/root/">
-    <File Path=".editorconfig" />
-    <File Path=".gitattributes" />
-    <File Path=".gitignore" />
-    <File Path=".gitmodules" />
-    <File Path="Directory.Build.props" />
-    <File Path="Directory.Packages.props" />
-    <File Path="global.json" />
-    <File Path="LICENSE" />
-    <File Path="publish.ps1" />
-    <File Path="README.md" />
-    <File Path="version.json" />
-  </Folder>
   <Folder Name="/src-modules/">
-    <Project Path="src-modules\Core\src\Core.App\Core.App.csproj" />
-    <Project Path="src-modules\Core\src\Core.Blazor\Core.Blazor.csproj" />
-    <Project Path="src-modules\Core\src\Core.Web\Core.Web.csproj" />
-    <Project Path="src-modules\Core\src\Core\Core.csproj" />
+    <Project Path="src-modules/Core/src/Core.App/Core.App.csproj" />
+    <Project Path="src-modules/Core/src/Core.Blazor/Core.Blazor.csproj" />
+    <Project Path="src-modules/Core/src/Core.Web/Core.Web.csproj" />
+    <Project Path="src-modules/Core/src/Core/Core.csproj" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src\TabKeeper.UI.Wasm\TabKeeper.UI.Wasm.csproj" />
-    <Project Path="src\TabKeeper.UI\TabKeeper.UI.csproj" />
-    <Project Path="src\TabKeeper\TabKeeper.csproj" />
+    <Project Path="src/TabKeeper.UI.Wasm/TabKeeper.UI.Wasm.csproj" />
+    <Project Path="src/TabKeeper.UI/TabKeeper.UI.csproj" />
+    <Project Path="src/TabKeeper/TabKeeper.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests\TabKeeper.UI.UnitTests\TabKeeper.UI.UnitTests.csproj" />
-  </Folder>
-  <Folder Name="/workflows/" Id="28f6650c-0da8-40f0-adb5-092b6e805770">
-    <File Path=".github/workflows/build.yaml" />
-    <File Path=".github/workflows/publish.yaml" />
-    <File Path=".github/workflows/_ci.yaml" />
-  </Folder>
-  <Folder Name="/src-modules/root/" Id="8757ca8d-7e98-c1c6-fe20-4b53fbf8b1f2">
-    <File Path="src-modules\Core\Directory.Build.props" />
-    <File Path="src-modules\Core\Directory.Packages.props" />
-    <File Path="src-modules\Core\global.json" />
+    <Project Path="tests/TabKeeper.UI.UnitTests/TabKeeper.UI.UnitTests.csproj" />
   </Folder>
 </Solution>
