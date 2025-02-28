@@ -16,7 +16,7 @@ public sealed class ProductViewModelTests
     public void Should_Change_Product_Properties()
     {
         // Arrange
-        var product = new Product
+        var product = new TabProduct
         {
             Id = Uuid.NewUuid(),
             Name = "Test",
@@ -24,7 +24,7 @@ public sealed class ProductViewModelTests
             Quantity = 1
         };
 
-        var viewModel = new ProductViewModel(product);
+        var viewModel = new TabProductViewModel(product);
 
         var propertyChangedFired = false;
         var propertyChangingFired = false;

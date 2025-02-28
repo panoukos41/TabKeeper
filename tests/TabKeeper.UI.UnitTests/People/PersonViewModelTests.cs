@@ -13,11 +13,11 @@ public sealed class PersonViewModelTests
     public void Should_Change_Total_For_One_Person()
     {
         // Arrange
-        var salad = new ProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Salad", Price = 5 });
-        var chips = new ProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Chips", Price = 10 });
-        var meat = new ProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Meat", Price = 15 });
+        var salad = new TabProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Salad", Price = 5 });
+        var chips = new TabProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Chips", Price = 10 });
+        var meat = new TabProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Meat", Price = 15 });
 
-        var viewModel = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "Panos" });
+        var viewModel = new TabPersonViewModel(new() { Id = Uuid.NewUuid(), Name = "Panos" });
 
         decimal total = 0;
         viewModel.WhenValueChanged(x => x.Total).Subscribe(x => total = x);
@@ -49,13 +49,13 @@ public sealed class PersonViewModelTests
     public void Should_Change_Totals_For_Many_People()
     {
         // Arrange
-        var salad = new ProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Salad", Price = 6 });
-        var chips = new ProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Chips", Price = 6 });
-        var meat = new ProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Meat", Price = 15 });
+        var salad = new TabProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Salad", Price = 6 });
+        var chips = new TabProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Chips", Price = 6 });
+        var meat = new TabProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Meat", Price = 15 });
 
-        var panos = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "Panos" });
-        var john = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "John" });
-        var george = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "George" });
+        var panos = new TabPersonViewModel(new() { Id = Uuid.NewUuid(), Name = "Panos" });
+        var john = new TabPersonViewModel(new() { Id = Uuid.NewUuid(), Name = "John" });
+        var george = new TabPersonViewModel(new() { Id = Uuid.NewUuid(), Name = "George" });
 
         decimal panosTotal = 0, johnTotal = 0, georgeTotal = 0;
 
@@ -115,11 +115,11 @@ public sealed class PersonViewModelTests
     public void Should_Change_Totals_After_Removing_People_Or_Product()
     {
         // Arrange
-        var salad = new ProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Salad", Price = 9 });
+        var salad = new TabProductViewModel(new() { Id = Uuid.NewUuid(), Name = "Salad", Price = 9 });
 
-        var panos = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "Panos" });
-        var john = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "John" });
-        var george = new PersonViewModel(new() { Id = Uuid.NewUuid(), Name = "George" });
+        var panos = new TabPersonViewModel(new() { Id = Uuid.NewUuid(), Name = "Panos" });
+        var john = new TabPersonViewModel(new() { Id = Uuid.NewUuid(), Name = "John" });
+        var george = new TabPersonViewModel(new() { Id = Uuid.NewUuid(), Name = "George" });
 
         decimal panosTotal = 0, johnTotal = 0, georgeTotal = 0;
 
