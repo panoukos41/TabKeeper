@@ -1,11 +1,10 @@
-﻿using Core;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Buffers;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
+using CompositeDisposable = System.Reactive.Disposables.CompositeDisposable;
+using Observable = System.Reactive.Linq.Observable;
 
 namespace TabKeeper.Components;
 
