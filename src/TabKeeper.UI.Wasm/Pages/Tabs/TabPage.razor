@@ -1,4 +1,7 @@
-﻿@page "/tab/{Id}"
+@using Ignis.Components
+@using Ignis.Components.HeadlessUI
+
+@page "/tab/{Id}"
 @inherits CoreRxComponent<TabViewModel>
 @inject StorageDb db
 @inject TranslateService translate

@@ -6,7 +6,7 @@
 
     <div class="material-input">
         <label for="Tab.Name">@("name" | translate)</label>
-        <InputText @bind-Value="Tab.Name" placeholder="@("name" | translate)" />
+        <InputText @bind-Value="Tab.Name" placeholder="@("name" | translate)" autofocus />
     </div>
     <ValidationMessage For="() => Tab.Name" />
 
