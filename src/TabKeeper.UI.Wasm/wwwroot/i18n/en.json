@@ -6,6 +6,12 @@
       "description": "Sorry, there is nothing at this address."
     }
   },
+  "add": "Add",
+  "update": "Update",
+  "cancel": "Cancel",
+  "close": "Close",
+  "products": "Products",
+  "people": "People",
   "settings": {
     "title": "Settings",
     "app.title": "Application",

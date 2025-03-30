@@ -1,4 +1,4 @@
-@using Ignis.Components
+﻿@using Ignis.Components
 @using Ignis.Components.HeadlessUI
 
 @page "/tab/{Id}"
@@ -72,15 +72,11 @@
                     <p class="font-semibold">@ViewModel.People.Items.Sum(x => x.Total).ToString("0.00")</p>
                 </div>
 
-                @* <Button class="btn btn-tertiary p-2">
-                    <FaSolidPen class="icon" />
-                </Button> *@
-
-                <Button class="btn btn-tertiary p-2" OnClick="() => NewPersonModal.Show()">
+                <Button class="btn btn-tertiary p-2" OnClick="() => NewPersonModal.Open()">
                     <FaSolidUserPlus class="icon" />
                 </Button>
 
-                <Button class="btn btn-tertiary p-2" OnClick="() => NewProductModal.Show()">
+                <Button class="btn btn-tertiary p-2" OnClick="() => NewProductModal.Open()">
                     <FaSolidCartPlus class="icon" />
                 </Button>
             </div>
@@ -101,7 +97,7 @@
 </div>
 
 @* Product Modal *@
-<Modal BackdropDismiss IsOpenWhen="SelectedProduct.IsNotNull()">
+<Modal IsOpenWhen="SelectedProduct.IsNotNull()">
     @{
         var product = SelectedProduct.Value!;
     }
@@ -126,7 +122,7 @@
 
 @* Add Product Modal *@
 <Modal @ref="NewProductModal" BackdropDismiss class="self-center flex flex-col gap-2">
-    <ProductForm id="new-product-form" OnValidSubmit="OnValidProduct" OnValidReset />
+    <ProductForm Id="new-product-form" OnValidSubmit="OnValidProduct" OnValidReset />
     <div class="flex flex-row-reverse gap-2">
         <Button class="btn btn-primary gap-2 grow" type="submit" form="new-product-form">
             <FaSolidPlus class="icon-sm" />
@@ -134,22 +130,22 @@
         </Button>
         <Button class="btn btn-cancel gap-2 grow" OnClick="() => NewProductModal.Close()">
             <FaSolidX class="icon-xs" />
-            <span>@("close" | translate)</span>
+            <span>@("cancel" | translate)</span>
         </Button>
     </div>
 </Modal>
 
 @* Add Person Modal *@
 <Modal @ref="NewPersonModal" BackdropDismiss class="self-center flex flex-col gap-2">
-    <PersonForm id="new-person-form" OnValidSubmit="OnValidPerson" OnValidReset />
-    <div class="flex flex-row-reverse gap-2">
+    <PersonForm Id="new-person-form" OnValidSubmit="OnValidPerson" OnValidReset />
+    <div class="mt-4 flex flex-row-reverse gap-2">
         <Button class="btn btn-primary gap-2 grow" type="submit" form="new-person-form">
             <FaSolidPlus class="icon-sm" />
             <span>@("add" | translate)</span>
         </Button>
         <Button class="btn btn-cancel gap-2 grow" OnClick="() => NewPersonModal.Close()">
             <FaSolidX class="icon-xs" />
-            <span>@("close" | translate)</span>
+            <span>@("cancel" | translate)</span>
         </Button>
     </div>
 </Modal>
@@ -162,9 +158,6 @@
 
     private Modal NewProductModal { get; set; } = null!;
     private Modal NewPersonModal { get; set; } = null!;
-
-    [Parameter]
-    public string Id { get; set; } = string.Empty;
 
     private void OnValidProduct(TabProduct product)
     {
