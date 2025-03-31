@@ -13,9 +13,7 @@
     <PackageReference Include="Blazored.LocalStorage" />
     <PackageReference Include="Flurl" />
     <PackageReference Include="Ignis.Components.HeadlessUI" />
-    <PackageReference Include="Ignis.Components.Reactivity" />
     <PackageReference Include="Ignis.Components.WebAssembly" />
-    <PackageReference Include="Ignis.Utils" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" PrivateAssets="all" />
     <PackageReference Include="Noctilocus" />

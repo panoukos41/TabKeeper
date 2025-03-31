@@ -10,9 +10,7 @@
     <PackageVersion Include="DynamicData" Version="9.1.2" />
     <PackageVersion Include="Flurl" Version="4.0.0" />
     <PackageVersion Include="Ignis.Components.HeadlessUI" Version="1.4.0" />
-    <PackageVersion Include="Ignis.Components.Reactivity" Version="1.4.0" />
     <PackageVersion Include="Ignis.Components.WebAssembly" Version="1.4.0" />
-    <PackageVersion Include="Ignis.Utils" Version="1.4.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.2" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
