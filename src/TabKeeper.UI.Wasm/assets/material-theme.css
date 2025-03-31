@@ -1,0 +1,215 @@
+/* depending on your strategy the order matters */
+@import "./theme/winter/light.css";
+@import "./theme/winter/dark.css";
+@import "./theme/fall/light.css";
+@import "./theme/fall/dark.css";
+@import "./theme/spring/light.css";
+@import "./theme/spring/dark.css";
+@import "./theme/summer/light.css";
+@import "./theme/summer/dark.css";
+
+@theme {
+    --color-primary: var(--md-sys-color-primary);
+    --color-surface-tint: var(--md-sys-color-surface-tint);
+    --color-on-primary: var(--md-sys-color-on-primary);
+    --color-primary-container: var(--md-sys-color-primary-container);
+    --color-on-primary-container: var(--md-sys-color-on-primary-container);
+    --color-secondary: var(--md-sys-color-secondary);
+    --color-on-secondary: var(--md-sys-color-on-secondary);
+    --color-secondary-container: var(--md-sys-color-secondary-container);
+    --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+    --color-tertiary: var(--md-sys-color-tertiary);
+    --color-on-tertiary: var(--md-sys-color-on-tertiary);
+    --color-tertiary-container: var(--md-sys-color-tertiary-container);
+    --color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+    --color-error: var(--md-sys-color-error);
+    --color-on-error: var(--md-sys-color-on-error);
+    --color-error-container: var(--md-sys-color-error-container);
+    --color-on-error-container: var(--md-sys-color-on-error-container);
+    --color-background: var(--md-sys-color-background);
+    --color-on-background: var(--md-sys-color-on-background);
+    --color-surface: var(--md-sys-color-surface);
+    --color-on-surface: var(--md-sys-color-on-surface);
+    --color-surface-variant: var(--md-sys-color-surface-variant);
+    --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+    --color-outline: var(--md-sys-color-outline);
+    --color-outline-variant: var(--md-sys-color-outline-variant);
+    --color-shadow: var(--md-sys-color-shadow);
+    --color-scrim: var(--md-sys-color-scrim);
+    --color-inverse-surface: var(--md-sys-color-inverse-surface);
+    --color-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+    --color-inverse-primary: var(--md-sys-color-inverse-primary);
+    --color-primary-fixed: var(--md-sys-color-primary-fixed);
+    --color-on-primary-fixed: var(--md-sys-color-on-primary-fixed);
+    --color-primary-fixed-dim: var(--md-sys-color-primary-fixed-dim);
+    --color-on-primary-fixed-variant: var(--md-sys-color-on-primary-fixed-variant);
+    --color-secondary-fixed: var(--md-sys-color-secondary-fixed);
+    --color-on-secondary-fixed: var(--md-sys-color-on-secondary-fixed);
+    --color-secondary-fixed-dim: var(--md-sys-color-secondary-fixed-dim);
+    --color-on-secondary-fixed-variant: var(--md-sys-color-on-secondary-fixed-variant);
+    --color-tertiary-fixed: var(--md-sys-color-tertiary-fixed);
+    --color-on-tertiary-fixed: var(--md-sys-color-on-tertiary-fixed);
+    --color-tertiary-fixed-dim: var(--md-sys-color-tertiary-fixed-dim);
+    --color-on-tertiary-fixed-variant: var(--md-sys-color-on-tertiary-fixed-variant);
+    --color-surface-dim: var(--md-sys-color-surface-dim);
+    --color-surface-bright: var(--md-sys-color-surface-bright);
+    --color-surface-container-lowest: var(--md-sys-color-surface-container-lowest);
+    --color-surface-container-low: var(--md-sys-color-surface-container-low);
+    --color-surface-container: var(--md-sys-color-surface-container);
+    --color-surface-container-high: var(--md-sys-color-surface-container-high);
+    --color-surface-container-highest: var(--md-sys-color-surface-container-highest);
+}
+
+@utility bg-primary {
+    @apply text-on-primary;
+}
+
+@utility bg-primary-container {
+    @apply text-on-primary-container;
+}
+
+@utility bg-secondary {
+    @apply text-on-secondary;
+}
+
+@utility bg-secondary-container {
+    @apply text-on-secondary-container;
+}
+
+@utility bg-tertiary {
+    @apply text-on-tertiary;
+}
+
+@utility bg-tertiary-container {
+    @apply text-on-tertiary-container;
+}
+
+@utility bg-error {
+    @apply text-on-error;
+}
+
+@utility bg-error-container {
+    @apply text-on-error-container;
+}
+
+@utility bg-background {
+    @apply text-on-background;
+}
+
+@utility bg-surface {
+    @apply text-on-surface;
+}
+
+@utility bg-surface-variant {
+    @apply text-on-surface-variant;
+}
+
+@utility bg-primary-fixed {
+    @apply text-on-primary-fixed;
+}
+
+@utility bg-secondary-fixed {
+    @apply text-on-secondary-fixed;
+}
+
+@utility bg-tertiary-fixed {
+    @apply text-on-tertiary-fixed;
+}
+
+@utility interactive-bg-primary {
+    @apply bg-primary;
+    @apply hover:bg-primary/90;
+    @apply active:bg-primary/95 active:text-on-primary/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-primary-container {
+    @apply bg-primary-container;
+    @apply hover:bg-primary-container/90;
+    @apply active:bg-primary-container/95 active:text-on-primary-container/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-secondary {
+    @apply bg-secondary;
+    @apply hover:bg-secondary/90;
+    @apply active:bg-secondary/95 active:text-on-secondary/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-secondary-container {
+    @apply bg-secondary-container;
+    @apply hover:bg-secondary-container/90;
+    @apply active:bg-secondary-container/95 active:text-on-secondary-container/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-tertiary {
+    @apply bg-tertiary;
+    @apply hover:bg-tertiary/90;
+    @apply active:bg-tertiary/95 active:text-on-tertiary/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-tertiary-container {
+    @apply bg-tertiary-container;
+    @apply hover:bg-tertiary-container/90;
+    @apply active:bg-tertiary-container/95 active:text-on-tertiary-container/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-error {
+    @apply bg-error;
+    @apply hover:bg-error/90;
+    @apply active:bg-error/95 active:text-on-error/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-error-container {
+    @apply bg-error-container;
+    @apply hover:bg-error-container/90;
+    @apply active:bg-error-container/95 active:text-on-error-container/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-background {
+    @apply bg-background;
+    @apply hover:bg-background/90;
+    @apply active:bg-background/95 active:text-on-background/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-surface {
+    @apply bg-surface;
+    @apply hover:bg-surface/90;
+    @apply active:bg-surface/95 active:text-on-surface/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-surface-variant {
+    @apply bg-surface-variant;
+    @apply hover:bg-surface-variant/90;
+    @apply active:bg-surface-variant/95 active:text-on-surface-variant/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-primary-fixed {
+    @apply bg-primary-fixed;
+    @apply hover:bg-primary-fixed/90;
+    @apply active:bg-primary-fixed/95 active:text-on-primary-fixed/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-secondary-fixed {
+    @apply bg-secondary-fixed;
+    @apply hover:bg-secondary-fixed/90;
+    @apply active:bg-secondary-fixed/95 active:text-on-secondary-fixed/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}
+
+@utility interactive-bg-tertiary-fixed {
+    @apply bg-tertiary-fixed;
+    @apply hover:bg-tertiary-fixed/90;
+    @apply active:bg-tertiary-fixed/95 active:text-on-tertiary-fixed/80;
+    @apply disabled:bg-on-surface/20 disabled:text-on-surface/20;
+}

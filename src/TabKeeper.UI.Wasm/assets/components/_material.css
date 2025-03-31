@@ -1,0 +1,36 @@
+.material {
+  @apply relative;
+
+  input,
+  textarea {
+    @apply w-full border rounded focus:ring-0 focus:ring-offset-0 focus:outline-none;
+    @apply p-1 ps-2 pt-4.5 placeholder-transparent;
+    @apply border-transparent bg-surface;
+
+    &.invalid,
+    &:invalid {
+        @apply border-error;
+    }
+
+    &:focus {
+        @apply border-on-surface;
+    }
+  }
+
+  label {
+    /* Default */
+    @apply pointer-events-none absolute cursor-text px-2 transition-transform duration-200;
+    @apply text-base text-on-surface/70;
+
+    /* Focus and Placeholder */
+    &:has(+ input:not(:focus)):has(+ input:placeholder-shown),
+    &:has(+ textarea:not(:focus)):has(+ textarea:placeholder-shown) {
+      @apply translate-y-1/2;
+    }
+  }
+
+  .error,
+  .validation-message {
+    @apply text-sm text-error;
+  }
+}

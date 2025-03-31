@@ -1,0 +1,26 @@
+/* Parent variant */
+@custom-variant parent {
+  .parent > & {
+    @slot;
+  }
+}
+
+@custom-variant ancestor {
+  .parent & {
+    @slot;
+  }
+}
+
+/* Next input variant */
+@custom-variant next-input {
+  &:has(+ input) {
+    @slot;
+  }
+}
+
+/* Peer input variant */
+@custom-variant peer-input {
+  input ~ & {
+    @slot;
+  }
+}

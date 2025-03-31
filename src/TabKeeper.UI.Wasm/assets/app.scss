@@ -1,52 +1,48 @@
-@import "./_buttons.scss";
-@import "./_cards.scss";
-@import "./_details.scss";
-@import "./_dialog.scss";
-@import "./_icons.scss";
-@import "./_material-input.scss";
-@import "./_preferences.scss";
-@import "./_skeleton.scss";
+@import "tailwindcss";
+@import "./custom-variants.css";
+@import "./material-theme.css";
+@import "./components/_buttons.css";
+@import "./components/_cards.css";
+@import "./components/_details.css";
+@import "./components/_dialog.css";
+@import "./components/_icons.css";
+@import "./components/_material.css";
+@import "./components/_preferences.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+html
+body,
+#app {
+  @apply w-screen h-dvh bg-surface;
+}
 
-@layer base {
-  html
-  body,
-  #app {
-    @apply w-screen h-dvh bg-surface;
-  }
+#app {
+  @apply grid grid-rows-[auto_minmax(0,1fr)];
+}
 
-  #app {
-    @apply grid grid-rows-[auto_minmax(0,1fr)];
-  }
+h1 {
+  @apply text-2xl font-bold;
+}
 
-  h1 {
-    @apply text-2xl font-bold;
-  }
+h2 {
+  @apply text-xl font-medium;
+}
 
-  h2 {
-    @apply text-xl font-medium;
-  }
+h3 {
+  @apply text-lg font-medium;
+}
 
-  h3 {
-    @apply text-lg font-medium;
-  }
+h4 {
+  @apply text-base font-medium;
+}
 
-  h4 {
-    @apply text-base font-medium;
-  }
+p {
+  @apply text-base;
+}
 
-  p {
-    @apply text-base;
-  }
+small {
+  @apply text-xs;
+}
 
-  small {
-    @apply text-xs;
-  }
-
-  label {
-    @apply text-base;
-  }
+label {
+  @apply text-base;
 }
