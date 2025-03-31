@@ -18,11 +18,20 @@ public static partial class ThemeModule
         return JSHost.ImportAsync(name, url ?? "../js/theme.js");
     }
 
+    [JSImport("configure", name)]
+    public static partial void Configure([JSMarshalAs<JSType.Any>] object? options);
+
     [JSImport("updateDom", name)]
     public static partial void UpdateDom();
 
-    [JSImport("toggle", name)]
-    public static partial void Toggle();
+    [JSImport("getTheme", name)]
+    public static partial string GetTheme();
+
+    [JSImport("setTheme", name)]
+    public static partial string SetTheme([JSMarshalAs<JSType.String>] string theme);
+
+    [JSImport("setAuto", name)]
+    public static partial void SetAuto();
 
     [JSImport("setDark", name)]
     public static partial void SetDark();
@@ -30,9 +39,6 @@ public static partial class ThemeModule
     [JSImport("setLight", name)]
     public static partial void SetLight();
 
-    [JSImport("setAuto", name)]
-    public static partial void SetAuto();
-
-    [JSImport("getTheme", name)]
-    public static partial string GetTheme();
+    [JSImport("toggle", name)]
+    public static partial void Toggle();
 }

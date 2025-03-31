@@ -17,7 +17,17 @@ public static class Preferences
             {
                 Key = Preferences.Theme,
                 Title = "settings.theme.title",
-                AllowedValues = ["auto", "dark", "light"],
+                AllowedValues = [
+                    "auto",
+                    "fall-light",
+                    "fall-dark",
+                    "spring-light",
+                    "spring-dark",
+                    "summer-light",
+                    "summer-dark",
+                    "winter-light",
+                    "winter-dark",
+                ],
                 DefaultValue = "auto",
                 SummaryProvider = value => $"settings.theme.{value}",
             })

@@ -21,7 +21,7 @@
         Preferences.Screen
             .WhenValuePreferenceChanged(Preferences.Theme)
             .Throttle(TimeSpan.FromMilliseconds(100))
-            .Subscribe(p => ThemeModule.UpdateDom())
+            .Subscribe(p => ThemeModule.SetTheme(p.Value))
             .DisposeWith(this);
 
         Preferences.Screen.Initialize(manager);
