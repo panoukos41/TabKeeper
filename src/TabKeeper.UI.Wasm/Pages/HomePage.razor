@@ -26,18 +26,18 @@
             </DropdownContent>
         </Dropdown>
 
-        <Button class="ms-auto btn btn-primary w-12 h-12" OnClick="() => addEntryModal.Show()">
+        <Button class="ms-auto btn btn-primary w-12 h-12" OnClick="() => addEntryModal.Open()">
             <FaSolidPlus class="icon" />
         </Button>
     </div>
 </div>
 
-<Modal @ref="addEntryModal" class="self-center flex flex-col gap-2">
+<Modal @ref="addEntryModal" class="p-6 mt-4 mb-auto rounded bg-secondary-container">
     <TabKeeper.Pages.Tabs.Components.TabForm
         id="new-tab-form"
         OnValidSubmit="TabValidSubmit"
     />
-    <Button class="btn btn-primary gap-2" type="submit" form="new-tab-form">
+    <Button class="btn btn-primary gap-2 mt-4 min-w-40 mx-auto" type="submit" form="new-tab-form">
         <FaSolidPlus class="icon-sm" />
         <span>@("add" | translate)</span>
     </Button>

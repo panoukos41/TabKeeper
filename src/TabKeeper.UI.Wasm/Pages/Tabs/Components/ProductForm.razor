@@ -1,26 +1,26 @@
 ﻿@inherits CoreComponent
 @inject TranslateService translate
 
-<EditForm Model="Product" OnValidSubmit="ValidSubmit" @attributes="Attributes" class="@this.Class("space-y-2")">
+<EditForm Model="Product" OnValidSubmit="ValidSubmit" @attributes="Attributes" id="@Id" class="@this.Class("space-y-2")">
     <FluentValidator Validator="TabProduct.Validator" />
 
-    <div class="material-input">
+    <div class="material">
         <label for="Product.Name">@("name" | translate)</label>
         <InputText @bind-Value="Product.Name" placeholder="@("name" | translate)" />
+        <ValidationMessage For="() => Product.Name" />
     </div>
-    <ValidationMessage For="() => Product.Name" />
 
-    <div class="material-input">
-        <label for="Product.Name">@("price" | translate)</label>
+    <div class="material">
+        <label for="Product.Price">@("price" | translate)</label>
         <InputNumber @bind-Value="Product.Price" placeholder="@("price" | translate)" min="0" step="0.1" />
+        <ValidationMessage For="() => Product.Price" />
     </div>
-    <ValidationMessage For="() => Product.Price" />
 
-    <div class="material-input">
-        <label for="Product.Name">@("quantity" | translate)</label>
+    <div class="material">
+        <label for="Product.Quantity">@("quantity" | translate)</label>
         <InputNumber @bind-Value="Product.Quantity" placeholder="@("quantity" | translate)" min="1" step="1" />
+        <ValidationMessage For="() => Product.Quantity" />
     </div>
-    <ValidationMessage For="() => Product.Quantity" />
 </EditForm>
 
 @code {

@@ -11,8 +11,6 @@
 <PreferenceScreenPage Preference="Preferences.Screen" />
 
 @code {
-    public static ConfigurationManager Configuration { get; } = new();
-
     protected override void OnInitialized()
     {
         ShellLayout.Context = new() { Title = "settings.title" | translate };
@@ -23,9 +21,9 @@
         Preferences.Screen
             .WhenValuePreferenceChanged(Preferences.Theme)
             .Throttle(TimeSpan.FromMilliseconds(100))
-            .Subscribe(p => ThemeModule.UpdateDom())
+            .Subscribe(p => ThemeModule.SetTheme(p.Value))
             .DisposeWith(this);
 
-        Preferences.Screen.Initialize(Configuration);
+        Preferences.Screen.Initialize(manager);
     }
 }

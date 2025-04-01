@@ -1,0 +1,23 @@
+@utility btn {
+  @apply px-3 py-1 flex items-center justify-center rounded-lg outline-none;
+}
+
+@utility btn-primary {
+  @apply interactive-bg-primary;
+}
+
+@utility btn-secondary {
+  @apply interactive-bg-secondary;
+}
+
+@utility btn-tertiary {
+  @apply interactive-bg-tertiary;
+}
+
+@utility btn-danger {
+  @apply interactive-bg-error;
+}
+
+@utility btn-cancel {
+  @apply interactive-bg-error;
+}

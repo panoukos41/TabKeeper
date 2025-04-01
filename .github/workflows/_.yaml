@@ -45,9 +45,8 @@ jobs:
     - name: Publish
       if: inputs.publish
       working-directory: src/TabKeeper.UI.Wasm
-      shell: pwsh
       run: |
-        .\css.ps1 -publish
+        npm run css:publish
         dotnet publish
 
     - name: Push to Cloudflare Pages

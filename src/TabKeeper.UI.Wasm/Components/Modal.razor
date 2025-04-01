@@ -1,104 +1,36 @@
-﻿@inherits CoreComponent
-@implements IDisposable
-
-<Transition Appear Show="IsOpen" AsComponent="typeof(Fragment)" Context="_">
-    <Dialog IsOpenChanged="IsOpenChanged">
-        <TransitionChild
-            AsComponent="typeof(Fragment)"
-            Enter="ease-out duration-300"
-            EnterFrom="opacity-0"
-            EnterTo="opacity-100"
-            Leave="ease-in duration-300"
-            LeaveFrom="opacity-100"
-            LeaveTo="opacity-0"
-            Context="transition">
-
-            <div class="@Css.Class("absolute inset-0 bg-black/20", transition)"></div>
-
-        </TransitionChild>
-
-        <div class="absolute inset-0" @onclick="() => BackdropDismiss ? Close() : None.Value">
-            <div class="w-full h-full overflow-hidden flex">
-                <TransitionChild
-                    AsComponent="typeof(Fragment)"
-                    Enter="ease-out duration-300"
-                    EnterFrom="opacity-0 scale-95"
-                    EnterTo="opacity-100 scale-100"
-                    Leave="ease-in duration-300"
-                    LeaveFrom="opacity-100 scale-100"
-                    LeaveTo="opacity-0 scale-95"
-                    Context="transition">
-
-                    <div class="@Css.Class("w-full max-h-full rounded-2xl bg-secondary-container overflow-y-auto p-6 m-4", this.Class() ?? "self-center justify-self-center", transition.CssClass)" @onclick:stopPropagation>
-                        @(ChildContent?.Invoke(this))
-                    </div>
-                </TransitionChild>
-            </div>
+﻿@* <dialog id="@Id" class="m-8 rounded-2xl bg-secondary-container" @onclose="OnClose" @oncancel="OnClose" @onclick="Close">
+    @if (IsOpen)
+    {
+        <div class="py-1" @onclick:stopPropagation>
+            @(ChildContent?.Invoke(this))
         </div>
-    </Dialog>
-</Transition>
+    }
+</dialog> *@
+
+@inherits CoreComponent
+
+<TabKeeper.Components.Dialog @ref="dialog" class="m-0 w-screen h-screen max-w-[100vw] max-h-screen bg-transparent" @onclick="Close" IsOpenWhen="IsOpenWhen">
+    <div class="max-h-[70vh] mt-24 mx-4 p-4 rounded-2xl bg-secondary-container overflow-y-auto" @onclick:stopPropagation>
+        @ChildContent?.Invoke(dialog)
+    </div>
+</TabKeeper.Components.Dialog>
 
 @code {
-    [Parameter]
-    public bool IsOpen { get; set; }
+    Dialog dialog = null!;
 
     [Parameter]
-    public EventCallback<bool> IsOpenChanged { get; set; }
+    public RenderFragment<Dialog>? ChildContent { get; set; }
 
     [Parameter]
     public IObservable<bool>? IsOpenWhen { get; set; }
 
-    [Parameter]
-    public IObservable<None>? UpdateWhen { get; set; }
-
-    [Parameter]
-    public RenderFragment<Modal>? ChildContent { get; set; }
-
-    [Parameter]
-    public bool BackdropDismiss { get; set; } = true;
-
-    [Parameter]
-    public EventCallback OnDismiss { get; set; }
-
-    [Parameter]
-    public EventCallback OnShow { get; set; }
-
-    protected override void OnInitialized()
+    public void Open()
     {
-        if (IsOpenWhen is { })
-        {
-            var sub = IsOpenWhen.Subscribe(open =>
-            {
-                IsOpen = open;
-                base.Update();
-            });
-            DisposeWith(sub);
-        }
-        if (UpdateWhen is { })
-        {
-            var updateSub = UpdateWhen.Subscribe(_ => Update());
-            DisposeWith(updateSub);
-        }
+        dialog.Open();
     }
 
-    public None Show()
+    public void Close()
     {
-        IsOpen = true;
-        OnShow.InvokeAsync();
-        base.Update();
-        return None.Value;
-    }
-
-    public None Close()
-    {
-        IsOpen = false;
-        OnDismiss.InvokeAsync();
-        base.Update();
-        return None.Value;
-    }
-
-    public None Toggle()
-    {
-        return IsOpen ? Close() : Show();
+        dialog.Close();
     }
 }

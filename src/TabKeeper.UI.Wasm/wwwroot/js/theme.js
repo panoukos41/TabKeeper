@@ -1,44 +1,82 @@
-﻿const dark = "dark";
-const light = "light";
-const auto = "auto";
-const key = "theme";
+﻿let key = "theme";
+let auto = "auto";
+let dark = "dark";
+let light = "light";
 
-export function updateDom() {
-  if (localStorage[key] === dark || (!(key in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.setAttribute('dark', true)
-  } else {
-    document.documentElement.removeAttribute('dark')
+export function configure(options) {
+  if (options == null) {
+    return;
+  }
+  if (options.key) {
+    key = options.key;
+  }
+  if (options.auto) {
+    auto = options.auto;
+  }
+  if (options.dark) {
+    dark = options.dark;
+  }
+  if (options.light) {
+    light = options.light;
   }
 }
 
-export function toggle() {
-  if (!(key in localStorage)) return;
-
-  localStorage[key] === light ? setDark() : setLight();
-  updateDom();
+export function updateDom() {
+  const theme = localStorage[key];
+  if (theme != null && theme != auto) {
+    document.documentElement.setAttribute(key, theme)
+  }
+  else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    document.documentElement.setAttribute(key, light)
+  }
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute(key, dark)
+  }
 }
 
-export function setDark() {
-  localStorage[key] = dark;
-  updateDom();
+export function getTheme() {
+  const theme = localStorage[key];
+  if (theme != null) {
+    return theme;
+  }
+  else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    return light;
+  }
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return dark;
+  }
+  return "";
 }
 
-export function setLight() {
-  localStorage[key] = light;
+export function setTheme(theme) {
+  localStorage[key] = theme;
+  //document.documentElement.setAttribute(key, theme)
   updateDom();
 }
 
 export function setAuto() {
   localStorage.removeItem(key);
+  document.documentElement.removeAttribute(key);
   updateDom();
 }
 
-export function getTheme() {
-  const theme = localStorage[key];
-
-  if ([dark, light, auto].some(v => v === theme))
-    return theme;
-
-  return auto;
+export function setDark() {
+  setTheme(dark);
 }
 
+export function setLight() {
+  setTheme(light);
+}
+
+export function toggle() {
+  const theme = localStorage[key];
+  if (theme != null) {
+    theme === light ? setDark() : setLight();
+  }
+  else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    setDark();
+  }
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    setLight();
+  }
+}

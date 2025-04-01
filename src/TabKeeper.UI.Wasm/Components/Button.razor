@@ -44,10 +44,9 @@
     [Parameter]
     public bool PreventDefault { get; set; }
 
-    private string TypeAttribute => this.GetAttributeOrDefault<string>("type", "button");
-    
-    private bool DisabledAttribute => this.GetAttributeOrDefault<bool>("disabled", false) || IsLoading;
+    private string TypeAttribute => this.Type("button");
 
-    private string? ClassAttribute
-        => Css.Class(this.TryGetAttribute<string>("class"), ("cursor-not-allowed relative", IsLoading));
+    private bool DisabledAttribute => this.Disabled() || IsLoading;
+
+    private string? ClassAttribute => this.Class(("cursor-not-allowed relative", IsLoading));
 }

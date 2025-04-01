@@ -6,14 +6,30 @@
       "description": "Sorry, there is nothing at this address."
     }
   },
+  "add": "Add",
+  "update": "Update",
+  "cancel": "Cancel",
+  "close": "Close",
+  "products": "Products",
+  "people": "People",
+  "name": "Name",
+  "place": "Place",
+  "price": "Price",
+  "quantity": "quantity",
   "settings": {
     "title": "Settings",
     "app.title": "Application",
     "theme": {
       "title": "Theme",
       "auto": "Auto",
-      "dark": "Dark",
-      "light": "Light"
+      "fall-light": "Fall Light",
+      "fall-dark": "Fall Dark",
+      "spring-light": "Spring Light",
+      "spring-dark": "Spring Dark",
+      "summer-light": "Summer Light",
+      "summer-dark": "Summer Dark",
+      "winter-light": "Winter Light",
+      "winter-dark": "Winter Dark"
     },
     "lang": {
       "title": "Language",

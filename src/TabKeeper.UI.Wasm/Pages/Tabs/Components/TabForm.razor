@@ -4,17 +4,17 @@
 <EditForm Model="Tab" OnValidSubmit="ValidSubmit" @attributes="Attributes" class="@this.Class("space-y-2")">
     <FluentValidator Validator="TabKeeper.Tabs.Tab.Validator" />
 
-    <div class="material-input">
+    <div class="material">
         <label for="Tab.Name">@("name" | translate)</label>
-        <InputText @bind-Value="Tab.Name" placeholder="@("name" | translate)" />
+        <InputText @bind-Value="Tab.Name" placeholder="@("name" | translate)" autofocus />
+        <ValidationMessage For="() => Tab.Name" />
     </div>
-    <ValidationMessage For="() => Tab.Name" />
 
-    <div class="material-input">
+    <div class="material">
         <label for="Tab.Place">@("place" | translate)</label>
         <InputText @bind-Value="Tab.Place" placeholder="@("place" | translate)" />
+        <ValidationMessage For="() => Tab.Place" />
     </div>
-    <ValidationMessage For="() => Tab.Place" />
 </EditForm>
 
 @code {

@@ -1,15 +1,14 @@
 ﻿@inherits CoreComponent
 @inject TranslateService translate
 
-<EditForm Model="Person" OnValidSubmit="ValidSubmit" @attributes="Attributes" class="@this.Class("space-y-2")">
+<EditForm Model="Person" OnValidSubmit="ValidSubmit" @attributes="Attributes" id="@Id" class="@this.Class("space-y-2")">
     <FluentValidator Validator="Person.Validator" />
 
-    <div class="material-input">
+    <div class="material">
         <label for="Person.Name">@("name" | translate)</label>
         <InputText @bind-Value="Person.Name" placeholder="@("name" | translate)" />
+        <ValidationMessage For="() => Person.Name" />
     </div>
-    <ValidationMessage For="() => Person.Name" />
-
 </EditForm>
 
 @code {

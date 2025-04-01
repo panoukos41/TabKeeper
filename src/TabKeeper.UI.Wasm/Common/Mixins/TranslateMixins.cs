@@ -8,7 +8,7 @@ public static class TranslateMixins
     public static IDisposable Update(this TranslateService translate, IComponent component)
     {
         if (component is not IHandleEvent handleEvent)
-            return Disposable.Empty;
+            return System.Reactive.Disposables.Disposable.Empty;
 
         var @ref = new WeakReference<IHandleEvent>(handleEvent);
 
