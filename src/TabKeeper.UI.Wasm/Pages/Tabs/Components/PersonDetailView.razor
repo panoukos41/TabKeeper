@@ -3,6 +3,9 @@
 
 <div class="space-y-3">
     <div class="flex items-center justify-between">
+        <Button If="@(!edit && !delete)" class="btn btn-danger gap-2 h-10" OnClick="StartDelete">
+            <FaRegularTrashCan class="icon-xs" />
+        </Button>
         <h1 class="m-0">
             @ViewModel.Name
         </h1>
@@ -24,9 +27,25 @@
             </Button>
         </div>
     }
+    else if (delete)
+    {
+        <div>
+            <h3 class="mb-4">@("delete-question" | translate)</h3>
+            <div class="flex gap-2">
+                <Button class="btn btn-danger gap-2 grow" OnClick="Delete">
+                    <FaSolidCheck class="icon-xs" />
+                    <span>@("yes" | translate)</span>
+                </Button>
+                <Button class="btn btn-tertiary gap-2 grow" OnClick="CancelDelete">
+                    <FaSolidXmark class="icon-xs" />
+                    <span>@("no" | translate)</span>
+                </Button>
+            </div>
+        </div>
+    }
     else
     {
-        @foreach (var product in TabViewModel.Products.Items)
+        @foreach (var product in TabViewModel.Products)
         {
             var key = product.ProductId.ToString();
 
@@ -40,9 +59,13 @@
 
 @code {
     private bool edit;
+    private bool delete;
 
     [Parameter, EditorRequired]
     public TabViewModel TabViewModel { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<TabPersonViewModel> WhenDelete { get; set; }
 
     private void StartEdit()
     {
@@ -61,5 +84,22 @@
         ViewModel.Person = person;
         edit = false;
         Update();
+    }
+
+    private void StartDelete()
+    {
+        delete = true;
+        Update();
+    }
+
+    private void CancelDelete()
+    {
+        delete = false;
+        Update();
+    }
+
+    private void Delete()
+    {
+        WhenDelete.InvokeAsync(ViewModel);
     }
 }

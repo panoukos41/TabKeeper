@@ -36,7 +36,7 @@
             @* Products Tab *@
             <TabPanel AsComponent="typeof(Fragment)">
                 <div class="flex flex-col gap-3 flex-grow overflow-y-auto">
-                    @foreach (var product in ViewModel.Products.Items)
+                    @foreach (var product in ViewModel.Products)
                     {
                         <ProductCardView
                             @key="product.ProductId.ToString()"
@@ -49,7 +49,7 @@
             @* People Tab *@
             <TabPanel AsComponent="typeof(Fragment)">
                 <div class="flex flex-col gap-3 flex-grow overflow-y-auto">
-                    @foreach (var person in ViewModel.People.Items)
+                    @foreach (var person in ViewModel.People)
                     {
                         <PersonCardView
                             @key="person.PersonId.ToString()"
@@ -70,7 +70,7 @@
 
                 <div class="ms-3 me-auto flex items-center justify-center gap-2">
                     <FaSolidCoins class="icon-sm" />
-                    <p class="font-semibold">@ViewModel.People.Items.Sum(x => x.Total).ToString("0.00")</p>
+                    <p class="font-semibold">@ViewModel.People.Sum(x => x.Total).ToString("0.00")</p>
                 </div>
 
                 <Button class="btn btn-tertiary p-2" OnClick="() => NewPersonModal.Open()">
@@ -102,7 +102,7 @@
     @{
         var product = SelectedProduct.Value!;
     }
-    <ProductDetailView ViewModel="product" TabViewModel="ViewModel" />
+    <ProductDetailView ViewModel="product" TabViewModel="ViewModel" WhenDelete="p => { context.Close(); ViewModel.RemoveProduct(p); }" />
     <Button class="min-w-60 mx-auto btn btn-secondary gap-2 mt-4" OnClick="() => context.Close()">
         <FaSolidXmark class="icon-sm" />
         <span>@("close" | translate)</span>
@@ -110,11 +110,11 @@
 </Modal>
 
 @* Person Modal *@
-<Modal BackdropDismiss IsOpenWhen="SelectedPerson.IsNotNull()">
+<Modal IsOpenWhen="SelectedPerson.IsNotNull()">
     @{
         var person = SelectedPerson.Value!;
     }
-    <PersonDetailView ViewModel="person" TabViewModel="ViewModel" />
+    <PersonDetailView ViewModel="person" TabViewModel="ViewModel" WhenDelete="p => { context.Close(); ViewModel.RemovePerson(p); }" />
     <Button class="min-w-60 mx-auto btn btn-secondary gap-2 mt-4" OnClick="() => context.Close()">
         <FaSolidXmark class="icon-sm" />
         <span>@("close" | translate)</span>
@@ -122,9 +122,9 @@
 </Modal>
 
 @* Add Product Modal *@
-<Modal @ref="NewProductModal" BackdropDismiss class="self-center flex flex-col gap-2">
+<Modal @ref="NewProductModal" class="self-center flex flex-col gap-2">
     <ProductForm Id="new-product-form" OnValidSubmit="OnValidProduct" OnValidReset />
-    <div class="flex flex-row-reverse gap-2">
+    <div class="mt-4 flex flex-row-reverse gap-2">
         <Button class="btn btn-primary gap-2 grow" type="submit" form="new-product-form">
             <FaSolidPlus class="icon-sm" />
             <span>@("add" | translate)</span>
@@ -137,7 +137,7 @@
 </Modal>
 
 @* Add Person Modal *@
-<Modal @ref="NewPersonModal" BackdropDismiss class="self-center flex flex-col gap-2">
+<Modal @ref="NewPersonModal" class="self-center flex flex-col gap-2">
     <PersonForm Id="new-person-form" OnValidSubmit="OnValidPerson" OnValidReset />
     <div class="mt-4 flex flex-row-reverse gap-2">
         <Button class="btn btn-primary gap-2 grow" type="submit" form="new-person-form">

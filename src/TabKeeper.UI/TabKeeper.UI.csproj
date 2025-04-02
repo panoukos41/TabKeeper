@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="DynamicData" />
+    <PackageReference Include="ObservableCollections.R3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using Core.Reactive;
 using DynamicData.Binding;
+using System.Reactive.Subjects;
 
 namespace TabKeeper.Tabs;
 

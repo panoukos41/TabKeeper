@@ -1,31 +1,67 @@
 ﻿@inherits CoreComponent
 @inject TranslateService translate
 
-<EditForm Model="Tab" OnValidSubmit="ValidSubmit" @attributes="Attributes" class="@this.Class("space-y-2")">
-    <FluentValidator Validator="TabKeeper.Tabs.Tab.Validator" />
-
-    <div class="material">
-        <label for="Tab.Name">@("name" | translate)</label>
-        <InputText @bind-Value="Tab.Name" placeholder="@("name" | translate)" autofocus />
-        <ValidationMessage For="() => Tab.Name" />
+@if (delete)
+{
+    <div>
+        <h3 class="mb-4">@("delete-question" | translate)</h3>
+        <div class="flex gap-2">
+            <Button class="btn btn-danger gap-2 grow" OnClick="Delete">
+                <FaSolidCheck class="icon-xs" />
+                <span>@("yes" | translate)</span>
+            </Button>
+            <Button class="btn btn-tertiary gap-2 grow" OnClick="CancelDelete">
+                <FaSolidXmark class="icon-xs" />
+                <span>@("no" | translate)</span>
+            </Button>
+        </div>
     </div>
+}
+else
+{
+    <EditForm Model="Tab" OnValidSubmit="ValidSubmit" @attributes="Attributes" id="@Id" class="@this.Class("space-y-2")">
+        <FluentValidator Validator="TabKeeper.Tabs.Tab.Validator" />
 
-    <div class="material">
-        <label for="Tab.Place">@("place" | translate)</label>
-        <InputText @bind-Value="Tab.Place" placeholder="@("place" | translate)" />
-        <ValidationMessage For="() => Tab.Place" />
-    </div>
-</EditForm>
+        <div class="flex items-center">
+            <FaSolidPen class="ms-1 icon-sm" />
+            @if (canDelete)
+            {
+                <Button If="@(!delete)" class="ms-auto btn btn-danger gap-2 h-10" OnClick="StartDelete">
+                    <FaRegularTrashCan class="icon-xs" />
+                </Button>
+            }
+        </div>
+
+        <div class="material">
+            <label for="Tab.Name">@("name" | translate)</label>
+            <InputText @bind-Value="Tab.Name" placeholder="@("name" | translate)" autofocus />
+            <ValidationMessage For="() => Tab.Name" />
+        </div>
+
+        <div class="material">
+            <label for="Tab.Place">@("place" | translate)</label>
+            <InputText @bind-Value="Tab.Place" placeholder="@("place" | translate)" />
+            <ValidationMessage For="() => Tab.Place" />
+        </div>
+    </EditForm>
+}
 
 @code {
+    private bool canDelete;
+    private bool delete;
+
     [Parameter, NotNull]
     public TabKeeper.Tabs.Tab? Tab { get; set; }
 
     [Parameter]
     public EventCallback<TabKeeper.Tabs.Tab> OnValidSubmit { get; set; }
 
+    [Parameter]
+    public EventCallback<TabKeeper.Tabs.Tab> WhenDelete { get; set; }
+
     protected override void OnInitialized()
     {
+        canDelete = Tab is { };
         Tab ??= new();
         Tab.Date = DateOnly.FromDateTime(DateTimeOffset.Now.DateTime);
     }
@@ -33,5 +69,22 @@
     private void ValidSubmit()
     {
         OnValidSubmit.InvokeAsync(Tab);
+    }
+
+    private void StartDelete()
+    {
+        delete = true;
+        Update();
+    }
+
+    private void CancelDelete()
+    {
+        delete = false;
+        Update();
+    }
+
+    private void Delete()
+    {
+        WhenDelete.InvokeAsync(Tab);
     }
 }

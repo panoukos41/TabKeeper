@@ -1,6 +1,6 @@
-using Core.Common.Mixins;
 using Core.Reactive;
-using DynamicData.Binding;
+using ObservableCollections;
+using R3;
 
 namespace TabKeeper.Tabs;
 
@@ -8,87 +8,99 @@ public sealed class TabViewModel : RxObject
 {
     public Tab Tab { get; }
 
-    private readonly SourceCache<TabProductViewModel, Uuid> products = new(p => p.ProductId);
-    private readonly SourceCache<TabPersonViewModel, Uuid> people = new(p => p.PersonId);
+    private readonly ObservableList<TabProductViewModel> products = [];
+    private readonly ObservableList<TabPersonViewModel> people = [];
 
     public TabViewModel(Tab tab)
     {
         Tab = tab;
-
-        products.AddOrUpdate(tab.Products.Select(x => new TabProductViewModel(x)));
-        people.Edit(people =>
+        products.AddRange(tab.Products.Select(x => new TabProductViewModel(x)));
+        people.AddRange(tab.People.Select(person =>
         {
-            foreach (var personVm in tab.People.Select(person => new TabPersonViewModel(person)))
+            var personVm = new TabPersonViewModel(person);
+            foreach (var productVm in products.IntersectBy(personVm.Tab.ProductIds, p => p.ProductId))
             {
-                people.AddOrUpdate(personVm);
-                foreach (var productVm in products.Items.IntersectBy(personVm.Tab.ProductIds, p => p.ProductId))
-                {
-                    personVm.RegisterProduct(productVm);
-                }
+                personVm.RegisterProduct(productVm);
             }
-        });
+            return personVm;
+        }));
 
-        people
-            .Connect()
-            .AutoRefresh()
-            .OnItemAdded(item => tab.People.AddOrUpdate(item.Tab))
-            .OnItemRefreshed(item => tab.People.AddOrUpdate(item.Tab))
-            //.OnItemUpdated((item, _) => tab.People.AddOrUpdate(item.Tab))
-            .OnItemRemoved(item => tab.People.Remove(item.Tab))
-            .DisposeMany()
-            .BindToObservableList(out var peopleList)
-            .Subscribe(_ => RaisePropertyChanged(nameof(People)))
-            .DisposeWith(this);
-        People = peopleList;
+        products.ForEach(product => product.WhenPropertyChanged.Subscribe(_ =>
+        {
+            Tab.Products.AddOrUpdate(product.Product);
+            RaisePropertyChanged(nameof(Products));
+        }));
+        people.ForEach(person => person.WhenPropertyChanged.Subscribe(_ =>
+        {
+            Tab.People.AddOrUpdate(person.Tab);
+            RaisePropertyChanged(nameof(People));
+        }));
 
-        products
-            .Connect()
-            .AutoRefresh()
-            .OnItemAdded(item => tab.Products.AddOrUpdate(item.Product))
-            .OnItemRefreshed(item => tab.Products.AddOrUpdate(item.Product))
-            //.OnItemUpdated((item, _) => tab.Products.AddOrUpdate(item.Product))
-            .OnItemRemoved(item => tab.Products.Remove(item.Product))
-            .DisposeMany()
-            .BindToObservableList(out var productsList)
-            .Subscribe(_ => RaisePropertyChanged(nameof(Products)))
-            .DisposeWith(this);
+        people.ObserveAdd().Subscribe(e => tab.People.AddOrUpdate(e.Value.Tab)).DisposeWith(this);
+        //people.ObserveChanged().Subscribe(e => tab.People.AddOrUpdate(e.Value.Product));
+        people.ObserveRemove().Subscribe(e => tab.People.Remove(e.Value.Tab)).DisposeWith(this);
+        people.ObserveChanged().Subscribe(_ => RaisePropertiesChanged(nameof(People))).DisposeWith(this);
+        People = people.ToViewList();
 
-        Products = productsList;
+        products.ObserveAdd().Subscribe(e => tab.Products.AddOrUpdate(e.Value.Product)).DisposeWith(this);
+        //products.ObserveChanged().Subscribe(e => tab.Products.AddOrUpdate(e.Value.Product));
+        products.ObserveRemove().Subscribe(e => tab.Products.Remove(e.Value.Product)).DisposeWith(this);
+        products.ObserveChanged().Subscribe(_ => RaisePropertiesChanged(nameof(Products))).DisposeWith(this);
+        Products = products.ToViewList();
     }
 
-    public IObservableList<TabProductViewModel> Products { get; }
+    public ISynchronizedViewList<TabProductViewModel> Products { get; }
 
-    public IObservableList<TabPersonViewModel> People { get; }
+    public ISynchronizedViewList<TabPersonViewModel> People { get; }
 
-    public decimal Total => products.Items.Sum(x => x.Total);
+    public decimal Total => products.Sum(x => x.Total);
 
     public TabProductViewModel? GetProduct(Uuid productId)
     {
-        return products.Lookup(productId) is { HasValue: true, Value: { } person } ? person : null;
+        return products.FirstOrDefault(x => x.ProductId == productId);
     }
 
     public void AddProduct(TabProductViewModel product)
     {
-        products.AddOrUpdate(product);
+        products.Add(product);
+        product.WhenPropertyChanged.Subscribe(_ =>
+        {
+            Tab.Products.AddOrUpdate(product.Product);
+            RaisePropertyChanged(nameof(Products));
+        });
     }
 
     public void RemoveProduct(TabProductViewModel product)
     {
+        foreach (var participant in product.ParticipantIds)
+        {
+            if (GetPerson(participant) is { } person)
+            {
+                person.UnRegisterProduct(product);
+            }
+        }
+        product.Dispose();
         products.Remove(product);
     }
 
     public TabPersonViewModel? GetPerson(Uuid personId)
     {
-        return people.Lookup(personId) is { HasValue: true, Value: { } person } ? person : null;
+        return people.FirstOrDefault(x => x.PersonId == personId);
     }
 
     public void AddPerson(TabPersonViewModel person)
     {
-        people.AddOrUpdate(person);
+        people.Add(person);
+        person.WhenPropertyChanged.Subscribe(_ =>
+        {
+            Tab.People.AddOrUpdate(person.Tab);
+            RaisePropertyChanged(nameof(People));
+        });
     }
 
     public void RemovePerson(TabPersonViewModel person)
     {
+        person.Dispose();
         people.Remove(person);
     }
 }

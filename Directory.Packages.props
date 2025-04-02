@@ -16,6 +16,7 @@
     <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageVersion Include="Noctilocus" Version="1.0.0-beta.5" />
+    <PackageVersion Include="ObservableCollections.R3" Version="3.3.3" />
     <PackageVersion Include="OneOf" Version="3.0.271" />
     <PackageVersion Include="P41.FontAwesome" Version="6.6.0.2" />
     <PackageVersion Include="System.Reactive" Version="6.0.1" />
