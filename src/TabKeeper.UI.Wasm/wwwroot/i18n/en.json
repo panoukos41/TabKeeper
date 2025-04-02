@@ -6,6 +6,8 @@
       "description": "Sorry, there is nothing at this address."
     }
   },
+  "yes":"Yes",
+  "no":"No",
   "add": "Add",
   "update": "Update",
   "cancel": "Cancel",
@@ -16,6 +18,7 @@
   "place": "Place",
   "price": "Price",
   "quantity": "quantity",
+  "delete-question": "Proceed and delete?",
   "settings": {
     "title": "Settings",
     "app.title": "Application",
