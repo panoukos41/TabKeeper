@@ -1,13 +1,4 @@
-﻿@* <dialog id="@Id" class="m-8 rounded-2xl bg-secondary-container" @onclose="OnClose" @oncancel="OnClose" @onclick="Close">
-    @if (IsOpen)
-    {
-        <div class="py-1" @onclick:stopPropagation>
-            @(ChildContent?.Invoke(this))
-        </div>
-    }
-</dialog> *@
-
-@inherits CoreComponent
+﻿@inherits CoreComponent
 
 <TabKeeper.Components.Dialog @ref="dialog" class="m-0 w-screen h-screen max-w-[100vw] max-h-screen bg-transparent" @onclick="Close" IsOpenWhen="IsOpenWhen">
     <div class="max-h-[70vh] mt-24 mx-4 p-4 rounded-2xl bg-secondary-container overflow-y-auto" @onclick:stopPropagation>

@@ -12,7 +12,7 @@
 html
 body,
 #app {
-  @apply w-screen h-dvh bg-surface;
+  @apply w-screen max-w-screen h-dvh bg-surface;
 }
 
 #app {

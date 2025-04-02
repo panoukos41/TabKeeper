@@ -21,9 +21,9 @@
 
 <PageTitle>@(string.IsNullOrEmpty(Title) ? "Tab Keeper" : $"Tab Keeper - {Title}")</PageTitle>
 
-<header class="flex w-full min-h-20 items-center p-6 gap-2 border-b border-on-surface">
+<header class="flex w-full max-w-screen truncate min-h-20 items-center p-6 gap-2 border-b border-on-surface">
     <Button key="Back" If="nav.Uri != nav.BaseUri" OnClick="() => nav.NavigateTo(nav.BaseUri)"><FaSolidCircleChevronLeft class="icon" /></Button>
-    <h1 class="font-bold">@Title</h1>
+    <h1 class="font-bold truncate">@Title</h1>
 </header>
 
 <main class="overflow-y-auto p-2">
