@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using TabKeeper.Tabs
 @inherits CoreComponent
 @inject StorageDb db
 @inject NavigationManager nav
@@ -7,11 +8,16 @@
 <div class="h-full flex flex-col relative">
     @* Tabs  *@
     <div class="grow overflow-y-auto space-y-2">
-        @foreach(var entry in Entries.Items.OrderBy(x => x.Date))
+        @foreach (var entry in Tabs.Items.OrderBy(x => x.Date))
         {
-            <a class="card flex gap-3 items-center" @key="@entry.Id.ToString()" href="@($"tab/{entry.Id}")">
-                <h2 class="mb-0 me-auto truncate">@entry.Name</h2>
-            </a>
+            <div class="card p-0 grid grid-cols-[70fr_30fr] gap-3 overflow-clip" @key="@entry.Id.ToString()" @onclick="() => SelectedTab.OnNext(entry)">
+                <div class="p-4 me-auto max-w-full truncate">
+                    <h2 class="mb-0 truncate">@entry.Name</h2>
+                </div>
+                <a class="bg-primary-container flex items-center justify-center" href="@($"tab/{entry.Id}")">
+                    <FaSolidArrowRight class="icon-sm" />
+                </a>
+            </div>
         }
     </div>
 
@@ -32,10 +38,11 @@
     </div>
 </div>
 
-<Modal @ref="addEntryModal" class="p-6 mt-4 mb-auto rounded bg-secondary-container">
+@* Add  *@
+<Modal @ref="addEntryModal">
     <TabKeeper.Pages.Tabs.Components.TabForm
-        id="new-tab-form"
-        OnValidSubmit="TabValidSubmit"
+        Id="new-tab-form"
+        OnValidSubmit="TabAdd"
     />
     <Button class="btn btn-primary gap-2 mt-4 min-w-40 mx-auto" type="submit" form="new-tab-form">
         <FaSolidPlus class="icon-sm" />
@@ -43,15 +50,47 @@
     </Button>
 </Modal>
 
+@* Edit *@
+<Modal IsOpenWhen="SelectedTab.IsNotNull()">
+    @{
+        var entry = SelectedTab.Value;
+        if (entry is null) return;
+    }
+    <TabKeeper.Pages.Tabs.Components.TabForm
+        Id="edit-tab-form"
+        Tab="entry with { }"
+        OnValidSubmit="TabUpdate"
+        WhenDelete="TabDelete"
+    />
+    <Button class="btn btn-primary gap-2 mt-4 min-w-40 mx-auto" type="submit" form="edit-tab-form">
+        <FaSolidPen class="icon-xs" />
+        <span>@("update" | translate)</span>
+    </Button>
+</Modal>
+
 @code {
+    private BehaviorSubject<Tab?> SelectedTab { get; } = new(null);
     private Modal addEntryModal = null!;
-    private SourceList<TabEntry> Entries { get; } = new();
+    private SourceCache<Tab, Uuid> Tabs { get; } = new(x => x.Id);
     private bool loading = true;
 
-    private async Task TabValidSubmit(TabKeeper.Tabs.Tab tab)
+    private async Task TabAdd(TabKeeper.Tabs.Tab tab)
     {
         await db.Tabs.Add(tab);
         nav.NavigateTo($"tab/{tab.Id}");
+    }
+
+    private async Task TabUpdate(TabKeeper.Tabs.Tab tab)
+    {
+        SelectedTab.OnNext(null);
+        Tabs.AddOrUpdate(tab);
+        await db.Tabs.Put(tab);
+    }
+
+    private void TabDelete(TabKeeper.Tabs.Tab tab)
+    {
+        SelectedTab.OnNext(null);
+        Tabs.Remove(tab);
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -66,9 +105,8 @@
             .ToObservable()
             .Do(entries =>
             {
-                Entries.AddRange(entries.Select(x => new TabEntry(x.Id, x.Name, x.Date)));
-                Entries
-                    .Connect()
+                Tabs.AddOrUpdate(entries);
+                Tabs.Connect()
                     .OnItemRemoved(async entry => await db.Tabs.Delete(entry.Id), invokeOnUnsubscribe: false)
                     .Subscribe(_ => Update())
                     .DisposeWith(this);
@@ -77,6 +115,4 @@
             .Subscribe(_ => Update())
             .DisposeWith(this);
     }
-
-    private record TabEntry(Uuid Id, string Name, DateOnly? Date);
 }
